@@ -51,3 +51,139 @@ class Solution {
         }
     }
 }
+
+//思路是对的 但是写的不够优美 进行修改 下面是第二版
+执行结果：
+通过
+显示详情
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+44 MB
+, 在所有 Java 提交中击败了
+89.17%
+的用户
+class Solution {
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        //思路应该是是二分法
+        //但是如何对这种矩阵进行二分查找呢
+        //没看出规律 暂时认为第一行最后一列是最中的数字 那么（好像就应该是它 因为只有从他开始 才能只走两个方向就找到结果）
+        //左比右小
+        //上比下小
+        //if(matrix.length < 0 || matrix[0].length < 0)
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0){//
+            return false;            
+        }
+        else{
+        int n = 0;
+        int m = matrix[0].length-1;
+        //int finder = ;
+        if(matrix[matrix.length-1][0] == target){//这两行也是必须的嘛 
+            return true;            
+        }
+        while(n != matrix.length - 1 || m != 0 ){
+            //finder != matrix[matrix.length-1][0]这个不能做判断条件 不然数组内有重复数字时会出错 
+            //然后这个条件 n != matrix.length - 1 || m != 0 有点绕
+            if(matrix[n][m] == target)
+                return true;
+            else if(matrix[n][m] < target){
+                if(n == matrix.length-1)
+                    return false;
+                ++n;
+            }
+            else if(matrix[n][m] > target){
+                if(m == 0){
+                    return false;
+                }
+                --m;                
+            }
+        }
+        return false;
+        }
+    }
+}
+
+//然后  这个条件 n != matrix.length - 1 || m != 0 有点绕 可以改动 还能顺便把里面几个超出数组边界的判断去掉 第三版
+执行结果：
+通过
+显示详情
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+44.1 MB
+, 在所有 Java 提交中击败了
+69.00%
+的用户
+class Solution {
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        //思路应该是是二分法
+        //但是如何对这种矩阵进行二分查找呢
+        //没看出规律 暂时认为第一行最后一列是最中的数字 那么（好像就应该是它 因为只有从他开始 才能只走两个方向就找到结果）
+        //左比右小
+        //上比下小
+        //if(matrix.length < 0 || matrix[0].length < 0)
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0){//
+            return false;            
+        }
+        else{
+        int n = 0;
+        int m = matrix[0].length-1;
+        //int finder = ;
+        if(matrix[matrix.length-1][0] == target){//这两行也是必须的嘛 
+            return true;            
+        }
+        while(n < matrix.length && m > -1 ){
+            //finder != matrix[matrix.length-1][0]这个不能做判断条件 不然数组内有重复数字时会出错 
+            //然后这个条件 n != matrix.length - 1 || m != 0 有点绕
+            if(matrix[n][m] == target)
+                return true;
+            else if(matrix[n][m] < target)
+                ++n;
+            else if(matrix[n][m] > target)
+                --m;                
+        }
+        return false;
+        }
+    }
+}
+
+//删去多余的代码         
+if(matrix[matrix.length-1][0] == target){  第四版
+return true;            
+}
+class Solution {
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        //思路应该是是二分法
+        //但是如何对这种矩阵进行二分查找呢
+        //没看出规律 暂时认为第一行最后一列是最中的数字 那么（好像就应该是它 因为只有从他开始 才能只走两个方向就找到结果）
+        //左比右小
+        //上比下小
+        //if(matrix.length < 0 || matrix[0].length < 0)
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0){//
+            return false;            
+        }
+        else{
+        int n = 0;
+        int m = matrix[0].length-1;
+        //int finder = ;
+ 
+        while(n < matrix.length && m > -1 ){
+            //finder != matrix[matrix.length-1][0]这个不能做判断条件 不然数组内有重复数字时会出错 
+            //然后这个条件 n != matrix.length - 1 || m != 0 有点绕
+            if(matrix[n][m] == target)
+                return true;
+            else if(matrix[n][m] < target)
+                ++n;
+            else if(matrix[n][m] > target)
+                --m;                
+        }
+        return false;
+        }
+    }
+}
