@@ -46,7 +46,7 @@ class Solution {
     public String replaceSpace(String s) {
         int i = 0;
         char[] ret = new char[3 * s.length()];
-            for(int j = 0; j < s.length(); i++,j++){//java与c不同
+            for(int j = 0; j < s.length(); i++,j++){//java的for循环初始化多个变量的方法是 for(int i=0,j=0;;)
                 if(s.charAt(j) == ' '){
                     ret[i] = '%';
                     ret[i+1] = '2';
