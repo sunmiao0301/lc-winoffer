@@ -1,0 +1,39 @@
+//第一版 这种简单的问题靠一直运行和改动来得到正确答案意义不大 以后应该尽量一次成功
+//且第一版的方法是暴力 应该用二分
+class Solution {
+    public int minArray(int[] numbers) {
+    //“输入一个递增排序的数组的一个旋转”
+    int ret = numbers[0];
+    for(int i = 1; i < numbers.length; i++){
+        if(numbers[i-1] > numbers[i]){
+            ret = numbers[i];
+            break;
+        }
+    }
+    return ret;
+    }
+}
+
+//用二分法 但是二分法处理这种问题就是要注意各种情况全面考虑 没推出来 有点不在状态
+class Solution {
+    public int minArray(int[] numbers) {
+        int low = 0;
+        int high = numbers.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (numbers[pivot] < numbers[high]) {
+                high = pivot;
+            } else if (numbers[pivot] > numbers[high]) {
+                low = pivot + 1;
+            } else {
+                high -= 1;
+            }
+        }
+        return numbers[low];
+    }
+}
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/solution/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-by-leetcode-s/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
