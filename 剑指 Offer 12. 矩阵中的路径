@@ -1,0 +1,76 @@
+//第一版
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        //DFS问题
+        //答案提示需要剪枝
+        //递归
+        if(board == null)
+            return false;
+        int remain = word.length();
+        for(int i = 0; i < board[0].length; i++){
+            for(int j = 0; j < board.length; j++){
+                if(
+                left(board, i, j, word) + right(board, i, j, word) + up(board, i, j, word) + down(board, i, j, word) != 0
+                ) {
+                return true;
+                //break;
+                }
+                else{
+                    //return false;
+                }
+            }
+        }
+        return false;
+    }
+    public static int left(char[][] board, int i, int j, String word){
+    	String next = word.substring(1);
+        if(i - 1 >= 0 && board[i-1][j] == word.charAt(0)){
+            if(word.length() > 1)
+            		return left(board, i - 1, j, next) + right(board,i - 1, j, next) + up(board,i - 1, j, next) + down(board, i - 1, j, next);
+            else{
+                return 1;
+            }
+        }else{
+            return 0;
+        }
+    }
+
+    public static int right(char[][] board, int i, int j, String word){
+    	String next = word.substring(1);
+        if(i + 1 < board[0].length && board[i+1][j] == word.charAt(0)){
+            if(word.length() > 1)
+            		return left(board, i+1, j, next) + right(board,i+1, j, next) + up(board,i+1, j, next) + down(board,i+1, j, next);
+            else{
+                return 1;
+            }
+        }else{
+            return 0;
+        }
+    }
+
+    public static int up(char[][] board, int i, int j, String word){
+    	String next = word.substring(1);
+        if(j - 1 > 0 && board[i][j-1] == word.charAt(0)){
+            if(word.length() > 1)
+            	return left(board,i,j-1, next) + right(board,i,j-1, next) + up(board,i,j-1 ,next) + down(board, i, j-1, next);
+            else{
+                return 1;
+            }    
+        }else{
+            return 0;
+        }
+    }
+
+    public static int down(char[][] board, int i, int j, String word){
+        String next = word.substring(1);
+        if(j + 1 < board.length && board[i][j+1] == word.charAt(0)){
+            if(word.length() > 1)
+            	return left(board,i,j+1, next) + right(board,i,j+1, next) + up(board,i,j+1 ,next) + down(board, i, j+1, next);
+            else{
+                return 1;
+            }
+        }else{
+            return 0;
+        }
+    }
+}
