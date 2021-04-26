@@ -1,4 +1,8 @@
-//第一版
+/*第一版
+  这样写不对 因为
+  if(i - 1 >= 0 && board[i-1][j] == word.charAt(0))
+  这两个条件不能写一起，第一个条件不满足的时候，第二个就已经超出数组下界了
+*/
 class Solution {
     public boolean exist(char[][] board, String word) {
         //DFS问题
@@ -72,5 +76,245 @@ class Solution {
         }else{
             return 0;
         }
+    }
+}
+
+/*
+第二版
+这一版发现了一个巨大问题 就是关于i j 哪个是行 哪个是列 的问题 这个问题要多想 然后把解决掉
+这一版通过了77/87个样例 但是我没有对已走过的路径加标记 所以在对于样例
+[["A","B","C","E"],
+["S","F","C","S"],
+["A","D","E","E"]]
+"ABCB"
+时报错了
+*/
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        /*
+        DFS问题
+        	答案提示需要剪枝
+        	递归
+       		int remain = word.length();
+    	[["A","B","C","E"],
+    	 ["S","F","C","S"],
+    	 ["A","D","E","E"]]
+    	*/
+        if(board[0][0] == word.charAt(0) && word.length() == 1)
+            return true;
+        if(word.length() > board[0].length * board.length)
+            return false;
+        for(int i = 0; i < board[0].length; i++){//横着先固定 横着4
+            for(int j = 0; j < board.length; j++){//然后竖着走 竖着3
+            	if(board[j][i] == word.charAt(0)){
+                if(
+                left(board, i, j, word) + right(board, i, j, word) + up(board, i, j, word) + down(board, i, j, word) != 0
+                ) {
+                return true;
+                //break;
+                }
+                else{
+                    //return false;
+                }
+            }
+            }
+        }
+        return false;
+    }
+    public static int left(char[][] board, int i, int j, String word){
+        
+    	String next = word.substring(1);
+    	
+    	if(i - 1 > -1){
+    		if(word.length() > 1){
+    			if(board[j][i-1] == next.charAt(0) && next.length() != 1)
+            		return left(board, i - 1, j, next) + right(board,i - 1, j, next) + up(board,i - 1, j, next) + down(board, i - 1, j, next);
+    			else if(board[j][i-1] == next.charAt(0) && next.length() == 1){
+    				return 1;
+    			}
+            }
+        }
+    	else{
+            return 0;
+        }
+		return 0;//不是很理解为什么能到这一步
+    }
+
+    public static int right(char[][] board, int i, int j, String word){
+        
+    	String next = word.substring(1);
+    if(i + 1 < board[0].length) {
+        if(word.length() > 1){//////////////////////
+            if(board[j][i+1] == next.charAt(0) && next.length() != 1)
+            	return left(board, i+1, j, next) + right(board,i+1, j, next) + up(board,i+1, j, next) + down(board,i+1, j, next);
+            else if(board[j][i+1] == next.charAt(0) && next.length() == 1){
+                return 1;
+            	}
+            }
+        }else{
+            return 0;
+        }	
+		return 0;
+    }
+
+    public static int up(char[][] board, int i, int j, String word){
+        
+    	String next = word.substring(1);
+    	if(j - 1 > -1) {
+        if(word.length() > 1){
+            if(board[j-1][i] == next.charAt(0) && next.length() != 1)
+            	return left(board,i,j-1, next) + right(board,i,j-1, next) + up(board,i,j-1 ,next) + down(board, i, j-1, next);
+            else if(board[j-1][i] == next.charAt(0) && next.length() == 1){
+                return 1;
+            	}
+            }    
+        }else{
+            return 0;
+        }
+    	return 0;
+    }
+
+    public static int down(char[][] board, int i, int j, String word){
+        
+        String next = word.substring(1);
+        if(j + 1 < board.length) {
+        if(word.length() > 1){
+            if(board[j+1][i] == next.charAt(0) && next.length() != 1)
+            	return left(board,i,j+1, next) + right(board,i,j+1, next) + up(board,i,j+1 ,next) + down(board, i, j+1, next);
+            else if(board[j+1][i] == next.charAt(0) && next.length() == 1){
+                return 1;
+            	}
+            }
+        }else{
+            return 0;
+        }
+        return 0;
+    }
+}
+
+//第三版 解决了问题之后 卡在了
+        [["A","B","C","E"],
+         ["S","F","E","S"],
+         ["A","D","E","E"]]
+            "ABCEFSADEESE"
+            这里。
+            样例认为这个是对的
+            那我只能说我理解错题意了
+            题目的意思应该是之前的所有格子的上下左右都可以。
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        /*
+        DFS问题
+        	答案提示需要剪枝
+        	递归
+
+        
+    	*/
+
+        //int[][] visit = new int[board.length][board[0].length];
+        if(board[0][0] == word.charAt(0) && word.length() == 1)
+            return true;
+        if(word.length() > board[0].length * board.length)
+            return false;
+        for(int i = 0; i < board[0].length; i++){//横着先固定 横着4
+            for(int j = 0; j < board.length; j++){//然后竖着走 竖着3
+                int[][] visit = new int[board.length][board[0].length];
+                visit[j][i] = 1;
+            	if(board[j][i] == word.charAt(0)){
+                    if(
+                        left(visit, board, i, j, word) + right(visit, board, i, j, word) + up(visit, board, i, j, word) + down(visit, board, i, j, word) != 0
+                    ){
+                        return true;
+                //break;
+                    }
+                else{
+                    //return false;
+                }
+            }
+            }
+        }
+        return false;
+    }
+    public static int left(int[][] visit, char[][] board, int i, int j, String word){
+        
+    	String next = word.substring(1);
+    	if(i - 1 > -1){
+            if(visit[j][i-1] == 1)
+            return 0;
+    		if(word.length() > 1){
+    			if(board[j][i-1] == next.charAt(0) && next.length() != 1)
+            		return left(visit,board, i - 1, j, next) + right(visit,board,i - 1, j, next) + up(visit,board,i - 1, j, next) + down(visit,board, i - 1, j, next);
+    			else if(board[j][i-1] == next.charAt(0) && next.length() == 1){
+    				return 1;
+    			}
+            }
+        }
+    	else{
+            return 0;
+        }
+		return 0;//不是很理解为什么能到这一步
+    }
+
+    public static int right(int[][] visit, char[][] board, int i, int j, String word){
+    
+    String next = word.substring(1);
+    if(i + 1 < board[0].length) {
+        if(visit[j][i+1] == 1)
+        return 0;
+        if(word.length() > 1){//////////////////////
+            if(board[j][i+1] == next.charAt(0) && next.length() != 1){
+                visit[j][i+1] = 1;
+            	return left(visit,board, i+1, j, next) + right(visit,board,i+1, j, next) + up(visit,board,i+1, j, next) + down(visit,board,i+1, j, next);
+            }
+            else if(board[j][i+1] == next.charAt(0) && next.length() == 1){
+                return 1;
+            	}
+            }
+        }else{
+            return 0;
+        }	
+		return 0;
+    }
+
+    public static int up(int[][] visit, char[][] board, int i, int j, String word){
+        
+    	String next = word.substring(1);
+    	if(j - 1 > -1) {
+            if(visit[j-1][i] == 1)
+            return 0;
+        if(word.length() > 1){
+            if(board[j-1][i] == next.charAt(0) && next.length() != 1){
+                visit[j-1][i] = 1;
+            	return left(visit,board,i,j-1, next) + right(visit,board,i,j-1, next) + up(visit,board,i,j-1 ,next) + down(visit,board, i, j-1, next);
+                }
+            else if(board[j-1][i] == next.charAt(0) && next.length() == 1){
+                return 1;
+            	}
+            }    
+        }else{
+            return 0;
+        }
+    	return 0;
+    }
+
+    public static int down(int[][] visit, char[][] board, int i, int j, String word){
+        
+        String next = word.substring(1);
+        if(j + 1 < board.length) {
+            if(visit[j+1][i] == 1)
+            return 0;
+        if(word.length() > 1){
+            if(board[j+1][i] == next.charAt(0) && next.length() != 1){
+                visit[j+1][i] = 1;
+            	return left(visit,board,i,j+1, next) + right(visit,board,i,j+1, next) + up(visit,board,i,j+1 ,next) + down(visit,board, i, j+1, next);
+                }
+            else if(board[j+1][i] == next.charAt(0) && next.length() == 1){
+                return 1;
+            	}
+            }
+        }else{
+            return 0;
+        }
+        return 0;
     }
 }
