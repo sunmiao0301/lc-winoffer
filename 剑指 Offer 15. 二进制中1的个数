@@ -1,0 +1,138 @@
+//第一版 但是不行 因为java中int是4个字节 也就是4 * 8 = 32位 但是这个“位”不是能表示的十进制数字的位数，是二进制的 所以能表示的数是2 ^ 32 << 32位的十进制数字
+public class Solution {
+    // you need to treat n as an unsigned value
+    int ret = 0;
+    public int hammingWeight(int n) {
+        String str_n =  " " + n;
+        for(int i = 0; i < str_n.length(); i++){
+            if(str_n.charAt(i) == '1')
+                ret++;
+        }
+        return ret;
+    }   
+}
+
+//第二版 除k取余法的原理 但是32位二进制还是太大了 java中的int的32位要考虑负数 所以最大值只能是21 4748 3647 = 2 ^ 31 - 1 (范围是-21 4748 3648~21 4748 3647) 而不能到达2 ^ 32 = 42 9496 7296
+315 / 601 个通过测试用例
+状态：解答错误
+提交时间：几秒前
+最后执行的输入：
+11111111111111111111111111111101
+public class Solution {
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int ret = 0;
+        while(n != 0){
+            if(n % 2 == 1)
+                ret++;
+            n /= 2;
+        }
+        return ret;
+    }
+}
+
+//第三版 做到这里 我的疑惑就是这个函数的输入既然是int 那他怎么超出int的范围呢
+//原因是他这个也是表示java中的数的范围内的 二进制串 没有超出int范围 由于不太记得码的相关知识了 此处我们只能看题解了
+//题解是用的位运算 对我来说算是新知识 之前没掌握
+//下面是我了解了位运算之后的代码 但是实际上是错误的 原因是：
+Line 7:
+error: bad operand types for binary operator’ &’
+if(n&1=1)
+first type:int
+second type: boolean
+
+public class Solution {
+    // you need to treat n as an unsigned value
+    int ret = 0;
+    public int hammingWeight(int n) {
+        while(n != 0){
+            for(int i = 0; i < 32; i++){
+                if(n & 1 == 1)
+                    ret++;
+                n = n >> 1;
+            }
+        }
+        return ret;
+    }
+}
+
+//第四版 不对 实际上有了“n = n >> 1 和 while(n != 0)”就不需要for32了
+public class Solution {
+    // you need to treat n as an unsigned value
+    
+    public int hammingWeight(int n) {
+        int ret = 0;
+        while(n != 0){
+            for(int i = 0; i < 32; i++){
+                if((n & 1) == 1)
+                    ret++;
+                n = n >> 1;
+            }
+        }
+        return ret;
+    }
+}
+
+//第五版 还是不对 >>是
+public class Solution {
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int ret = 0;
+        while(n != 0){
+            //for(int i = 0; i < 32; i++){
+                ret += n & 1;
+                n = n >> 1;
+            //}
+        }
+        return ret;
+    }
+}
+
+//第六版 对 原因是：
+>> 表示右移，如果该数为正，则高位补0，若为负数，则高位补1。如：int i=15; i>>2的结果是3，移出的部分将被抛弃。
+>>>表示无符号右移，也叫逻辑右移，即若该数为正，则高位补0，而若该数为负数，则右移后高位同样补0。
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+1 ms
+, 在所有 Java 提交中击败了
+96.74%
+的用户
+内存消耗：
+35.4 MB
+, 在所有 Java 提交中击败了
+36.62%
+的用户
+
+public class Solution {
+    // you need to treat n as an unsigned value
+    
+    public int hammingWeight(int n) {
+        int ret = 0;
+        while(n != 0){          
+                ret += n & 1;
+                n >>>= 1;
+        }
+        return ret;
+    }
+}
+
+//第七版 更好的方法 巧用 n & (n - 1)
+n &= n - 1 ： 消去数字 n 最右边的 1
+这样就是
+public class Solution {
+    public int hammingWeight(int n) {
+        int res = 0;
+        while(n != 0) {
+            res++;
+            n &= n - 1;
+        }
+        return res;
+    }
+}
+
+
+//怎么求10011对应的00011的数？
