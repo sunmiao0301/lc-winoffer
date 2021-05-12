@@ -1,0 +1,100 @@
+//第一版 结果不对 限于时间和难度 明天在写
+class Solution {
+    public boolean isNumber(String s) {
+        //s_pro =
+        //字符串包括空格吗？假设有 先处理一下
+         while(s.charAt(0) == ' '){
+             s = s.substring(1);
+         }
+         int i = 0;
+         while(s.charAt(0) != ' '){
+             if(s.length() == 1){
+                 i++;
+                 break;
+             }
+             s = s.substring(1);
+             i++;
+         }
+         s = s.substring(0,i);//处理掉了空格
+         String s_temp = s;
+         if(s.length() == 0)
+            return false;
+        int j = 0;
+         while(s.length() != 0){
+             if(s.length() == 1){
+                 return (isDecimal(s_temp) || isInteger(s_temp));
+             }
+             if(s.charAt(0) == 'e' || s.charAt(0) == 'E'){
+                 //goto way_1;
+                 break;
+             }
+             j++;
+             s = s.substring(1);
+         }
+         String s_left = s_temp.substring(0,j);
+         String s_right = s_temp.substring(j+1);
+         if((isDecimal(s_left) || isInteger(s_left)) && isInteger(s_right))
+            return true;
+         return false;
+         //return isDecimal(s) || isInteger(s);
+    }
+    public static boolean isDecimal(String s){
+        if(s.charAt(0) == '+' || s.charAt(0) == '-'){
+            s.substring(1);
+        }
+        if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){//这里+ - 和 数字的判断不应该合并 不然后面接. 不能判断是不是正确
+            s.substring(1);
+            while(s.length() != 0){
+                if(s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48){
+                    s.substring(1);
+                    continue;
+                }
+                if(s.charAt(0) == '.'){
+                    s = s.substring(1);
+                    while(s.length() != 0){
+                        if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+                            s = s.substring(1);
+                        }else{
+                            return false;
+                        }
+                    return true;
+                    }
+                return false;
+                }
+            return false;   
+            }
+            return false;
+        }
+        else if(s.charAt(0) == '.'){
+            s = s.substring(1);
+            while(s.length() != 0){
+                if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+                s = s.substring(1);
+                }else{
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static boolean isInteger(String s){
+        //一个数字字符
+        if(s.charAt(0) == '+' || s.charAt(0) == '-' || (s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+        //后面全是数字
+        s = s.substring(1);
+        while(s.length() != 0){
+            if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+                s = s.substring(1);
+            }else{
+                return false;
+            }
+        }
+        return true;
+        }else{
+            return false;
+        }
+    }
+}
