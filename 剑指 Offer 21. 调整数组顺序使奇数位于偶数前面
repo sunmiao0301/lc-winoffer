@@ -1,0 +1,109 @@
+//第一版 一遍过 简单题
+class Solution {
+    public int[] exchange(int[] nums) {
+        //感觉就是一次学习排序算法的契机 考完试把排序算法搞一遍
+        //前后一起找?
+        //左奇 右偶
+        int left = 0;
+        int right = nums.length - 1;
+        int temp = 0;
+        while(left < right){
+            //左奇右偶
+            if(nums[left] % 2 == 1 && nums[right] % 2 == 0){
+                left++;
+                right--;
+            }
+            //左奇右奇
+            else if(nums[left] % 2 == 1 && nums[right] % 2 == 1){
+                left++;
+            }
+            //左偶右奇
+            else if(nums[left] % 2 == 0 && nums[right] % 2 == 1){
+                temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+                left++;
+                right--;
+            }
+            //左偶右偶
+            else if(nums[left] % 2 == 0 && nums[right] %2 == 0){
+                right--;
+            }
+        }
+        return nums;
+    }
+}
+
+//然后第一版的思路（头尾双指针）其实能写的优雅一点 如下第二版
+补充一点，位运算的执行效率高于求余运算和乘除法 所以这里我们优化为位运算 原理：奇数的最低位为1 
+判断x是否奇数 (x & 1) == 1 true 则为奇数 //注意()不能遗漏
+判断x是否偶数 (x & 1) == 0 true 则为偶数
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+2 ms
+, 在所有 Java 提交中击败了
+98.11%
+的用户
+内存消耗：
+45.7 MB
+, 在所有 Java 提交中击败了
+99.63%
+的用户
+class Solution {
+    public int[] exchange(int[] nums) {
+        //感觉就是一次学习排序算法的契机 考完试把排序算法搞一遍
+        //前后一起找?
+        //左奇 右偶
+        int left = 0;
+        int right = nums.length - 1;
+        int temp = 0;
+        while(left < right){
+            //找左边的偶数 所以如果是奇数就continue掉
+            if((nums[left] & 1) == 1){
+                left++;
+                continue;
+            }
+            //找右边的奇数 所以如果是偶数就continue掉
+            if((nums[right] & 1) == 0){
+                right--;
+                continue;
+            }
+            temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            left++;
+            right--;
+        }
+        return nums;
+    }
+}
+
+//第三版 快慢双指针
+但是我感觉这种办法不一定比头尾双指针好？
+class Solution {
+    public int[] exchange(int[] nums) {
+        //感觉就是一次学习排序算法的契机 考完试把排序算法搞一遍
+        //前后一起找?
+        //左奇 右偶
+        int slow = 0;
+        //int fast = 1;
+        int fast = 0;
+        int temp = 0;
+        while(fast < nums.length){
+            if((nums[fast] & 1) == 1){
+                temp = nums[slow];
+                nums[slow] = nums[fast];
+                nums[fast] = temp;
+                slow++;
+                //fast++;
+                //continue;
+            }
+            fast++;
+        }
+        return nums;
+    }
+}
