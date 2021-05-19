@@ -1,0 +1,115 @@
+//第一版 未完成 我的思路分为两部：
+1）找出A中与B根节点值一样的节点，命名为 found
+2）用 found 和 B 来执行函数matchLeft 和 matchRight 以此判断 B 是否是 A 子树。
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+    //空树不是任何一个树的子结构
+    //树怎么由一个[]组表示呢
+    //判断B是不是A的子结构 所以B <= A
+    TreeNode found = A;
+    find_equal_B(B, found);
+    return matchLeft(B, found) && matchRight(B, found);
+    }
+    public static boolean matchLeft(TreeNode B, TreeNode found){
+        if(B.left != null && found.left != null && B.left.val= found.left.val)){
+            return matchLeft(B.left, found.left) && matchRight(B.left, found.left); 
+        }
+        else if(B.left == null && A_sub.left == null){//不能合并 不然不能递归下一步？
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public static boolean matchRight(TreeNode B, TreeNode found){
+        if(B.right != null && found.right != null && B.right.val == found.right.val)){
+            return matchLeft(B.right, found.right) && matchRight(B.right, found.right); 
+        }
+        else if(B.right == null && found.right == null){//不能合并 不然不能递归下一步？
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    //在这个函数的地方 引出了一个问题 就是遍历一棵树 找其中的一个节点值为已知值 x 的节点
+    public static TreeNode find_equal_B(TreeNode B, TreeNode found){
+        while(found.val != B.val){
+            if(found.left == null && found.right == null)
+                return ;
+            else if(found.left == null)
+                return find_equal_B(B, found.right);
+            else if(found.right == null)
+                return find_equal_B(B, found.left);
+            else
+                ...
+        }
+        return found;
+    }
+}
+
+//第二版 我尝试使用flag进行简化 但是后来我发现这种方法不行 
+在测试用例：
+执行结果：
+解答错误
+输入：
+[4,2,3,4,5,6,7,8,9]
+[4,8,9]
+输出：
+false
+预期结果：
+true
+时是不行的 因为树A中可能有多个和B根节点一致的节点。
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        int flag = 0;
+        return helper(A, B, flag);
+    }
+    public static boolean helper(TreeNode A, TreeNode B, int flag){
+        if(A == null)
+            return false;
+        if(B == null)//约定空树不是任意一个树的子结构
+            return false;
+
+        if(A.val == B.val)
+            flag = 1;
+        if(flag == 0)
+            return helper(A.left, B, flag) || helper(A.right, B, flag);
+
+        if(flag == 1){//一旦flag == 1 接下来的B必须是A的子结构
+            if(B.left == null && B.right == null && A.val == B.val)//进入了子结构判断模式 不代表A.val == B.val
+                return true;
+            else if(B.left == null && B.right == null && A.val != B.val)
+                return false;
+            else if(B.left == null && A.right.val == B.right.val)
+                return helper(A.right, B.right, flag);
+            else if(B.right == null && A.left.val == B.left.val)
+                return helper(A.left, B.left, flag);
+            else if(B.left != null && B.right != null && A.left != null && A.right != null)
+                return helper(A.left, B.left, flag) && helper(A.right, B.right, flag);
+            else
+                return false;
+        }
+        return false;
+    }
+}
+
+//
