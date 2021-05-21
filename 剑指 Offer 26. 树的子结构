@@ -57,7 +57,7 @@ class Solution {
     }
 }
 
-//第二版 我尝试使用flag进行简化 但是后来我发现这种方法不行 
+//第二版 我尝试使用flag进行简化 但是后来我发现这种方法没有考虑完全
 在测试用例：
 执行结果：
 解答错误
@@ -112,4 +112,150 @@ class Solution {
     }
 }
 
-//
+//第三版 昨晚洗澡的时候一直在想 终于想清楚了 秉持着可读性第一的原则 代码写的比较冗余
+    我就感觉到 这个题应该是由两个递归来解决
+    第一个递归是对A递归(称为递归A) 目的是找到A中各个与B根节点值一样的节点
+    第二个递归是对B递归(称为递归B) 目的是对递归A中找到的 进行递归
+    递归A之间应该是 并 
+    递归B之间应该是 交
+    在此基础上写好代码
+    运行，果然一次成功
+    再总结一下大致的思路：
+    ·································
+    对于找A中存在B根节点的 第一个递归——递归A
+    我们分两种大情况，目前的A与B节点值是否相等，
+    在大情况之下，还要分四种小情况，分别是：
+    A左空右空
+    A左空右不空
+    A左不空右空
+    A左不空右不空
+    如此，就是2 * 4 = 8 种情况
+    如果相等，我们肯定要让A, B进入一个递归B 这是必须的
+    如果不相等，就不需要递归B
+    在上面两种情况的基础上
+    如果A左空右空，那么什么都不需要并
+    如果A左空右不空，那么需要并上 A.right, B 的递归A
+    如果A左不空右空，那么需要并上 A.left, B 的递归A
+    如果A左不空右不空，那么需要并上 A.right, B 的递归A 再并上 A.left, B 的递归A
+    ·································
+    对于递归B
+    我们应该以B为主要 因为A可以有B没有的 但是必须有B有的 也就是说B才是那个决定性因素
+    以此，
+    分以下四种情况
+    如果B左空右空 恭喜 返回ture
+    如果B左不空右空 那么A必须左不空 且A左值等于B左值 如果上述都满足 返回A.left 和 B.left 的递归B
+    如果B左空右不空 那么A必须右不空 且A右值等于B右值 如果上述都满足 返回A.right 和 B.right 的递归B
+    如果B左不空右不空 那么A必须左不空右不空 且A左值等于右左值 如果上述都满足 返回A.left 和 B.left 的递归B 交上 返回A.right 和 B.right 的递归B
+    
+    
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+    /*
+    做到这 我就感觉到 这个题应该是由两个递归来解决
+    第一个递归是对A递归(称为递归A) 目的是找到各个与B根节点值一样的节点
+    第二个递归是对B递归(称为递归B) 目的是对前一个递归中找到的进行递归
+    递归A之间应该是 并 
+    递归B之间应该是 交 
+    */
+    if(B == null)//空树不是任意一个数的子结构
+        return false;
+    if(A == null)
+        return false;
+    return find_B_root_among_A(A, B);
+    }
+    public static boolean find_B_root_among_A(TreeNode A, TreeNode B){        
+        if(A.val == B.val){
+            if(A.left == null && A.right == null)
+                return find_B_structure_among_A(A, B);
+            if(A.left == null && A.right != null)
+                return find_B_root_among_A(A.right, B) || find_B_structure_among_A(A, B);
+            if(A.left != null && A.right == null)
+                return find_B_root_among_A(A.left, B) || find_B_structure_among_A(A, B);
+            if(A.left != null && A.right != null)
+            return find_B_root_among_A(A.left, B) || find_B_root_among_A(A.right, B) || find_B_structure_among_A(A, B);
+        }           
+        if(A.val != B.val){
+            if(A.left == null && A.right == null)
+                return false;
+            if(A.left == null && A.right != null)
+                return find_B_root_among_A(A.right, B);
+            if(A.left != null && A.right == null)
+                return find_B_root_among_A(A.left, B);
+            if(A.left != null && A.right != null)
+                return find_B_root_among_A(A.left, B) || find_B_root_among_A(A.right, B);
+        }
+    return false;//
+    }
+    public static boolean find_B_structure_among_A(TreeNode A, TreeNode B){
+        if(B.left == null && B.right == null){
+            return true;
+        }
+        if(B.left != null && B.right == null){
+            if(A.left != null && A.left.val == B.left.val)
+                return find_B_structure_among_A(A.left, B.left);
+            return false;
+        }
+        if(B.left == null && B.right != null){
+            if(A.right != null && A.right.val == B.right.val)
+                return find_B_structure_among_A(A.right, B.right);
+            return false;
+        }
+        if(B.left != null && B.right != null){
+            if(A.left != null && A.right != null && A.left.val == B.left.val && A.right.val == B.right.val)
+                return find_B_structure_among_A(A.left, B.left) && find_B_structure_among_A(A.right, B.right);
+            return false;
+        }
+    return false;//
+    }
+}
+
+//第四版
+作者：edelweisskoko
+同理 但是写的更优雅 学习了
+class Solution {
+    private TreeNode B;
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if(B == null) return false;
+        this.B = B;
+        return dfs(A);
+    }
+
+    private boolean dfs(TreeNode nodeA){
+        if(nodeA == null)
+            return false;
+        if(nodeA.val == B.val)
+            if(helper(nodeA, B))
+                return true;
+        return dfs(nodeA.left) || dfs(nodeA.right);
+    }
+
+    private boolean helper(TreeNode nodeA, TreeNode nodeB){
+        if(nodeB == null)
+            return true;
+        if(nodeA == null || nodeA.val != nodeB.val)
+            return false;
+        return helper(nodeA.left, nodeB.left) && helper(nodeA.right, nodeB.right);
+    }
+}
+
+//第五版 高手
+作者：jyd
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        return (A != null && B != null) && (recur(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B));
+    }
+    boolean recur(TreeNode A, TreeNode B) {
+        if(B == null) return true;
+        if(A == null || A.val != B.val) return false;
+        return recur(A.left, B.left) && recur(A.right, B.right);
+    }
+}
