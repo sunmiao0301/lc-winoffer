@@ -1,0 +1,31 @@
+//第一版 这么写的话参数太多了
+class Solution {
+    public int[] spiralOrder(int[][] matrix) {
+    //主要是转向问题 可以通过一个visited数组(或是一个每转一圈就--的参数) 和 四个方向的函数来完成
+    int[] ret = new int[matrix.length * matrix[].length];
+    int flag_left_to_right = matrix[].length;
+    int flag_up_to_down = matrix.length;
+    int flag_right_to_left = 0;
+    int flag_down_to_up = 0;
+
+    int temp_left_to_right = 0;
+    int temp_up_to_down = 0;
+    int temp_right_to_left = matrix[].length;
+    int temp_down_to_up = matrix.length;
+
+    int row = 0;//行（高度）
+    int col = 0;//列（宽度）
+    for(i = 0; i < matrix.length * matrix[].length; i++){
+        
+        
+        i++;
+    }
+    }
+    public static left_to_right(int row, int col, int flag_left_to_right){
+        
+    }
+}
+
+//第二版
+换成用visit来存储 但是遇到一个问题
+究其原因是因为各个函数之间都是互相的局部变量 即使你在
