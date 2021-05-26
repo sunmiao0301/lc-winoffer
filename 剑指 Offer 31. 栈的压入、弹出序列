@@ -1,0 +1,76 @@
+//第一版 通过 但效果不好 明天再改
+执行结果：
+通过
+执行用时：
+4 ms
+, 在所有 Java 提交中击败了
+7.25%
+的用户
+内存消耗：
+37.9 MB
+, 在所有 Java 提交中击败了
+85.56%
+的用户
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+    //经典数据结构 栈 的课后习题
+    //假设压入栈的所有数字均不相等
+    //这里的压入序列指的是“只要压入即可”而不是“先全部压入”
+    //我感觉 分析的重心不在于 哪些是对的（种类多） 而是哪些是不对的（种类少）
+    //出错的可能性就是 之前没出去 但是在后面又先出去 一旦被压住 就不能再其之前出去
+    //需要注意的是 压入顺序是否一定有序12345...？ 好像不一定
+    //好像可以直接用栈来 完成这个算法
+    //输入输出都是数组
+    Stack<Integer> stack = new Stack<Integer>();
+    int in = 0;
+    int out = 0;
+    while(in != pushed.length - 1 && out != popped.length){
+        /*
+        pushed 是 popped 的排列。所以不可能数字组成不一样
+        分析几种可能：
+        首先明确 一切活动都是以 出栈数组当前下标对应的值 决定
+        1）出栈下标值 等于 入栈下标值（这一步必须且必然发生）
+        此时 进了 又出 然后出栈下标值+1 入栈下标-1（这是第一步）
+        此后，有两种可能
+        1.1）出栈下标值 又等于 入栈下标值 继续出栈 下标值+1 入栈下标-1..
+        1.2）出栈下标值 不等于 入栈下标值不变 入栈下标+2 继续比较..
+        2）出栈下标值 不等于 入栈下标值
+        此时 进了 不出 出栈下标不变 入栈下标+1
+        直到
+
+        上面的分析都是建立在不用栈的前提上 如果用 应该能简化
+         */
+        stack.push(pushed[in]);
+        while(popped[out] == stack.peek()){
+            stack.pop();
+            out++;
+            if(stack.empty()){
+                in++;
+                if(in == pushed.length)
+                    return true;
+                stack.push(pushed[in]);
+            }
+                
+            if(out == popped.length)
+                break;
+        }
+        if(popped[out] != stack.peek()){
+            //stack.push()
+            in++;
+        }
+    }
+    if(in == pushed.length - 1){
+        stack.push(pushed[in]);
+        while(!stack.empty()){
+            if(stack.pop() == popped[out])
+                out++;
+            else
+                return false;
+        }
+
+    }
+    if(out == popped.length)//此处out = 1
+        return true;
+    return false;
+    }
+}
