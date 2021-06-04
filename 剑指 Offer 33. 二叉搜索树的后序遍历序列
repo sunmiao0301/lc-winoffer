@@ -1,0 +1,150 @@
+//第一版 但是leetcode上不支持方法copyOfRange 故无法验证此方法
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+    /*后序遍历 即“左——右——根” 的顺序（对应的大小关系是“小——大——中”）
+    ·假设输入的数组的任意两个数字都互不相同。
+    二叉查找树（Binary Search Tree）
+    （又：二叉搜索树，二叉排序树）
+    它或者是一棵空树
+    或者是具有下列性质的二叉树： 
+    1）若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值； 
+    2）若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值； 
+    3）它的左、右子树也分别为二叉排序树。
+
+    我感觉想要判断其为true是困难的 但是要判断其为false应该是不难的
+    
+    小大中 小大 小中 大中 //小 大 中
+
+    有可能是和递归有关
+    因为最后一个值就是根节点 所以小于根的就是左子树 大于根值的就是右子树 但是数组不好递归啊 要新建很多子数组吗
+    或者用字符串来存？
+    那么是不是对于每一次递归只要都满足
+    “小 大 中”
+    “小 中”
+    “大 中”
+    即可
+    （反正就是在分界线出现之后 分界线如何确定呢 那么就是出最后一个值之外 第一个比最后一个值大的 如果有 就是含大 那么就是
+    那么第一个小是否需要判断呢 如果数组有类似substring这样的 其实也不一定好用 还行 那就用copy试试）
+    （而不能出现小 大 小 中 等其他情况）
+    */
+    if(postorder.length == 1)
+        return true;
+    if(postorder[0] > postorder[postorder.length - 1])
+        return verifyPostorder(copyOfRange(postorder, 0, postorder.length - 2));
+    
+    int index = 0;
+    for(; index < postorder.length; index++){
+        if(postorder[index] > postorder[postorder.length - 1])
+            break;
+    }
+
+    if(index == postorder.length)
+        return verifyPostorder(copyOfRange(postorder,0,index - 2));
+    for(int i = 0; i < index; i++){
+        if(postorder[i] > postorder[postorder.length - 1])
+            return false;
+    }
+    for(int j = index + 1; j < postorder.length - 1; j++){
+        if(postorder[j] < postorder[postorder.length - 1])
+            return false;
+    }
+    return verifyPostorder(copyOfRange(postorder, 0, index - 1)) && verifyPostorder(copyOfRange(postorder, index, postorder.length - 2));
+    }
+}
+
+//第二版 看一下题解使用的方法 于是我们在题解使用的替代copyOfRange方法的基础上 继续使用我们的思路 如下
+其实完全不需要在每一层递归 都新建两个数组用来存储左右子树 因为其实有一个最初的树即可 在这个树的基础上进行即可
+需要注意的是 由于Solution方法的参数是数组类型 所以我们必须另开一个方法（起到copyOfRange的作用）
+但是这一版本 在第20个样例的时候 不能通过
+20 / 23 个通过测试用例
+状态：解答错误
+提交时间：18 分钟前
+最后执行的输入：
+[1,2,5,10,6,9,4,3]
+
+class Solution {
+    //何时return false 是个问题
+    public boolean verifyPostorder(int[] postorder) {
+        if(postorder == null || postorder.length < 3)
+            return true;
+        int right_begin = 0;
+        while(postorder[right_begin] < postorder[postorder.length - 1])
+            right_begin++;
+        for(int i = right_begin; i < postorder.length - 1; i++){
+            if(postorder[i] < postorder[postorder.length - 1])
+                return false;
+        }
+        if(right_begin == 0 || right_begin == postorder.length - 1)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, 0, postorder.length - 2);
+        return helper(postorder, 0 , right_begin - 1) && helper(postorder, right_begin, postorder.length - 2);
+    }
+    public static boolean helper(int[] postorder, int right_begin, int right_end){
+        if(right_end - right_begin == 1 || right_end - right_end == 0)····················································A
+            return true;
+        int temp_right_begin = right_begin;
+        while(postorder[temp_right_begin] < postorder[right_end])//right_end对应的是新子树的根节点
+            temp_right_begin++;
+        for(int i = temp_right_begin; i < right_end; i++){
+            if(postorder[i] < postorder[right_end])
+                return false;
+        }
+        if(temp_right_begin == right_begin || temp_right_begin == right_end)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, right_begin, right_end - 1);
+        if(right_end - right_begin == 2)
+            return true;
+        return helper(postorder, right_begin , temp_right_begin) && helper(postorder, temp_right_begin, right_end - 1);
+    }
+}
+
+//第三版 通过 将A处代码略作修改即可通过 
+if(postorder == null || right_end - right_begin < 2)//right_end - right_begin == 1 || right_end - right_end == 0
+分析原因有两种分析方法：
+1）Solution主类方法应该和helper递归方法一致 因为本来就是同一个问题的递归解决
+2）粗心 把第二个判断条件打错了“right_end - right_end == 0”
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.7 MB
+, 在所有 Java 提交中击败了
+84.73%
+的用户
+class Solution {
+    //何时return false 是个问题
+    public boolean verifyPostorder(int[] postorder) {
+        if(postorder == null || postorder.length < 3)
+            return true;
+        int right_begin = 0;
+        while(postorder[right_begin] < postorder[postorder.length - 1]){
+            right_begin++;
+        }
+        for(int i = right_begin; i < postorder.length - 1; i++){
+            if(postorder[i] < postorder[postorder.length - 1])
+                return false;
+        }
+        if(right_begin == 0 || right_begin == postorder.length - 1)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, 0, postorder.length - 2);
+        return helper(postorder, 0 , right_begin - 1) && helper(postorder, right_begin, postorder.length - 2);
+    }
+    public static boolean helper(int[] postorder, int right_begin, int right_end){
+        if(postorder == null || right_end - right_begin < 2)//right_end - right_begin == 1 || right_end - right_end == 0
+            return true;
+        int temp_right_begin = right_begin;
+        while(postorder[temp_right_begin] < postorder[right_end]){//right_end对应的是新子树的根节点
+            temp_right_begin++;
+        }
+        for(int i = temp_right_begin; i < right_end; i++){
+            if(postorder[i] < postorder[right_end])
+                return false;
+        }
+        if(temp_right_begin == right_begin || temp_right_begin == right_end)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, right_begin, right_end - 1);
+        if(right_end - right_begin == 2)
+            return true;
+        return helper(postorder, right_begin , temp_right_begin) && helper(postorder, temp_right_begin, right_end - 1);
+    }
+}
