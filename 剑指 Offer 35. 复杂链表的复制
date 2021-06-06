@@ -272,3 +272,114 @@ class Solution {
         return ret_is_next.next;
     }
 }
+
+//第七版 自己写的 通过
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+38 MB
+, 在所有 Java 提交中击败了
+60.73%
+的用户
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+class Solution {
+    //把next和random放在一起处理 第一次遍历先只创建节点 不连接
+    public Node copyRandomList(Node head) {
+        Map<Node, Node> map = new HashMap<>();
+        Node ret_is_next = new Node(0);
+        //Node temp = ret_is_next;
+        Node cur = head;
+        while(cur != null){//新建若干节点 并对应的存入map
+            Node temp = new Node(cur.val);
+            map.put(cur, temp);
+            cur = cur.next;
+        }
+        cur = head;
+        ret_is_next.next = map.get(cur);
+        //cur = cur.next;
+        while(cur != null){
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        return ret_is_next.next;
+        
+    }
+}
+
+//第八版 K神方法一：哈希表
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null) return null;
+        Node cur = head;
+        Map<Node, Node> map = new HashMap<>();
+        // 3. 复制各节点，并建立 “原节点 -> 新节点” 的 Map 映射
+        while(cur != null) {
+            map.put(cur, new Node(cur.val));
+            cur = cur.next;
+        }
+        cur = head;
+        // 4. 构建新链表的 next 和 random 指向
+        while(cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        // 5. 返回新链表的头节点
+        return map.get(head);
+    }
+}
+
+//第九版 K神拼接 + 拆分
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null) return null;
+        Node cur = head;
+        // 1. 复制各节点，并构建拼接链表
+        while(cur != null) {
+            Node tmp = new Node(cur.val);
+            tmp.next = cur.next;
+            cur.next = tmp;
+            cur = tmp.next;
+        }
+        // 2. 构建各新节点的 random 指向
+        cur = head;
+        while(cur != null) {
+            if(cur.random != null)
+                cur.next.random = cur.random.next;
+            cur = cur.next.next;
+        }
+        // 3. 拆分两链表
+        cur = head.next;
+        Node pre = head, res = head.next;
+        while(cur.next != null) {
+            pre.next = pre.next.next;
+            cur.next = cur.next.next;
+            pre = pre.next;
+            cur = cur.next;
+        }
+        pre.next = null; // 单独处理原链表尾节点
+        return res;      // 返回新链表头节点
+    }
+}
