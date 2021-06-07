@@ -1,0 +1,213 @@
+//第一版 堆栈溢出 java.lang.StackOverFlowError
+究其原因就是A处代码 把右节点连上了 导致一直递归求 find_max
+可见这个问题的难度就在于怎么确定递归的终止条件
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val,Node _left,Node _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+class Solution {
+    //“head” 表示指向链表中有最小元素的节点。
+    //左右子节点都有的 则前后继都有 改换指向即可
+    //只有左或只有右的 则只有前或后继 需要对其中一个指向
+    //叶子节点前后继都无
+    //树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继
+    public Node treeToDoublyList(Node root) {
+    //每个没有某个指针的 一定被连接了 所以只需要反向再连接回去即可
+    Node head = find_min(root);//还需要返回链表中的第一个节点的指针
+    //
+    //find_min(root).left = find_max(root);//第一个节点的前驱是最后一个节点
+    //find_max(root).right = find_min(root);//最后一个节点的后继是第一个节点。
+    helper(root);
+    Node tail = head;
+    while(tail.right != null)
+        tail = tail.right;
+    head.left = tail;
+    tail.right = head;
+    return head;
+    }
+    public Node find_min(Node sub_root){//找到的min一定是没有右（后继指针）的
+        if(sub_root.left == null)
+            return sub_root;
+        return find_min(sub_root.left);
+    }
+    public Node find_max(Node sub_root){//找到的max一定是没有左（前继指针）的
+        if(sub_root.right == null)
+            return sub_root;
+        return find_max(sub_root.right);
+    }
+    public void helper(Node sub_root){
+        if(sub_root.left != null){
+            Node temp = sub_root.left;
+            sub_root.left = find_max(sub_root.left);
+            //find_max(sub_root.left).right = sub_root;
+            sub_root.left.right = sub_root;//····································A
+            helper(temp);
+        }
+        if(sub_root.right != null){
+            Node temp = sub_root.right;
+            sub_root.right = find_min(sub_root.right);
+            //find_min(sub_root.right).left = sub_root;
+            sub_root.right.left = sub_root;
+            helper(temp);
+        }
+        return ;
+    }
+}
+
+//第二版 还是不行 在例子[8,-6,null,-8]处就不行
+12 / 50 个通过测试用例
+状态：解答错误
+提交时间：4 小时前
+最后执行的输入：
+[8,-6,null,-8]
+问题在于本样例中三个节点都连接好之后，递归中的right处理部分会进入无限循环
+解决办法就是：
+在进入递归 和递归中进入递归都限定好 对已经处理过的节点不再处理
+见第三版
+class Solution {
+    //“head” 表示指向链表中有最小元素的节点。
+    //左右子节点都有的 则前后继都有 改换指向即可
+    //只有左或只有右的 则只有前或后继 需要对其中一个指向
+    //叶子节点前后继都无
+    //树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继
+    public Node treeToDoublyList(Node root) {
+    //每个没有某个指针的 一定被连接了 所以只需要反向再连接回去即可
+    if(root == null)return null;
+    Node head = find_min(root);//还需要返回链表中的第一个节点的指针
+    Node tail = find_max(root);
+    head.left = tail;
+    tail.right = head;
+    helper(root,head,tail);
+    return head;
+    }
+    public Node find_min(Node sub_root){//找到的min一定是没有右（后继指针）的
+        if(sub_root.left == null)
+            return sub_root;
+        return find_min(sub_root.left);
+    }
+    public Node find_max(Node sub_root){//找到的max一定是没有左（前继指针）的
+        if(sub_root.right == null)
+            return sub_root;
+        return find_max(sub_root.right);
+    }
+    public void helper(Node sub_root, Node head, Node tail){
+        if(sub_root.left != null){
+            Node temp = sub_root.left;
+            sub_root.left = find_max(sub_root.left);
+            sub_root.left.right = sub_root;
+            if(temp.left.right != temp || temp.right.left != temp )//temp.right.left可能为null 这样也行么 && temp.right.left != temp
+                helper(temp,head,tail);
+        }
+        if(sub_root.right != null){
+            Node temp = sub_root.right;
+            sub_root.right = find_min(sub_root.right);
+            sub_root.right.left = sub_root;
+            if(temp.left.right != temp || temp.right.left != temp)// && temp.left.right != temp
+                helper(temp,head,tail);
+        }
+        return ;
+    }
+}
+
+//第三版 自己写的：
+关键就在于 在进入递归 和在递归中进入递归 都要限定好 对已经处理过某一方向的节点的该方向不再处理
+限定条件就是ABCD处的代码
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+37.4 MB
+, 在所有 Java 提交中击败了
+96.83%
+的用户
+class Solution {
+    //“head” 表示指向链表中有最小元素的节点。
+    //左右子节点都有的 则前后继都有 改换指向即可
+    //只有左或只有右的 则只有前或后继 需要对其中一个指向
+    //叶子节点前后继都无
+    //树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继
+    public Node treeToDoublyList(Node root) {
+    //每个没有某个指针的 一定被连接了 所以只需要反向再连接回去即可
+    if(root == null)return null;
+    Node head = find_min(root);//还需要返回链表中的第一个节点的指针
+    Node tail = find_max(root);
+    head.left = tail;
+    tail.right = head;
+    helper(root);
+    return head;
+    }
+    public Node find_min(Node sub_root){//找到的min一定是没有右（后继指针）的
+        if(sub_root.left == null)
+            return sub_root;
+        return find_min(sub_root.left);
+    }
+    public Node find_max(Node sub_root){//找到的max一定是没有左（前继指针）的
+        if(sub_root.right == null)
+            return sub_root;
+        return find_max(sub_root.right);
+    }
+    public void helper(Node sub_root){
+        if(sub_root.left != null && sub_root.left.right != sub_root){
+            Node temp = sub_root.left;
+            sub_root.left = find_max(sub_root.left);
+            sub_root.left.right = sub_root;
+            if(temp.left.right != temp || temp.right.left != temp )
+                helper(temp);
+        }
+        if(sub_root.right != null && sub_root.right.left != sub_root){
+            Node temp = sub_root.right;
+            sub_root.right = find_min(sub_root.right);
+            sub_root.right.left = sub_root;
+            if(temp.left.right != temp || temp.right.left != temp)
+                helper(temp);
+        }
+        return ;
+    }
+}
+
+//第四版 K神
+本文解法基于性质：二叉搜索树的中序遍历为 递增序列 。
+将 二叉搜索树 转换成一个 “排序的循环双向链表” ，其中包含三个要素：
+排序链表： 节点应从小到大排序，因此应使用 中序遍历 “从小到大”访问树的节点。
+双向链表： 在构建相邻节点的引用关系时，设前驱节点 pre 和当前节点 cur ，不仅应构建 pre.right = cur ，也应构建 cur.left = pre 。
+循环链表： 设链表头节点 head 和尾节点 tail ，则应构建 head.left = tail 和 tail.right = head 。
+https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/solution/mian-shi-ti-36-er-cha-sou-suo-shu-yu-shuang-xian-5/
+class Solution {
+    Node pre, head;
+    public Node treeToDoublyList(Node root) {
+        if(root == null) return null;
+        dfs(root);
+        head.left = pre;
+        pre.right = head;
+        return head;
+    }
+    void dfs(Node cur) {
+        if(cur == null) return;
+        dfs(cur.left);
+        if(pre != null) pre.right = cur;
+        else head = cur;
+        cur.left = pre;
+        pre = cur;
+        dfs(cur.right);
+    }
+}
