@@ -1,0 +1,165 @@
+//第一版没写好 写的是找到最大的那个数对应的数量 比如
+输入: [1, 2, 3, 2, 2, 2, 5, 4, 2]
+正确输出: 2
+但是我的写法输出的是2出现的次数，即5.
+我的思路是 维护一个第一大和一个第二大 当第二大的数字出现次数 加上 剩下的数字 都不能大于第一大的数组出现的次数时 就结束循环 但是这种方法好像不是很好写 思路也不一定好
+ /*
+            每次只能 + 1
+            如果小于second
+                无动作
+            如果等于second
+                如果小于first
+                    无动作
+                如果等于first
+                    无动作
+                如果大于first（不可能）
+                    无动作
+
+            如果大于second（那么原来 可能是 second 或是 first 或是与他们相等的值）
+                如果小于first(那么可能是second 或是与second相等的值
+                    second易主
+                如果等于first
+                    second易主 first不变
+                如果大于first（那么是first）
+                    那么second = first
+                    first易主 = 这个值
+            */
+且结果好像也不对 因为结束循环的时候 2出现的次数应该是4 不是5
+class Solution {
+    public int majorityElement(int[] nums) {
+        //你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+        if(nums.length == 1 || nums.length == 2)
+            return nums[0];
+        int first = 0;
+        int second = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            if(map.containsKey(nums[i]))
+                map.put(nums[i], map.get(nums[i]) + 1);//根据新数更新hashmap 当空怎么处理？
+            else
+                map.put(nums[i], 1);
+           
+            int temp = map.get(nums[i]);
+
+            if(temp <= second)
+                continue;
+            if(temp > second){
+                if(temp <= first)
+                    second = temp;
+                else if(temp > first)
+                    second = first;
+                    first = temp;
+            }
+            if(second + nums.length - i - 1 < first){
+
+                return first;
+            }
+        }
+        return -1;
+    }
+}
+
+//第二版 想改动第一版 使得其能直接返回出现次数first的那个数字 后来改的面目全非了 运行不了
+class Solution {
+    public int majorityElement(int[] nums) {
+        //你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+            /*
+            每次只能 + 1
+            如果小于second
+                无动作
+            如果等于second
+                如果小于first
+                    无动作
+                如果等于first
+                    无动作
+                如果大于first（不可能）
+                    无动作
+
+            如果大于second（那么原来 可能是 second 或是 first 或是与他们相等的值）
+                如果小于first(那么可能是second 或是与second相等的值
+                    second易主
+                如果等于first
+                    second易主 first不变
+                如果大于first（那么是first）
+                    那么second = first
+                    first易主 = 这个值
+            */
+        if(nums.length == 1 || nums.length == 2)
+            return nums[0];
+        int first;
+        int second;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            if(map.containsKey(nums[i]))
+                map.put(nums[i], map.get(nums[i]) + 1);//根据新数更新hashmap 
+            else
+                map.put(nums[i], 1);
+
+        int temp = map.get(nums[i]);
+        
+
+            if(temp <= map.get(second))
+                continue;
+            if(temp > map.get(second)){
+                if(temp <= map.get(first))
+                    map.put(second, temp);
+                    //second = temp;
+                else if(temp > map.get(first)){
+                    map.put(second, map.get(first));
+                    //second = first;
+                    map.put(first, temp);
+                    //first = temp;
+                }
+            }
+            if(map.get(second) + nums.length - i - 1 < map.get(first))
+                return first;
+        }
+        return -1;
+    }
+}
+
+//第三版 普通的hashmap 
+执行结果：
+通过
+执行用时：
+22 ms
+, 在所有 Java 提交中击败了
+8.04%
+的用户
+内存消耗：
+43.6 MB
+, 在所有 Java 提交中击败了
+31.54%
+的用户
+class Solution {
+    public int majorityElement(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            if(map.containsKey(nums[i]))
+                map.put(nums[i], map.get(nums[i]) + 1);
+            else
+                map.put(nums[i] , 1);
+            if(map.get(nums[i]) == nums.length / 2 + 1)
+                return nums[i];
+        }
+        return -1;
+    }
+}
+
+//第四版
+class Solution {
+    public int majorityElement(int[] nums) {
+    /*
+    排序法
+    题设“数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。你可以假设数组是非空的，并且给定的数组总是存在多数元素。”
+    这句话说明 对这个数组排序 最中间的必然是这个超过一半的数字
+    对于长度为奇数 那么就是length / 2
+    对于长度为偶数 那么中线左右都行 
+    */
+    Arrays.sort(nums);
+    return nums[nums.length / 2];
+    }
+}
+
+//大神解法 摩尔投票法
+摩尔投票法： 核心理念为 票数正负抵消 。此方法时间和空间复杂度分别为 O(N)O(N) 和 O(1)O(1) ，为本题的最佳解法。
