@@ -157,8 +157,117 @@ class Solution {
 }
 
 //第四版 发现问题在于第一轮好像没有结束
+问题先放着 进行第五版
 
+//第五版 看思路后自己写的 不剪枝的DFS 但是好理解
+但是报错了：
+输入
+"abc"
+输出
+["aba","abc"]
+预期结果
+["abc","acb","bac","bca","cab","cba"]
 
+错误出在A处，原因是错误写法s = s + String.valueOf(arr[i]);下s = s + String.valueOf(arr[i]);
+其实是等效于 String new_s = "";
+            new_s = new_s + String.valueOf(arr[i]);
+这样就相当于在这次循环中 保存了一个临时局部变量
+而正确的写法的效果保证了每次循环时 s 都来自外层的参数传递而来 都是“新的”；
+
+visited[i] = false;·······························这一行代码的用法 位置都很巧妙（B）
+为何巧妙，以“abc”为例，列出递归展开的样子可知：
+for(i = 0)  s = a;
+······
+······
+······
+        for(i = 1) s = ab;
+        ······
+        ······
+        ······
+                for(i = 2) s = abc;
+                ······
+                ······
+                ······
+                    set.add(s);
+                    return;
+                    
+                visited[2] = false;
+                i++（==3，跳出循环）
+         visited[1] = false;
+         
+         然后
+         for(i = 2) s = ac;
+         ······
+         ······
+         ······
+                 for(i = 1) s = acb;
+                 ······
+                 ······
+                 ······
+·························································abc 和 acb 后面不再列举了
+class Solution {
+    Set<String> set = new HashSet<>();
+
+    public String[] permutation(String s) {
+        char[] arr = s.toCharArray();//先转化为char字符 然后最后生成字符串的时候再使用String.valueOf(char)方法把字符转换为String
+        boolean[] visited = new boolean[arr.length];
+        s = "";
+        helper(s, visited, arr);
+        return set.toArray(new String[set.size()]);
+    }
+    void helper(String s, boolean[] visited, char[] arr){
+        if(s.length() == arr.length){
+            set.add(s);
+            return;
+        }
+        for(int i = 0; i < arr.length; i++){
+            if(visited[i])
+                continue;
+            visited[i] = true;
+            s = s + String.valueOf(arr[i]);············································A
+            helper(s, visited, arr);
+            visited[i] = false;·······························这一行代码的用法 位置都很巧妙（B）
+        }
+    }
+}
+
+//第六版 改正第五版错误 但是效果很差 因为没有剪枝
+执行结果：
+通过
+执行用时：
+54 ms
+, 在所有 Java 提交中击败了
+22.23%
+的用户
+内存消耗：
+44.8 MB
+, 在所有 Java 提交中击败了
+5.90%
+的用户
+class Solution {
+    Set<String> set = new HashSet<>();
+
+    public String[] permutation(String s) {
+        char[] arr = s.toCharArray();//先转化为char字符 然后最后生成字符串的时候再使用String.valueOf(char)方法把字符转换为String
+        boolean[] visited = new boolean[arr.length];
+        s = "";
+        helper(s, visited, arr);
+        return set.toArray(new String[set.size()]);
+    }
+    void helper(String s, boolean[] visited, char[] arr){
+        if(s.length() == arr.length){
+            set.add(s);
+            return;
+        }
+        for(int i = 0; i < arr.length; i++){
+            if(visited[i])
+                continue;
+            visited[i] = true;
+            helper(s+String.valueOf(arr[i]), visited, arr);
+            visited[i] = false;
+        }
+    }
+}
 
 //最后一版 K神
 class Solution {
