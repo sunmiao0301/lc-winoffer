@@ -133,7 +133,7 @@ class Solution {
             if(left == k - 1){
                 return Arrays.copyOfRange(arr, 0, k);
             }
-            if(left < k - 1){
+            if(left < k - 1){······················································A
                 int[] temp_arr = Arrays.copyOfRange(arr, 0, right_s + 1);
                 Arrays.sort(temp_arr);
                 return Arrays.copyOfRange(temp_arr, 0, k);
@@ -143,7 +143,11 @@ class Solution {
     }
 }
 
-//第四版 大神
+//第四版 第三版的时空还不是很好的原因在于A处代码，没有继续用快排思想解决，而是直接使用的Arrays.sort()来解决了
+下面是对第三版修正之后的结果：
+
+
+//第五版 大神
 class Solution {
     public int[] getLeastNumbers(int[] arr, int k) {
         if (k == 0 || arr.length == 0) {
