@@ -143,11 +143,154 @@ class Solution {
     }
 }
 
-//第四版 第三版的时空还不是很好的原因在于A处代码，没有继续用快排思想解决，而是直接使用的Arrays.sort()来解决了
+//第四版 
+第三版的时空还不是很好的原因在于A处代码，没有继续用快排思想解决，而是直接使用的Arrays.sort()来解决了
 下面是对第三版修正之后的结果：
+但是在第五个样例处出了问题：
+执行结果：
+解答错误
+输入：
+[0,0,1,2,4,2,2,3,1,4]
+8
+输出：
+[0,0,1,2,2,2,2,3]
+预期结果：
+[0,0,1,1,2,2,2,3]
+居然多出了一个2。。。
 
+最后发现是因为在退出循环C的时候没有注意把最后一个“空”填上
+其次 我发现 AB处代码是没有必要改成<= >= 的
 
-//第五版 大神
+根据上面的分析 改正结果如第五版
+
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        //int left = 0;
+        //int right = arr.length - 1;
+        if(k >= arr.length)
+            return arr;
+        return helper(0, arr.length - 1, arr, 0, arr.length - 1, k);
+    }
+    public int[] helper(int left, int right, int[] arr, int left_s, int right_s, int k){
+        int temp = arr[left];
+        while(left < right){·········································C
+            while(left < right){//先用大的填左边的坑
+                if(arr[right] <= temp){//····························A
+                    arr[left] = arr[right];//右边出现坑
+                    left++;
+                    break;
+                }
+                right--;
+            }
+            while(left < right){//用小的填右边的坑
+                if(arr[left] >= temp){//······························B
+                    arr[right] = arr[left];//左边出现坑
+                    right--;
+                    break;
+                }
+                left++;
+            }
+        }
+    if(left > k)
+        return helper(left_s, right - 1, arr, left_s, right - 1, k);
+    if(left < k - 1)
+        return helper(left + 1, right_s, arr, left + 1, right_s, k);
+    if(left == k || left == k - 1)
+        return Arrays.copyOfRange(arr, 0, k);
+    return new int[0];
+    }
+}
+
+//第五版 时间很ok 但是空间上不是很好 模仿大神思路略作修改看看能否好些
+执行结果：
+通过
+执行用时：
+2 ms
+, 在所有 Java 提交中击败了
+99.54%
+的用户
+内存消耗：
+39.9 MB
+, 在所有 Java 提交中击败了
+28.66%
+的用户
+炫耀一下:
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if(k >= arr.length)
+            return arr;
+        return helper(0, arr.length - 1, arr, 0, arr.length - 1, k);
+    }
+    public int[] helper(int left, int right, int[] arr, int left_s, int right_s, int k){
+        int temp = arr[left];//······························拿出一个坑
+        while(left < right){
+            while(left < right){//先用大的填左边的坑
+                if(arr[right] < temp){
+                    arr[left] = arr[right];//右边出现坑
+                    left++;
+                    break;
+                }
+                right--;
+            }
+            while(left < right){//用小的填右边的坑
+                if(arr[left] > temp){
+                    arr[right] = arr[left];//左边出现坑
+                    right--;
+                    break;
+                }
+                left++;
+            }
+        }
+        arr[left] = temp;···································把最后一个空填上！
+    if(left > k)
+        return helper(left_s, right - 1, arr, left_s, right - 1, k);
+    if(left < k - 1)
+        return helper(left + 1, right_s, arr, left + 1, right_s, k);
+    if(left == k || left == k - 1)
+        return Arrays.copyOfRange(arr, 0, k);
+    return new int[0];
+    }
+}
+
+//第六版 模仿大神空间的思路 空间上略好一点
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if(k >= arr.length)
+            return arr;
+        return helper(0, arr.length - 1, arr, k);
+    }
+    public int[] helper(int left, int right, int[] arr, int k){
+        int temp = arr[left];//····························拿出一个坑
+        int left_s = left;
+        int right_s = right;
+        while(left < right){
+            while(left < right){//先用大的填左边的坑
+                if(arr[right] < temp){//····························
+                    arr[left] = arr[right];//右边出现坑
+                    left++;
+                    break;
+                }
+                right--;
+            }
+            while(left < right){//用小的填右边的坑
+                if(arr[left] > temp){//······························
+                    arr[right] = arr[left];//左边出现坑
+                    right--;
+                    break;
+                }
+                left++;
+            }
+        }
+        arr[left] = temp;
+    if(left > k)
+        return helper(left_s, right - 1, arr, k);
+    if(left < k - 1)
+        return helper(left + 1, right_s, arr, k);
+    return Arrays.copyOf(arr, k);
+    }
+}
+
+//第七版 大神题解
 class Solution {
     public int[] getLeastNumbers(int[] arr, int k) {
         if (k == 0 || arr.length == 0) {
