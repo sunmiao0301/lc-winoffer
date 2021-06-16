@@ -317,4 +317,216 @@ class Solution {
         }
         return 0;
     }
+    
+    6.16号重新做
+    //第一版
+对于示例
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "A"
+预期输出：true
+实际输出：false
+
+检查发现首先有一个问题出在A处，ret不是全局变量 即使是传参 也不能被修改生效 还需要注意的是 全局变量不要作为参数 反而会失效
+改正该错误后见第二版 
+
+class Solution {
+    public boolean exist(char[][] board, String word) {
+    //同一个单元格内的字母不允许重复使用 visit[]
+    boolean ret = false;
+    int[][] visit = new int[board.length][board[0].length];//初始化全是0
+    for(int i = 0; i < board.length; i++){
+        for(int j = 0; j < board[0].length; j++){
+            if(board[i][j] == word.charAt(0)){
+                helper(i, j, visit, board, word, 1, ret);
+            }
+        }
+    }
+    return ret;
+    }
+    void helper(int i, int j, int[][] visit, char[][] board, String word, int index, boolean ret){
+        visit[i][j] = 1;
+        if(index == word.length()){·······································A
+            ret = ret || true;
+            return;
+        }
+
+        //上面
+        if(i - 1 >= 0){
+            if(board[i - 1][j] == word.charAt(index) && visit[i - 1][j] != 1){
+                i--;
+                index++;
+                helper(i, j , visit, board, word, index, ret);
+            }
+        }
+        //左边
+        if(j - 1 >= 0){
+            if(board[i][j - 1] == word.charAt(index) && visit[i][j - 1] != 1){
+                j--;
+                index++;
+                helper(i, j, visit, board, word, index, ret);
+            }
+        }
+        //下边
+        if(i + 1 <= board.length - 1){
+            if(board[i+1][j] == word.charAt(index) && visit[i+1][j] != 1){
+                i++;
+                index++;
+                helper(i, j, visit, board, word, index, ret);
+            }
+        }
+        //右边
+        if(j + 1 <= board[0].length - 1){
+            if(board[i][j + 1] == word.charAt(index) && visit[i][j+1] != 1){
+                j++;
+                index++;
+                helper(i, j, visit, board, word, index, ret);
+            }
+        }
+    }
+}
+
+//第二版
+在本第二版中
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "A" / "AB" / "ABC"
+预期输出：true
+实际输出：true
+也就是说一条直线上的都行了 
+但是转弯的就不行：
+[["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+"ABCC"
+此时
+会出现“StringIndexOutOfBoundsException：String index out of range： 4”
+
+然后我试验了多种情况 得到的结果是 从左向右可以
+从右向左 从上向下 从下向上 都不行
+
+然后我发现了问题所在 对于有顺序的 上———左——下——右而言
+前面的index++对后面的index有影响
+发现此问题后修改如第三版
+
+class Solution {
+    boolean ret = false;
+    public boolean exist(char[][] board, String word) {
+    //同一个单元格内的字母不允许重复使用 visit[]
+    int[][] visit = new int[board.length][board[0].length];//初始化全是0
+    for(int i = 0; i < board.length; i++){
+        for(int j = 0; j < board[0].length; j++){
+            if(board[i][j] == word.charAt(0)){
+                helper(i, j, visit, board, word, 1);
+            }
+        }
+    }
+    return ret;
+    }
+    void helper(int i, int j, int[][] visit, char[][] board, String word, int index){
+        visit[i][j] = 1;
+        if(index == word.length()){
+            ret = ret || true;
+            return;
+        }
+
+        //上面
+        if(i - 1 >= 0){
+            if(board[i - 1][j] == word.charAt(index) && visit[i - 1][j] != 1){
+                i--;
+                index++;
+                helper(i, j , visit, board, word, index);
+            }
+        }
+        //左边
+        if(j - 1 >= 0){
+            if(board[i][j - 1] == word.charAt(index) && visit[i][j - 1] != 1){
+                j--;
+                index++;
+                helper(i, j, visit, board, word, index);
+            }
+        }
+        //下边
+        if(i + 1 <= board.length - 1){
+            if(board[i+1][j] == word.charAt(index) && visit[i+1][j] != 1){
+                i++;
+                index++;
+                helper(i, j, visit, board, word, index);
+            }
+        }
+        //右边
+        if(j + 1 <= board[0].length - 1){
+            if(board[i][j + 1] == word.charAt(index) && visit[i][j+1] != 1){
+                j++;
+                index++;
+                helper(i, j, visit, board, word, index);
+            }
+        }
+    }
+}
+
+//第三版
+在第77个样例处出错
+执行结果：
+解答错误
+输入：
+[["C","A","A"],["A","A","A"],["B","C","D"]]
+CAA
+AAA
+BCD
+
+"AAB"
+
+输出：
+false
+预期结果：
+true
+class Solution {
+    boolean ret = false;
+    public boolean exist(char[][] board, String word) {
+    //同一个单元格内的字母不允许重复使用 visit[]
+    int[][] visit = new int[board.length][board[0].length];//初始化全是0
+    for(int i = 0; i < board.length; i++){
+        for(int j = 0; j < board[0].length; j++){
+            if(board[i][j] == word.charAt(0)){
+                helper(i, j, visit, board, word, 1);
+            }
+        }
+    }
+    return ret;
+    }
+    void helper(int i, int j, int[][] visit, char[][] board, String word, int index){
+        visit[i][j] = 1;
+        if(index == word.length()){
+            ret = ret || true;
+            return;
+        }
+        //上面
+        if(i - 1 >= 0){
+            if(board[i - 1][j] == word.charAt(index) && visit[i - 1][j] != 1){
+                helper(--i, j , visit, board, word, ++index);
+                index--;
+                i++;
+            }
+        }
+        //左边
+        if(j - 1 >= 0){
+            if(board[i][j - 1] == word.charAt(index) && visit[i][j - 1] != 1){
+                helper(i, --j, visit, board, word, ++index);
+                index--;
+                j++;
+            }
+        }
+        //下边
+        if(i + 1 <= board.length - 1){
+            if(board[i+1][j] == word.charAt(index) && visit[i+1][j] != 1){
+                helper(++i, j, visit, board, word, ++index);
+                index--;
+                i--;
+            }
+        }
+        //右边
+        if(j + 1 <= board[0].length - 1){
+            if(board[i][j + 1] == word.charAt(index) && visit[i][j+1] != 1){
+                helper(i, ++j, visit, board, word, ++index);
+                index--;
+                j--;
+            }
+        }
+    }
+}
 }
