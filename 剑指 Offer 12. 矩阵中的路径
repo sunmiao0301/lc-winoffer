@@ -545,6 +545,10 @@ class Solution {
 错误是：
 超出时间限制
 应该是没有剪枝吧，但是85个样例我感觉还不错了。
+我感觉解决的办法就是一旦发现ret = true 就立即退出子函数
+但是我想不到方法实现这一步
+可能可以通过主方法exist中return || 来实现
+但是那样的话 问题又出现了 就是for无法对多个boolean之间 ||
 
 class Solution {
     boolean ret = false;
@@ -563,7 +567,7 @@ class Solution {
     void helper(int i, int j, int[][] visit, char[][] board, String word, int index){
         visit[i][j] = 1;
         if(index == word.length()){
-            ret = ret || true;
+            ret = ret || true;············································A
             return;
         }
         //上面
@@ -603,5 +607,27 @@ class Solution {
             }
         }
         visit[i][j] = 0;····························································B
+    }
+}
+
+//第五版 K神
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        char[] words = word.toCharArray();
+        for(int i = 0; i < board.length; i++) {
+            for(int j = 0; j < board[0].length; j++) {
+                if(dfs(board, words, i, j, 0)) return true;
+            }
+        }
+        return false;
+    }
+    boolean dfs(char[][] board, char[] word, int i, int j, int k) {
+        if(i >= board.length || i < 0 || j >= board[0].length || j < 0 || board[i][j] != word[k]) return false;
+        if(k == word.length - 1) return true;
+        board[i][j] = '\0';
+        boolean res = dfs(board, word, i + 1, j, k + 1) || dfs(board, word, i - 1, j, k + 1) || 
+                      dfs(board, word, i, j + 1, k + 1) || dfs(board, word, i , j - 1, k + 1);
+        board[i][j] = word[k];
+        return res;
     }
 }
