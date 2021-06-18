@@ -1,0 +1,82 @@
+//第一版 先暴力 增强信心
+class Solution {
+    public int countDigitOne(int n) {
+    /*
+    正整数1~n
+    */
+    int ret = 0;
+    for(int i = 1; i <= n; i++){
+        while(i != 0){
+            if(i % 10 == 1)
+                ret++;
+            i = i / 10;
+        }
+    }
+    return ret;
+    }
+}
+
+//第二版 看了大佬题解自己写的
+class Solution {
+    public int countDigitOne(int n) {
+    /*
+    正整数1~n
+    大佬提出的 密码锁法
+    由于题目要求的是：“十进制表示中各个位1出现的次数总和”而不是“十进制表示中出现1的数的次数总和”
+    所以可以对各个数位依次考虑
+    让我们以一个四位数为例 依次考虑求第二位为1的情况有多少种
+    对于1201 也就是第一位为1 第二位0 的情况
+        这种情况下，让第二位为1，则其大于位必须是0-11，也就是12（大于位的数）种，个位为0-9，也就是10种。
+    对于1211 也就是第一位为1 第二位1 的情况
+        这种情况下，让第二位为1，则需要分两种情况考虑，第一种情况是大于位是0-11，个位为0-9，同之前
+        但是当大于位为12，也就是大于位只有一种情况，此时个位（小于位）只有2种（小于位+1）；
+    对于12（2、3、4、5···）1 也就是第一位为1 第二位为大于1的数 的情况
+        这种情况下，让第二位为1 则大于位就是13（大于位+1）种情况，小于位就是0-9，也就是10（10的1（小于位位数）次方）种。
+
+    为了确保以上结论的普适性，我们试着对四位数的第三位进行分析。
+    对于1021，也就是第四位为1，第三位为0的情况
+        这种情况下，让第三位为1，则第四位不能为1 只能为0 也就是1（大于位的数）种情况，小于位为0-99，100种（10的2（小于位的位数）次方）
+    对于1121，也就是第四位为1，第三位为1的情况
+        这种情况下，让第三位为1，则上面的情况包括之后，还得再考虑第四位和第三位是11的情况，这种情况下，小于位就是0-21 = 22（小于位+1）
+    对于1（2、3、4、5···）21，也就是第四位为1，第三位为（2、3、4、5···）的情况
+        这种情况下，让第三位为1，第四位可以是0-1（大于位+1）种情况，小于位就是0-99(100,10的2次方)
+    
+    综上分析，我们可知
+    对于每一位，
+    如果这一位是0 则其为1的情况数为：大于位的数 * （10 ^ 小于位的位数）（1）
+    如果这一位是1 则其为1的情况数为：大于位的数 * （10 ^ 小于位的位数） +（小于位的数 + 1）
+    如果这一位是2、3、4、5··· 则其为1的情况数为：（大于位的数 + 1）* （10 ^ 小于位的位数）
+    substring(int beginIndex, int endIndex)
+    返回从起始位置（beginIndex）到目标位置（endIndex）之间的字符串，但不包含目标位置（endIndex）
+    */
+    String s = "" + n;
+    int ret = 0;
+    for(int i = 0; i < s.length(); i++){
+        if(s.charAt(i) == '0'){
+            if(i == s.length() - 1)
+                ret += Integer.parseInt(s.substring(0,i));
+            else
+                ret += Integer.parseInt(s.substring(0,i)) * Math.pow(10, s.length() - i - 1);
+        }
+        else if(s.charAt(i) == '1'){
+            if(i == 0 && i == s.length() - 1){ret = 1;}
+            else if(i == 0)
+                ret += Integer.parseInt(s.substring(i + 1)) + 1;
+            else if(i == s.length() - 1)
+                ret += Integer.parseInt(s.substring(0,i)) * (Math.pow(10, s.length() - i - 1)) + 1;
+            else
+                ret += Integer.parseInt(s.substring(0,i)) * Math.pow(10, s.length() - i - 1) + Integer.parseInt(s.substring(i + 1)) + 1;
+        }
+        else{//s.charAt(i) == "2\3\4\5\6···"
+            if(i == 0 && i == s.length() - 1){ret = 1;}
+            else if(i == 0)
+                ret += Math.pow(10, s.length() - i - 1);
+            else if(i == s.length() - 1)
+                ret += Integer.parseInt(s.substring(0,i)) + 1;
+            else
+                ret += (Integer.parseInt(s.substring(0,i)) + 1) * Math.pow(10, s.length() - i - 1);
+        }
+    }
+    return ret;
+    }
+}
