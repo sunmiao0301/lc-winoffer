@@ -57,53 +57,190 @@ class Solution {
 提交时间：几秒前
 最后执行的输入：
 10000
-然后我都检查了一下 在100 1000 10000···时都不对
+然后我都检查了一下 在1000 10000···时都不对
+
+后来我找到了问题所在 就是在AB之间的代码处理的不对
+因为C处处理得到的结果which_bit是 1 2 3 ··· 0 这种顺序 所以用AB之间的代码处理得到的顺序不对
+改正后见第三版
+
 class Solution {
     public int findNthDigit(int n) {
-    /*
-    隐隐感觉是递归解决
-    从下标0开始计数！
-    123456789(9 = 10 - 1)
-    10111213141516171819
-    20
-    ···
-    90919293949596979899(91 = 100 - 9)
-    100101102103104105106107108109
-    111
-    ···999
-    （1000 - 100 - 9 = 891）
-    位数 * 数量
-    1 * 9 对 1 取余为 0 被 1 整除得到的商就是要求的值
-    2 * （100 - 9）      减去 9 后，对 2 取余。为 0 则是个位数 为1 则是十位数；整除得到的商则是
-    3 * （1000 -100 - 9）减去1 * 9 + 2 * 90 个后，对3取余。为0 则为个位数 为1 则是十位数 为2 则是百位数
-    4 * （）             减去1 * 9 + 2 * 90 + 3 * 900
-    我知道思路了
-    通过余数可以确定是哪一数位
-    通过整除可以确定是第几个数（注意：不是第几位）
-    */
-    int old = 0;
-    int new_new = 9 * 1;
+    int old_bit = 0;
+    int new_bit = 9 * 1;
     int old_num = 0;
     for(int i = 1; i < 20; i++){
-        if(n > old && n <= new_new){//此时 i + 1 是位数
-            n = n - old;
+        if(n > old_bit && n <= new_bit){//此时 i + 1 是位数
+            n = n - old_bit;
+            int which_bit = n % i;·································C
+            int which_num = 0;//
+            if(n % i != 0)
+                which_num = n / i + old_num + 1;
+            else
+                which_num = n / i + old_num;
+
+            for(int j = 0; j < which_bit; j++){····················A
+                which_num /= 10;
+            }
+            which_num %= 10;·······································B
+            
+            return which_num;
+        }
+        old_bit = new_bit;
+        new_bit += (i + 1) * 9 * (int)Math.pow(10, i);
+        old_num += 9 * (int)Math.pow(10, i - 1);
+    }
+    return -1;
+    }
+}
+
+//第三版 出错在第66个样例
+66 / 70 个通过测试用例
+状态：解答错误
+提交时间：1 分钟前
+最后执行的输入：
+1000000000
+我猜测是超出int范围引起的 
+故改正成第四版
+
+class Solution {
+    public int findNthDigit(int n) {
+    int old_bit = 0;
+    int new_bit = 9 * 1;
+    int old_num = 0;
+    for(int i = 1; i < 10000; i++){
+        if(n > old_bit && n <= new_bit){//此时 i + 1 是位数
+            n = n - old_bit;
             int which_bit = n % i;
             int which_num = 0;//
             if(n % i != 0)
                 which_num = n / i + old_num + 1;
             else
                 which_num = n / i + old_num;
-            for(int j = 0; j < which_bit; j++){
-                which_num /= (int)Math.pow(10, i - 1);
+            //这里我发现 which_bit 在三位数的时候顺序是1 2 0 所以尽管 which_num 求的是对的 但是求bit这里处理的不对 改正如下
+            if(which_bit == 0)
+                return which_num % 10;
+            else{
+                for(int j = 0; j < i - which_bit; j++){
+                    which_num /= 10;
+                }
+                return which_num % 10;
             }
-            which_num %= 10;
-            
-            return which_num;
         }
-        old = new_new;
-        new_new += (i + 1) * 9 * (int)Math.pow(10, i);
+        old_bit = new_bit;
+        new_bit += (i + 1) * 9 * (int)Math.pow(10, i);
         old_num += 9 * (int)Math.pow(10, i - 1);
     }
     return -1;
+    }
+}
+
+//第四版
+输入
+1000000000
+输出
+0
+预期结果
+1
+还是不对
+所以我检查一下，这里的问题出在哪
+首先是看看
+which_num = 1410229442
+然后看看which_bit = 2235
+最后检查 i = 4823
+这肯定出问题了
+但是我尝试了一下1000000000 少一个0 此时又一切正常 bit num i 等都很对 所以代码应该没问题 问题应该是出在了超出int范围上
+所以我把数据类型全部转换为了long
+见第五版
+
+class Solution {
+    public int findNthDigit(int n) {
+    int old_bit = 0;
+    int new_bit = 9 * 1;
+    int old_num = 0;
+    int INT_MAX = (int)Math.pow(2,31);
+    for(int i = 1; i < INT_MAX; i++){
+        if(n > old_bit && n <= new_bit){//此时 i + 1 是位数
+            n = n - old_bit;
+            int which_bit = n % i;
+            int which_num = 0;//
+            if(n % i != 0)
+                which_num = n / i + old_num + 1;
+            else
+                which_num = n / i + old_num;
+            return which_bit;
+            
+        }
+        old_bit = new_bit;
+        new_bit += (i + 1) * 9 * (int)Math.pow(10, i);
+        old_num += 9 * (int)Math.pow(10, i - 1);
+    }
+    return -1;
+    }
+}
+
+//第五版
+    自己总结的根本思路：
+    通过余数帮助确定是哪一数位
+    通过整除帮助确定是第几个数（注意：不是第几位）
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.3 MB
+, 在所有 Java 提交中击败了
+34.16%
+的用户
+class Solution {
+    public int findNthDigit(int n) {
+    Long N = (long)n;
+    long old_bit = 0;
+    long new_bit = 9 * 1;
+    long old_num = 0;
+    int INT_MAX = (int)Math.pow(2,31);
+    for(long i = 1; i < 10; i++){
+        if(N > old_bit && N <= new_bit){//此时 i + 1 是位数
+            N = N - old_bit;
+            long which_bit = N % i;
+            long which_num = 0;
+            if(N % i != 0)
+                which_num = N / i + old_num + 1;
+            else
+                which_num = N / i + old_num;
+
+            if(which_bit == 0)
+                return (int)which_num % 10;
+            else{
+                for(int j = 0; j < i - which_bit; j++){
+                    which_num /= 10;
+                }
+                return (int)which_num % 10;
+            }
+        }
+        old_bit = new_bit;
+        new_bit += (i + 1) * 9 * (int)Math.pow(10, i);
+        old_num += 9 * (int)Math.pow(10, i - 1);
+    }
+    return -1;
+    }
+}
+
+//第六版
+class Solution {
+    public int findNthDigit(int n) {
+        int digit = 1;
+        long start = 1;
+        long count = 9;
+        while (n > count) { // 1.
+            n -= count;
+            digit += 1;
+            start *= 10;
+            count = digit * start * 9;
+        }
+        long num = start + (n - 1) / digit; // 2.
+        return Long.toString(num).charAt((n - 1) % digit) - '0'; // 3.
     }
 }
