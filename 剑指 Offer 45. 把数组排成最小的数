@@ -1,0 +1,174 @@
+//第一版 看了题解大致写的 运行示例如下：
+输入
+[10,2]
+输出
+"20"
+预期结果
+"102"
+原来是A处的忘记加{}了 以后要注意
+改正见第二版
+
+class Solution {
+    public String minNumber(int[] nums) {
+    /*
+    最后的结果不需要去掉前导0
+    把对全体的排序 化成 对一对的排序
+    用快排吧?
+    先用冒泡试试
+    */
+    //int left = 0;
+    //int rigth = nums.length - 1;
+    int temp = 0;
+    String ret = "";
+    for(int i = 0; i < nums.length; i++){
+        for(int j = i + 1; j < nums.length; j++){
+            if(exchange(i, j, nums))·························A
+                temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+        }
+    }
+    for(int i = 0; i < nums.length; i++){
+        ret += nums[i];
+    }
+    return ret;
+    }
+    boolean exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Integer.parseInt(i_j) > Integer.parseInt(j_i))
+            return true;
+        return false;
+    }
+}
+
+//第二版 
+29 / 222 个通过测试用例
+状态：执行出错
+提交时间：几秒前
+执行出错信息：
+java.lang.NumberFormatException: For input string: "999999998999999997"
+  at line 68, java.base/java.lang.NumberFormatException.forInputString
+  at line 658, java.base/java.lang.Integer.parseInt
+  at line 776, java.base/java.lang.Integer.parseInt
+  at line 28, Solution.exchange
+  at line 13, Solution.minNumber
+  at line 57, __DriverSolution__.__helper__
+  at line 82, __Driver__.main
+最后执行的输入：
+[999999998,999999997,999999999]
+猜测是数字超出int范围了
+改成long 如下第三版
+
+class Solution {
+    public String minNumber(int[] nums) {
+    int temp = 0;
+    String ret = "";
+    for(int i = 0; i < nums.length; i++){
+        for(int j = i + 1; j < nums.length; j++){
+            if(exchange(i, j, nums)){
+                temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+    }
+    for(int i = 0; i < nums.length; i++){
+        ret += nums[i];
+    }
+    return ret;
+    }
+    boolean exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Integer.parseInt(i_j) > Integer.parseInt(j_i))
+            return true;
+        return false;
+    }
+}
+
+//第三版 通过 但是效果不好
+执行结果：
+通过
+执行用时：
+38 ms
+, 在所有 Java 提交中击败了
+5.01%
+的用户
+内存消耗：
+39.1 MB
+, 在所有 Java 提交中击败了
+4.99%
+的用户
+class Solution {
+    public String minNumber(int[] nums) {
+    int temp = 0;
+    String ret = "";
+    for(int i = 0; i < nums.length; i++){
+        for(int j = i + 1; j < nums.length; j++){
+            if(exchange(i, j, nums)){
+                temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+    }
+    for(int i = 0; i < nums.length; i++){
+        ret += nums[i];
+    }
+    return ret;
+    }
+    boolean exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Long.parseLong(i_j) > Long.parseLong(j_i))
+            return true;
+        return false;
+    }
+}
+
+//第四版 自己写的基于快排 而不是冒泡的
+
+//第五版 K神的快排的方法
+class Solution {
+    public String minNumber(int[] nums) {
+        String[] strs = new String[nums.length];
+        for(int i = 0; i < nums.length; i++)
+            strs[i] = String.valueOf(nums[i]);
+        quickSort(strs, 0, strs.length - 1);
+        StringBuilder res = new StringBuilder();
+        for(String s : strs)
+            res.append(s);
+        return res.toString();
+    }
+    void quickSort(String[] strs, int l, int r) {
+        if(l >= r) return;
+        int i = l, j = r;
+        String tmp = strs[i];
+        while(i < j) {
+            while((strs[j] + strs[l]).compareTo(strs[l] + strs[j]) >= 0 && i < j) j--;
+            while((strs[i] + strs[l]).compareTo(strs[l] + strs[i]) <= 0 && i < j) i++;
+            tmp = strs[i];
+            strs[i] = strs[j];
+            strs[j] = tmp;
+        }
+        strs[i] = strs[l];
+        strs[l] = tmp;
+        quickSort(strs, l, i - 1);
+        quickSort(strs, i + 1, r);
+    }
+}
+
+//第六版 K神的借助内置函数的方法
+class Solution {
+    public String minNumber(int[] nums) {
+        String[] strs = new String[nums.length];
+        for(int i = 0; i < nums.length; i++)
+            strs[i] = String.valueOf(nums[i]);
+        Arrays.sort(strs, (x, y) -> (x + y).compareTo(y + x));
+        StringBuilder res = new StringBuilder();
+        for(String s : strs)
+            res.append(s);
+        return res.toString();
+    }
+}
