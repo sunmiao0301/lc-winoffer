@@ -128,8 +128,247 @@ class Solution {
 }
 
 //第四版 自己写的基于快排 而不是冒泡的
+18 / 222 个通过测试用例
+状态：超出时间限制
+提交时间：3 分钟前
+最后执行的输入：
+[1,1,1]
+说明我这写的不全对
+我把这个基于“字符串‘大小’比较算法”的快排改成了对int型数据的快排算法
+代码如下：
+class Solution {
+    void quicksort(int left, int right, int[]nums){
+        if(left >= right)return;
+        int i = left;//key下标
+        int j = right;
+        while(left < right){
+            while(left < right && nums[left] < nums[i]){left++;}
+            while(left < right && nums[right] > nums[i]){right--;}
+            swap(left, right, nums);
+            /*
+            对换条件的左右值之后
+            需要左右各自再往里进一步···································A
+            */
+            left++;
+            right--;
+        }
+        swap(i, left, nums);
+        quicksort(i, left - 1, nums);
+        quicksort(left + 1, j, nums);
+    }
+    String ret = "";
+    public String minNumber(int[] nums) {
+        quicksort(0, nums.length - 1, nums);
+        for(int i = 0; i < nums.length; i++)
+            ret += nums[i];
+            return ret;
+        }
+    int temp = 0;
+    void swap(int a, int b, int[] nums){
+        temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+运行样例[1,1,1]时也报错超出时间限制 说明当数组中元素相同时，会发生无限循环 检查到错误在代码A处：
+由此 我们再对原代码进行修改 见第五版
 
-//第五版 K神的快排的方法
+class Solution {
+    /*
+    交换式快排:
+    void quicksort(int left, int right, int[]nums){
+        if(left >= right)return;
+        int i = left;//key下标
+        int j = right;
+        while(left < right){
+            while(left < right && nums[left] < nums[i]){left++;}
+            while(left < right && nums[right] > nums[i]){right--;}
+            swap(left, right, nums);
+        }
+        swap(i, left(right),nums);
+        quicksort(i, left - 1, nums);
+        quicksort(left + 1, j, nums);
+    }
+    */
+    String ret = "";
+    public String minNumber(int[] nums) {
+        quicksort(0, nums.length - 1, nums);
+    for(int i = 0; i < nums.length; i++)
+        ret += nums[i];
+        return ret;
+    }
+    
+    boolean need_exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Long.parseLong(i_j) > Long.parseLong(j_i))
+            return true;
+        return false;
+    }
+
+    void quicksort(int left, int right, int[] nums){
+        if(left >= right)return;
+        int i = left;
+        int j = right;
+        while(left < right){
+            while(left < right && need_exchange(i, left, nums)){left++;}
+            while(left < right && need_exchange(right, i, nums)){right--;}
+            swap(left, right, nums);
+        }
+        swap(i, left, nums);
+        quicksort(i, left - 1, nums);
+        quicksort(left + 1, j, nums);
+    }
+    int temp = 0;
+    void swap(int a, int b, int[] nums){
+        temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+
+//第五版 对第四版进行改正之后
+25 / 222 个通过测试用例
+状态：解答错误
+提交时间：几秒前
+最后执行的输入：
+[10,2]
+对样例不行
+检查：
+原来是快排忽略了一些
+正确的快排如下：
+class Solution {
+    void quicksort(int left, int right, int[]nums){
+        if(left >= right)return;
+        int i = left;//key下标
+        int j = right;
+        while(left < right){
+            while(left < right && nums[left] <= nums[i]){left++;}······························换 < 为 <=
+            while(left < right && nums[right] >= nums[i]){right--;}
+            swap(left, right, nums);
+        }
+        swap(i, right, nums);
+        quicksort(i, right - 1, nums);
+        quicksort(right + 1, j, nums);
+    }
+    String ret = "";
+    public String minNumber(int[] nums) {
+        quicksort(0, nums.length - 1, nums);
+        for(int i = 0; i < nums.length; i++)
+            ret += nums[i];
+            return ret;
+        }
+    int temp = 0;
+    void swap(int a, int b, int[] nums){
+        temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+所以对这一版修改为第六版
+class Solution {
+    String ret = "";
+    public String minNumber(int[] nums) {
+        quicksort(0, nums.length - 1, nums);
+    for(int i = 0; i < nums.length; i++)
+        ret += nums[i];
+        return ret;
+    }
+    
+    boolean need_exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Long.parseLong(i_j) > Long.parseLong(j_i))
+            return true;
+        return false;
+    }
+
+    void quicksort(int left, int right, int[] nums){
+        if(left >= right)return;
+        int i = left;
+        int j = right;
+        while(left < right){
+            while(left < right && need_exchange(i, left, nums)){left++;}
+            while(left < right && need_exchange(right, i, nums)){right--;}
+            swap(left, right, nums);
+            left++;
+            right--;
+        }
+        swap(i, left, nums);
+        quicksort(i, left - 1, nums);
+        quicksort(left + 1, j, nums);
+    }
+    int temp = 0;
+    void swap(int a, int b, int[] nums){
+        temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+
+//第六版 到这里 我才发现好像问题出在need_exchange函数上
+无论我把A处的代码改成 >= 还是 <= 结果都是错误的210 而不是102。。。
+boolean need_exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Long.parseLong(i_j) >= Long.parseLong(j_i))·················A
+            return true;
+        return false;
+    }
+问题不在于此
+在于快排顺序不对
+改正后通过 如下 但是效果不好：
+执行用时：
+20 ms
+, 在所有 Java 提交中击败了
+6.36%
+的用户
+内存消耗：
+38.5 MB
+, 在所有 Java 提交中击败了
+8.84%
+的用户
+
+class Solution {
+    String ret = "";
+    public String minNumber(int[] nums) {
+        quicksort(0, nums.length - 1, nums);
+    for(int i = 0; i < nums.length; i++)
+        ret += nums[i];
+        return ret;
+    }
+    
+    boolean need_exchange(int i, int j, int[] nums){
+        String i_j = "" + nums[i] + nums[j];
+        String j_i = "" + nums[j] + nums[i];
+        if(Long.parseLong(i_j) >= Long.parseLong(j_i))
+            return true;
+        return false;
+    }
+
+    void quicksort(int left, int right, int[] nums){
+        if(left >= right)return;
+        int i = left;
+        int j = right;
+        while(left < right){
+            while(left < right && need_exchange(right, i, nums)){right--;}
+            while(left < right && need_exchange(i, left, nums)){left++;}
+            swap(left, right, nums);
+        }
+        swap(i, left, nums);
+        quicksort(i, left - 1, nums);
+        quicksort(left + 1, j, nums);
+    }
+    int temp = 0;
+    void swap(int a, int b, int[] nums){
+        temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+}
+
+
+//第版 K神的快排的方法
 class Solution {
     public String minNumber(int[] nums) {
         String[] strs = new String[nums.length];
@@ -159,7 +398,7 @@ class Solution {
     }
 }
 
-//第六版 K神的借助内置函数的方法
+//第版 K神的借助内置函数的方法
 class Solution {
     public String minNumber(int[] nums) {
         String[] strs = new String[nums.length];
