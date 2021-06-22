@@ -1,0 +1,18 @@
+//第一版 递归 方法对 但是会超时
+24 / 51 个通过测试用例
+状态：超出时间限制
+提交时间：22 分钟前
+最后执行的输入：
+44
+class Solution {
+    public int fib(int n) {
+        return helper(n) % 1000000007;
+    }
+    int helper(int n){
+        if(n == 0)return 0;
+        else if(n == 1)return 1;
+        else return helper(n - 1) + helper(n - 2);
+    }
+}
+
+//第二版
