@@ -154,3 +154,76 @@ class Solution {
         
     }
 }
+
+//第四版 对第三版优化了一下 效果不错 很优雅 甚至感觉比一些题解还好
+执行结果：
+通过
+显示详情
+添加备注
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.1 MB
+, 在所有 Java 提交中击败了
+74.87%
+的用户
+class Solution {
+    public int translateNum(int num) {
+    /*
+    动态规划
+    第二版
+    从后向前来
+    1225
+    ···
+    122
+    12
+    ···
+    12
+    1+
+    1+
+    0+
+    ···
+    1+
+    0+
+    1+
+    1+
+    0+
+    ···
+    5
+    从前往后来
+    2258
+    258
+    ···
+    258
+    58
+    58
+    8
+    ···
+    58+
+    8+
+    +
+    +
+    +
+    ···
+    =5
+    一样
+    */
+    return helper(num);
+    }
+    int helper(int num){    
+        //int ten_bit = num % 100;
+        //int one_bit = num % 10;
+        if(num % 10 == num || num == 0)//只剩一位数或者0位
+            return 1;
+        if(num % 100 >= 10 && num % 100 <= 25)//两位数可以翻译
+            return helper(num / 100) + helper(num / 10);
+        else//两位数不可翻译
+            return helper(num / 10);
+    }      
+}
+
+//第五版 K神
+https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/solution/mian-shi-ti-46-ba-shu-zi-fan-yi-cheng-zi-fu-chua-6/
