@@ -109,4 +109,48 @@ private void backtrack("原始参数") {
     }
 }
 
-//第三版 动态规划
+//第三版 动态规划 自己写的 效果也不好
+ps： 从前还是从后推导效果是一样的
+执行结果：
+通过
+执行用时：
+5 ms
+, 在所有 Java 提交中击败了
+9.94%
+的用户
+内存消耗：
+35.5 MB
+, 在所有 Java 提交中击败了
+12.75%
+的用户
+class Solution {
+    public int translateNum(int num) {
+    /*
+    动态规划
+    对于长度为i的数字字符串
+    f(i) 
+    = f(i - 1) = f(i - 2)//当最后两位不能联合翻译
+    = f(i - 2) + f(i - 1)//当最后两位能联合翻译
+    从头还是从尾开始？
+    我这个是从尾开始 好像不对
+    但是又感觉结果是一样的
+    */
+    String s = "" + num;
+    return helper(s.length() - 1, s);
+    }
+    int helper(int len, String s){    
+        if(len == 0)return 1;
+        int ten_bit = s.charAt(len - 1) - 48;
+        int one_bit = s.charAt(len) - 48;
+        if(len == 1){
+            if(ten_bit * 10 + one_bit >= 10 && ten_bit * 10 + one_bit <= 25)
+                return 2;
+            return 1;
+        }
+        if(ten_bit * 10 + one_bit >= 10 && ten_bit * 10 + one_bit <= 25)
+            return helper(len - 2, s) + helper(len - 1, s);
+        else
+            return helper(len - 1, s);//注意是len - 1 不是 len - 2
+        
+    }
+}
