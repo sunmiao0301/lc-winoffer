@@ -1,0 +1,160 @@
+//第一版 遇到最大的问题 就是如何平衡下面两个样例之间的关系：
+1）最后执行的输入："dddccdbba"
+2）最后执行的输入："cc"
+最后通过在三个判断之前加上了 A 代码 完成了本题 但是效率很低
+执行结果：
+通过
+执行用时：
+63 ms
+, 在所有 Java 提交中击败了
+5.06%
+的用户
+内存消耗：
+38.7 MB
+, 在所有 Java 提交中击败了
+63.93%
+的用户
+class Solution {
+    public char firstUniqChar(String s) {
+    /*
+    第一个只出现一次的字符
+    最传统的方法无疑是遍历
+    如果减少遍历？
+    把已经排除的字母都除掉？
+    好像不好除掉
+    但是我想到一个办法
+    两个for 不知道效果如何
+    */
+    if(s.length() == 1)return s.charAt(0);
+    int i = 0;
+    int j = 0;
+    for(; i < s.length(); i++){
+        for(j = 0; j < s.length(); j++){
+            if(i == s.length() - 1 && j == s.length() - 1)/··················A
+                return s.charAt(i);
+            if(j == i)continue;
+            if(s.charAt(j) == s.charAt(i))
+                break;
+            if(j == s.length() - 1)
+                return s.charAt(i);
+        }
+    }
+    return ' ';
+    }
+}
+
+//第二版 我想到的方法就是 每次都把能排除的字母从s中全部除去 这样每次需要遍历的s就越来越短
+但是没有思考到合适的实现方式
+
+//第三版 偷瞟一眼 发现K神题解是通过哈希表实现的
+于是模仿如下
+其中有一个巧妙之处在于：代码A处
+    遍历hashmap 找到第一个value为1的key
+    这里我想到的方法是
+    1）遍历hashmap 找到第一个value为1的key值返回
+    但是高手用的却是
+    2）寻找s中第一个在hashmap中value值为1的char，这样写起来很简单
+
+结果效果更一般
+执行结果：
+通过
+执行用时：
+52 ms
+, 在所有 Java 提交中击败了
+5.06%
+的用户
+内存消耗：
+38.9 MB
+, 在所有 Java 提交中击败了
+30.78%
+的用户
+class Solution {
+    public char firstUniqChar(String s) {
+    /*
+    哈希表
+    往里存1 若是有重复的就将其value + 1
+    最后遍历 找第一个 为 1 的返回
+    若是没有 就返回' '
+    */
+    //map<charity>
+    Map<Character, Integer> map = new HashMap<>();
+    for(int i = 0; i < s.length(); i++){
+        if(map.containsKey(s.charAt(i)))
+            map.replace(s.charAt(i), map.get(s.charAt(i)) + 1);
+        else
+            map.put(s.charAt(i), 1);
+    }
+    /* 
+    遍历hashmap 找到第一个value为1的key
+    这里我想到的方法是
+    1）遍历hashmap 找到第一个value为1的key值返回
+    但是高手用的却是
+    2）寻找s中第一个在hashmap中value值为1的char
+    */
+    for(int i = 0; i < s.length(); i++){······················A
+        if(map.get(s.charAt(i)) == 1)
+            return s.charAt(i);
+    }
+    return ' ';
+    }
+}
+
+//第四版
+看了K神题解 我发现第三版中提到的“巧妙之处”反而是使得第三版效率变低的原因
+我提出的
+1）遍历hashmap 找到第一个value为1的key值返回
+其实是最佳思路 但是需要更深的数据结构————有序哈希表
+
+是需要注意的一点：
+HashMap 的Map.Entry 是无序的，是不会按照插入的顺序的来输出的
+LinkedHashMap.Entry 是有序的（按照插入的顺序），继承自HashMap.Node。同时新增了before和after两个字段，用来维护LinkedHashMap中Entry的顺序。
+
+K神版本
+
+class Solution {
+    public char firstUniqChar(String s) {
+        Map<Character, Boolean> dic = new LinkedHashMap<>();
+        char[] sc = s.toCharArray();
+        for(char c : sc)
+            dic.put(c, !dic.containsKey(c));
+        for(Map.Entry<Character, Boolean> d : dic.entrySet()){
+           if(d.getValue()) return d.getKey();
+        }
+        return ' ';
+    }
+}
+
+PS:
+java语法之for :
+在Java语言的最新版本――J2SE 1.5中，引入了另一种形式的for循环。借助这种形式的for循环，现在可以用一种更简单地方式来进行遍历的工作。 
+基本是这样的格式： 
+for (循环变量类型 循环变量名称 : 要被遍历的对象) 循环体 
+借助这种语法，遍历一个数组的操作就可以采取这样的写法： 
+遍历数组的简单方式 
+Java代码 
+
+/* 建立一个数组 */  
+int[] integers = {1， 2， 3， 4};  
+/* 开始遍历 */  
+for (int i : integers) {  
+System.out.println(i);/* 依次输出“1”、“2”、“3”、“4” */  
+}  
+
+模仿之后自己写的： 还有可以优化的地方 那就是 出现一次就是true 两次以上就是false 也就是说LinkedHashMap<character, boolean>
+class Solution {
+    public char firstUniqChar(String s) {
+    //map<charity>
+    Map<Character, Integer> map = new LinkedHashMap<>();
+    for(int i = 0; i < s.length(); i++){
+        if(map.containsKey(s.charAt(i)))
+            map.replace(s.charAt(i), map.get(s.charAt(i)) + 1);
+        else
+            map.put(s.charAt(i), 1);
+    }
+    for(Map.Entry<Character,Integer> d : map.entrySet()){
+        if(d.getValue() == 1)
+            return d.getKey();
+    }
+    return ' ';
+    }
+}
