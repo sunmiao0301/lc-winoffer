@@ -158,3 +158,138 @@ class Solution {
     return ' ';
     }
 }
+
+//第五版 看了题解思路写的
+时间还不错 但是空间比较差
+由此可以看出用dp[]数组对空间是很浪费的 不如就维护dp[i-1]即可
+对空间复杂度的改进见第六版
+
+执行结果：
+通过
+执行用时：
+6 ms
+, 在所有 Java 提交中击败了
+90.93%
+的用户
+内存消耗：
+38.5 MB
+, 在所有 Java 提交中击败了
+46.93%
+的用户
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+    /*
+    动态递归 + 哈希表
+    具体思路：
+    需要维护一个map 里面是每个字符的最后出现的位置
+    然后对于dp[i]
+    如果当前字符在dp[i-1]长度内没有 就直接 + 1
+    如果有 就 + 1 再减去 那个位置
+    //还可以维护一个最大值max 最后返回即可
+    */
+    int[] dp = new int[s.length()];
+    if(s.equals(""))return 0;
+    dp[0] = 1;
+    HashMap<Character, Integer> map = new HashMap<>();//Integer是他的位置
+    map.put(s.charAt(0), 0);
+    for(int i = 1; i < s.length(); i++){
+        if(!map.containsKey(s.charAt(i))){
+            dp[i] = dp[i-1] + 1;
+            map.put(s.charAt(i), i);
+        }
+        else{
+            if(map.get(s.charAt(i)) >= i - dp[i-1])//有 且在范围内
+                dp[i] = i - map.get(s.charAt(i));
+            else
+                dp[i] = dp[i-1] + 1;
+            map.replace(s.charAt(i), i);
+        }
+
+    }
+    int max = 0;
+    for(int i = 0; i < dp.length; i++){
+        if(dp[i] > max)
+            max = dp[i];
+    }
+    return max;
+    }
+}
+
+//第六版 空间优化版
+效果还不一定好
+执行结果：
+通过
+执行用时：
+8 ms
+, 在所有 Java 提交中击败了
+53.59%
+的用户
+内存消耗：
+38.3 MB
+, 在所有 Java 提交中击败了
+83.29%
+的用户
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+    /*
+    动态递归 + 哈希表
+    具体思路：
+    需要维护一个map 里面是每个字符的最后出现的位置
+    然后对于dp[i]
+    如果当前字符在dp[i-1]长度内没有 就直接 + 1
+    如果有 就 + 1 再减去 那个位置
+    //还可以维护一个最大值max 最后返回即可
+    */
+    //int[] dp = new int[s.length()];
+    if(s.equals(""))return 0;
+    int dp = 1;
+    int max = 1;
+    HashMap<Character, Integer> map = new HashMap<>();//Integer是他的位置
+    map.put(s.charAt(0), 0);
+    for(int i = 1; i < s.length(); i++){
+        if(!map.containsKey(s.charAt(i))){
+            dp = dp + 1;
+            if(dp > max)
+                max = dp;
+            map.put(s.charAt(i), i);
+        }
+        else{
+            if(map.get(s.charAt(i)) >= i - dp)//有 且在范围内
+                dp = i - map.get(s.charAt(i));
+            else
+                dp = dp + 1;
+                if(dp > max)
+                    max = dp;
+            map.replace(s.charAt(i), i);
+        }
+    }
+    return max;
+    }
+}
+
+//K神
+执行结果：
+通过
+执行用时：
+6 ms
+, 在所有 Java 提交中击败了
+90.93%
+的用户
+内存消耗：
+38.4 MB
+, 在所有 Java 提交中击败了
+74.69%
+的用户
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> dic = new HashMap<>();
+        int res = 0, tmp = 0;
+        for(int j = 0; j < s.length(); j++) {
+            int i = dic.getOrDefault(s.charAt(j), -1); // 获取索引 i
+            dic.put(s.charAt(j), j); // 更新哈希表
+            tmp = tmp < j - i ? tmp + 1 : j - i; // dp[j - 1] -> dp[j]
+            res = Math.max(res, tmp); // max(dp[j - 1], dp[j])
+        }
+        return res;
+    }
+}
