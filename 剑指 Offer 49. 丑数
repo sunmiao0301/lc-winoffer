@@ -67,3 +67,83 @@ class Solution {
 由于初始值dp[1] dp[2] dp[3] 没有选取好
 导致后面也都不好 思路也乱
 其实应该是三指针 大数组
+
+
+//第二版 耽搁了两天 一遍过
+模仿题解写的
+K神思路巧妙在于
+
+把*2 *3 *5分给三个指针进行 这样化比较多个数为比较3个数即可
+然后三个指针的移动设定更是巧妙
+不是指向自己造成的那个新数
+而是指向dp[]中的下一个值！
+
+一言以蔽之：
+这个题用三指针，
+第一个丑数是1，
+以后的丑数都是基于前面的小丑数分别乘2，3，5构成的。
+我们每次添加进去一个当前计算出来个三个丑数的最小的一个，
+并且是谁计算的，
+谁指针就后移一位。
+
+执行结果：
+通过
+执行用时：
+3 ms
+, 在所有 Java 提交中击败了
+72.12%
+的用户
+内存消耗：
+37.6 MB
+, 在所有 Java 提交中击败了
+35.19%
+的用户
+class Solution {
+    public int nthUglyNumber(int n) {
+    /*
+    三个指针mult_2 mult_3 mult_5 都从0开始
+    然后还有一个quick作为最远指针
+    
+    */
+    int[] dp = new int[n];
+    dp[0] = 1;
+    int mult_2 = 0;
+    int mult_3 = 0;
+    int mult_5 = 0;
+    int quick = 0;
+    while(quick < n - 1){
+        int temp = Math.min(dp[mult_2] * 2, Math.min(dp[mult_3] * 3, dp[mult_5] * 5));
+        if(dp[mult_2] * 2 == temp){
+            dp[quick + 1] = dp[mult_2] * 2;
+            mult_2++;
+        }
+        if(dp[mult_3] * 3 == temp){
+            dp[quick + 1] = dp[mult_3] * 3;
+            mult_3++;
+        }
+        if(dp[mult_5] * 5 == temp){
+            dp[quick + 1] = dp[mult_5] * 5;
+            mult_5++;
+        } 
+        quick++;
+    }
+    return dp[n - 1];
+    }
+}
+
+//第三版 K神题解
+class Solution {
+    public int nthUglyNumber(int n) {
+        int a = 0, b = 0, c = 0;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        for(int i = 1; i < n; i++) {·······································提升速度就在于此 将while(quick < n - 1) 换成 for(int i = 1; i < n; i++) 空间换时间
+            int n2 = dp[a] * 2, n3 = dp[b] * 3, n5 = dp[c] * 5;
+            dp[i] = Math.min(Math.min(n2, n3), n5);
+            if(dp[i] == n2) a++;
+            if(dp[i] == n3) b++;
+            if(dp[i] == n5) c++;
+        }
+        return dp[n - 1];
+    }
+}
