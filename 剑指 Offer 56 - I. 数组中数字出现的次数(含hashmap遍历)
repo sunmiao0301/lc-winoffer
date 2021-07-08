@@ -1,0 +1,58 @@
+//第一版 用的hashmap 效果不好 
+需要注意的是 hashmap 的遍历方式是：五种方法见链接:https://blog.csdn.net/w605283073/article/details/80708943
+// Iterating entries using a For Each loop
+		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+		}
+ 
+	}
+执行结果：
+通过
+执行用时：
+10 ms
+, 在所有 Java 提交中击败了
+16.84%
+的用户
+内存消耗：
+40.1 MB
+, 在所有 Java 提交中击败了
+57.13%
+的用户
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+    //输出：[1,6] 或 [6,1] 所以输出不需要有序
+    Map<Integer, Integer> map = new HashMap<>();
+    for(int i = 0; i < nums.length; i++){
+        //可能需要建立两个map 哦 不需要 因为一个数最多出现两次 如果有 第二次之后就没有了
+        if(map.containsKey(nums[i]))
+            map.remove(nums[i]);
+        else
+            map.put(nums[i], 1);
+        //map.getOrDefault(nums[i], -1) == -1?map.put(nums[i], 1):remove(nums[i]);
+    }
+    int[] ret = new int[2];
+    int i = 0;
+    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			ret[i] = entry.getKey();
+            i++;
+    }
+    return ret;
+    }
+}
+
+//第二版 K神 
+链接：https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/solution/jian-zhi-offer-56-i-shu-zu-zhong-shu-zi-tykom/
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        int x = 0, y = 0, n = 0, m = 1;
+        for(int num : nums)               // 1. 遍历异或
+            n ^= num;
+        while((n & m) == 0)               // 2. 循环左移，计算 m
+            m <<= 1;
+        for(int num: nums) {              // 3. 遍历 nums 分组
+            if((num & m) != 0) x ^= num;  // 4. 当 num & m != 0
+            else y ^= num;                // 4. 当 num & m == 0
+        }
+        return new int[] {x, y};          // 5. 返回出现一次的数字
+    }
+}
