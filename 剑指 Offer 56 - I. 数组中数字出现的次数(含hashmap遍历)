@@ -143,3 +143,79 @@ class Solution {
         return ret_a;
     }
 }
+
+//第五版 啼笑皆非了 写到一半发现这一题必须得是用异或 
+用我这个方法空间复杂度不能o（1） 因为第一次统计（两A之间的代码）各个位的时候就会把nums[]里面的数位搞没了 必须得copy一份相同数组存起来 不过这一版写的过程中也有收获
+第六版是异或法
+执行结果：
+通过
+执行用时：
+19 ms
+, 在所有 Java 提交中击败了
+5.94%
+的用户
+内存消耗：
+40.4 MB
+, 在所有 Java 提交中击败了
+8.33%
+的用户
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        //不准备用异或 还是用56-II的方法结合56-I处理要找两个数的处理思想
+        int[] nums_copy = nums.clone();
+        int[] sum = new int[32];
+        for(int i = 0; i < nums.length; i++){·······························A
+            for(int j = 0; j < 32; j++){
+                sum[31 - j] += nums_copy[i] & 1;
+                nums_copy[i] >>= 1;
+            }
+        }···································································A
+        int bit = 0;
+        for(int k = 0, flag = 0 ; k < 32; k++){
+            if((sum[k] % 2 == 1 && flag == 0)){
+                bit = bit | 1;
+                flag = 1;
+                continue;
+            }
+            bit <<= 1;
+        }
+        int[] ret_a = new int[32];
+        int[] ret_b = new int[32];
+        for(int l = 0; l < nums.length; l++){
+            if((nums[l] & bit) == 0){
+                for(int i = 0; i < 32; i++){
+                    ret_a[31 - i] += (nums[l] & 1);
+                    nums[l] >>= 1;               
+                }
+            }
+            else{
+                for(int j = 0; j < 32; j++){
+                    ret_b[31 - j] += (nums[l] & 1);
+                    nums[l] >>= 1;               
+                } 
+            }         
+        }
+        int[] ret = new int[2];
+        int a = 0;
+        int b = 0;
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                a = a | (ret_a[i] % 2);
+                break;
+            }  
+            a = a | (ret_a[i] % 2);
+            a = a << 1;
+        }
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                b = b | (ret_b[i] % 2);
+                break;
+            }  
+            b = b |(ret_b[i] % 2);
+            b = b << 1;
+        }
+        ret[0] = a;
+        ret[1] = b;
+        return ret;
+    }
+}
