@@ -83,6 +83,63 @@ b’= 0 0 0 1
 ———————————
 a’’=0 1 0 1 = 5 = b
 
-//
-
-
+//第四版
+不准备用异或 还是用56-II的方法结合56-I处理要找两个数的处理思想 看看效率如何
+但是下面这个写法是错的，找区分两个数组的那个位，不能用下面A处的代码，因为会破坏数据nums[l]
+改正后见第五版
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        //不准备用异或 还是用56-II的方法结合56-I处理要找两个数的处理思想
+        int[] sum = new int[32];
+        for(int i = 0; i < nums.length; i++){
+            for(int j = 0; j < 32; j++){
+                sum[31 - j] += nums[i] & 1;
+                nums[i] >>= 1;
+            }
+        }
+        int k = 0;············································A
+        for( ; k < 32; k++){
+            if((sum[k] % 2) == 1){//29
+                break;
+            }
+        }·····················································A
+        int[] ret_a = new int[32];
+        int[] ret_b = new int[32];
+        for(int l = 0; l < nums.length; l++){
+            if(nums[l]>>(31 - k) == 1){·······················A
+                for(int i = 0; i < 32; i++){
+                    ret_a[31 - i] = (ret_a[31 - i] + (nums[l] & 1)) % 2;
+                    nums[l] >>= 1;               
+                }
+            }
+            else{
+                for(int j = 0; j < 32; j++){
+                    ret_b[31 - j] =(ret_b[31 - j] + (nums[l] & 1)) % 2;
+                    nums[l] >>= 1;               
+                } 
+            }         
+        }
+        int[] ret = new int[2];
+        int a = 0;
+        int b = 0;
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                a = a | ret_a[i];
+                break;
+            }  
+            a = a | ret_a[i];
+            a = a << 1;
+        }
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                b = b | ret_b[i];
+                break;
+            }  
+            b = b | ret_b[i];
+            b = b << 1;
+        }
+        ret[0] = a;
+        ret[1] = b;
+        return ret_a;
+    }
+}
