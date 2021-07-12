@@ -1,0 +1,39 @@
+//第一版 写的不好
+效果很差
+class Solution {
+    public String reverseWords(String s) {
+    /*
+    为简单起见，标点符号和普通字母一样处理。
+    输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+    如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+    先入后出？
+    */
+    if(s.length() == 0)return "";
+    Stack<String> stack = new Stack<>();
+    int l = 0;
+    int r = 0;
+    for(l = r; l < s.length(); l++){
+        if(s.charAt(l) == ' ')
+            continue;
+        r = l;
+        for(r = l; r < s.length(); r++){
+            if(s.charAt(r) != ' ' && r != s.length() - 1)
+                continue;
+            if(r == s.length() - 1 && s.charAt(r) != ' '){
+                stack.push(s.substring(l));
+                break;
+            }
+            stack.push(s.substring(l, r));
+                break;
+        }
+        l = r;
+    }
+    String ret = "";
+    while(!stack.isEmpty()){
+        ret += stack.pop() + " ";
+    }
+    if(ret == "")
+        return "";
+    return ret.substring(0, ret.length() - 1);
+    }
+}
