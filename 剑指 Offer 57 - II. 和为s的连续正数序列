@@ -240,3 +240,50 @@ class Solution {
     return array.toArray(new int[0][]);
     }
 }
+
+//第七版 LeetCode题解
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> vec = new ArrayList<int[]>();
+        for (int l = 1, r = 2; l < r;) {
+            int sum = (l + r) * (r - l + 1) / 2;
+            if (sum == target) {
+                int[] res = new int[r - l + 1];
+                for (int i = l; i <= r; ++i) {
+                    res[i - l] = i;
+                }
+                vec.add(res);
+                l++;
+            } else if (sum < target) {
+                r++;
+            } else {
+                l++;
+            }
+        }
+        return vec.toArray(new int[vec.size()][]);
+    }
+}
+
+//第八版 K神
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+        int i = 1, j = 2, s = 3;
+        List<int[]> res = new ArrayList<>();
+        while(i < j) {
+            if(s == target) {
+                int[] ans = new int[j - i + 1];
+                for(int k = i; k <= j; k++)
+                    ans[k - i] = k;
+                res.add(ans);
+            }
+            if(s >= target) {
+                s -= i;
+                i++;
+            } else {
+                j++;
+                s += j;
+            }
+        }
+        return res.toArray(new int[0][]);
+    }
+}
