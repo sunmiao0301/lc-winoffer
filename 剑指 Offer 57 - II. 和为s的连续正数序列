@@ -78,3 +78,41 @@ class Solution {
 //第三版 滑动窗口
 前半部分我知道 只需要找到第一个big与对应的small
 但是后面怎么滑动窗口呢？
+我理解的滑动窗口如下
+
+执行结果：
+超出时间限制
+最后执行的输入：
+50252
+
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+    List<int[]> array = new ArrayList<>();
+    int small = 1;
+    int big = target - 1;
+    for(; small < target - 1; small++){//正整数
+        for(big = target - 1; big > small; big--){
+            if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target)
+                break;
+        }
+        if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target)
+                break;
+    }
+    for(int r = big; small < r && r < target; r++){
+        if(((r - small) % 2 == 0 ? (small + r) / 2 * (r - small + 1) : (small + r) * ((r - small + 1) / 2)) == target){
+            int[] temp = new int[r - small + 1];
+            for(int i = 0, s = small; i < temp.length; i++, s++){
+                temp[i] = s;
+            }
+            array.add(temp);
+            small++;
+            r = small;
+        }
+        if(r == target - 1){
+            small++;
+            r = small;
+        }
+    }
+    return array.toArray(new int[0][]);
+    }
+}
