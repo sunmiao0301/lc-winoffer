@@ -1,0 +1,80 @@
+//第一版
+我知道方法是双指针 但是不知道怎么生成返回的二维数组
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+    /*
+    以二维数组形式输出
+    “至少含有两个数”
+    正整数序列
+    “不同序列按照首个数字从小到大排列” 我感觉是暗示从第一个数开始
+    这种不工整二维数组是啥
+    234
+    45
+    那空缺的位置是啥？
+    */
+    List<Integer[]> array = new ArrayList<>();
+    //int[] arr = new int[target - 1];//用于截取需要的数组?
+    for(int small = 1; small < target - 1; small++){//正整数
+        for(int big = target - 1; big > 1; big--){
+            if(((big - samll) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target){
+                //加入从small到big范围的数组
+            }
+        }
+    }
+    }
+}
+
+//第二版
+超时 两个for还是太慢了
+执行结果：
+超出时间限制
+最后执行的输入：
+50252
+
+A处代码很关键：
+toArray(new T[0])能够运行是因为java做了优化，能动态生成对应大小的数组，是官方建议的书写方式，能避免某些并发问题并且效率更高
+相关网站链接：https://juejin.cn/post/6844904145753735176
+
+1、数组空间等于0时，将会动态的创建和集合size相同空间大小的数组，性能是最好的。
+2、数组空间大于0但是小于size时，会重新创建大小等于集合size的数组，此时会增加GC的负担。
+3、数组空间等于集合的size时，在普通情况下是没问题的，但是在高并发情况下，数组创建完成后，集合的size变大，此时影响跟第二条相同。
+4、数组空间大于集合的size时，一方面会造成空间浪费，另一方面会在使用数组时产生空指针的异常。因为多出来的空间会存入null
+
+toArray(T[] a)方法，将集合根据入参的数据类型转换成对应的数组。该方法就可以完美的解决使用toArray()方法的弊端。
+
+// toArray(T[] a)方法的使用。
+public static void main(String[] args) {
+    List<String> list = new ArrayList<>();
+    list.add("张三");
+    list.add("李四");
+    list.add("王五");
+    // 传入一个String类型的数组。
+    String[] strArray = list.toArray(new String[0]);
+    for (String item : strArray) {
+        System.out.println(item);
+    }
+}
+
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+    List<int[]> array = new ArrayList<>();
+    //int[] arr = new int[target - 1];//用于截取需要的数组?
+    for(int small = 1; small < target - 1; small++){//正整数
+        for(int big = target - 1; big > small; big--){
+            if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target){
+                //加入从small到big范围的数组
+                int[] temp = new int[big - small + 1];
+                for(int i = small, j = 0; i <= big; i++, j++){
+                    temp[j] = i;
+                }
+                array.add(temp);
+            }
+        }
+    }
+    return array.toArray(new int[0][]);····························A
+    }
+}
+
+//第三版 滑动窗口
+前半部分我知道 只需要找到第一个big与对应的small
+但是后面怎么滑动窗口呢？
