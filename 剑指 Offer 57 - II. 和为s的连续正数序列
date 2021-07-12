@@ -191,4 +191,52 @@ class Solution {
     }
 }
 
-提交时间：1 分钟前
+//第六版 继续优化 通过 但是效果不好
+
+执行结果：
+通过
+执行用时：
+2794 ms
+, 在所有 Java 提交中击败了
+5.24%
+的用户
+内存消耗：
+36.7 MB
+, 在所有 Java 提交中击败了
+20.00%
+的用户
+
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+    List<int[]> array = new ArrayList<>();
+    int small = 1;
+    int big = target - 1;
+    for(; small < target - 1; small++){//正整数
+        for(big = target - 1; big > small; big--){
+            if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target)
+                break;
+        }
+        if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target)
+                break;
+    }
+
+    int len = big - small;
+    for(int r = big; r - small <= len && small <= target / 2; r++){
+        if(((r - small) % 2 == 0 ? (small + r) / 2 * (r - small + 1) : (small + r) * ((r - small + 1) / 2)) == target){
+            len = r - small;
+            int[] temp = new int[r - small + 1];
+            for(int i = 0, s = small; i < temp.length; i++, s++){
+                temp[i] = s;
+            }
+            array.add(temp);
+            small++;
+            r = small;
+        }
+        if(r - small == len){
+            small++;
+            r = small;
+        }
+    }
+    return array.toArray(new int[0][]);
+    }
+}
