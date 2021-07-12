@@ -151,3 +151,44 @@ class Solution {
     return array.toArray(new int[0][]);
     }
 }
+
+//第五版
+继续优化 效果明显 卡在了最后一个样例
+32 / 32 个通过测试用例
+状态：超出时间限制
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+    List<int[]> array = new ArrayList<>();
+    int small = 1;
+    int big = target - 1;
+    for(; small < target - 1; small++){//正整数
+        for(big = target - 1; big > small; big--){
+            if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target)
+                break;
+        }
+        if(((big - small) % 2 == 0 ? (small + big) / 2 * (big - small + 1) : (small + big) * ((big - small + 1) / 2)) == target)
+                break;
+    }
+
+    int len = big - small;
+    for(int r = big; small < r && r - small <= len && small <= target / 2; r++){
+        if(((r - small) % 2 == 0 ? (small + r) / 2 * (r - small + 1) : (small + r) * ((r - small + 1) / 2)) == target){
+            len = r - small;
+            int[] temp = new int[r - small + 1];
+            for(int i = 0, s = small; i < temp.length; i++, s++){
+                temp[i] = s;
+            }
+            array.add(temp);
+            small++;
+            r = small;
+        }
+        if(r - small == len){
+            small++;
+            r = small;
+        }
+    }
+    return array.toArray(new int[0][]);
+    }
+}
+
+提交时间：1 分钟前
