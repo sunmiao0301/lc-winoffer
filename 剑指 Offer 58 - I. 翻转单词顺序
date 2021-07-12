@@ -117,3 +117,60 @@ class Solution {
     return ret.substring(0, ret.length() - 1);
     }
 }
+
+//第四版
+对第三版整理一下 但是效果没有提升
+class Solution {
+    public String reverseWords(String s) {
+    s = s + " ";
+    int temp = 0;
+    int flag = 0;
+    Stack<String> stack = new Stack<>();
+    for(int i = 0; i < s.length(); i++){//
+        if(s.charAt(i) == ' ' && flag == 1){
+                stack.push(s.substring(temp, i));
+                temp = i;
+                flag = 0;
+        }
+        else if(s.charAt(i) != ' ' && flag == 0){
+                temp = i;
+                flag = 1;      
+        }
+    }
+    String ret = "";
+    while(!stack.isEmpty()){
+        ret += stack.pop() + " ";
+    }
+    if(ret.length() == 0)
+        return ret;
+    return ret.substring(0, ret.length() - 1);
+    }
+}
+
+//K 神
+执行结果：
+通过
+执行用时：
+3 ms
+, 在所有 Java 提交中击败了
+68.61%
+的用户
+内存消耗：
+38.4 MB
+, 在所有 Java 提交中击败了
+32.37%
+的用户
+class Solution {
+    public String reverseWords(String s) {
+        s = s.trim(); // 删除首尾空格
+        int j = s.length() - 1, i = j;
+        StringBuilder res = new StringBuilder();
+        while(i >= 0) {
+            while(i >= 0 && s.charAt(i) != ' ') i--; // 搜索首个空格
+            res.append(s.substring(i + 1, j + 1) + " "); // 添加单词
+            while(i >= 0 && s.charAt(i) == ' ') i--; // 跳过单词间空格
+            j = i; // j 指向下个单词的尾字符
+        }
+        return res.toString().trim(); // 转化为字符串并返回
+    }
+}
