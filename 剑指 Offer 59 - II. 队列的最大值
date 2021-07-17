@@ -1,0 +1,154 @@
+//第一版 遇到的问题是如何处理 push的值小于deque中最左（大）值 但是又大于deque其中某个值 如下：
+["MaxQueue","push_back","push_back","push_back","max_value","pop_front","max_value"]
+[[],[5],[2],[3],[],[],[]]
+测试结果就是：
+["MaxQueue","push_back","push_back","push_back","max_value","pop_front","max_value"]
+[[],[5],[2],[3],[],[],[]]
+输出
+[null,null,null,null,5,5,2]
+预期结果
+[null,null,null,null,5,5,3]
+
+class MaxQueue {
+    Queue<Integer> q = new LinkedList<>();
+    Deque<Integer> d = new LinkedList<>();
+    public MaxQueue() {
+
+    }
+    
+    public int max_value() {
+        return (d.isEmpty() ? -1 : d.peekFirst());
+    }
+    
+    public void push_back(int value) {
+        q.add(value);
+        if(d.isEmpty())
+            d.addLast(value);
+        else if(d.peekFirst() < value){
+            d.clear();
+            d.add(value);
+        }
+        else if(d.peekFirst() == value){
+            d.clear();
+            d.add(value);
+            d.add(value);
+        }
+        //如果大于怎么办
+        //else if(d.peekFirst() > value){
+        //   d.add(value);
+        //}
+    }
+    
+    public int pop_front() {
+        if(q.isEmpty())
+            return -1;
+        if(q.peek() == d.peekFirst()){//队列的队尾元素无法得到，就和栈底的元素无法得到一样！
+            q.poll();
+            return d.pollFirst();            
+        }
+        return q.poll();
+    }
+}
+
+//第二版 对于我第一版提出的问题 K神的解决方案是：
+    public void push_back(int value) {
+        queue.offer(value);
+        while(!deque.isEmpty() && deque.peekLast() < value)
+            deque.pollLast();
+        deque.offerLast(value);
+  }
+  
+//第三版 看了push的方法之后，我的解答是不对：
+
+4 / 34 个通过测试用例
+状态：解答错误
+
+输入：
+["MaxQueue","max_value","pop_front","max_value","push_back","max_value","pop_front","max_value","pop_front","push_back","pop_front","pop_front","pop_front","push_back","pop_front","max_value"]
+[[],[],[],[],[46],[],[],[],[],[868],[],[],[],[525],[],[]]
+输出
+[null,-1,-1,-1,null,46,46,-1,-1,null,868,-1,-1,null,525,868]
+预期结果
+[null,-1,-1,-1,null,46,46,-1,-1,null,868,-1,-1,null,525,-1]
+
+class MaxQueue {
+    Queue<Integer> q = new LinkedList<>();
+    Deque<Integer> d = new LinkedList<>();
+    public MaxQueue() {
+
+    }
+    
+    public int max_value() {
+        return (d.isEmpty() ? -1 : d.peekFirst());
+    }
+    
+    public void push_back(int value) {
+        q.add(value);
+        while(!d.isEmpty() && d.peekLast() < value){
+            d.pollLast();
+        }
+        d.add(value);
+    }
+    
+    public int pop_front() {
+        if(q.isEmpty())
+            return -1;
+        if(q.peek() == d.peekFirst())//队列的队尾元素无法得到，就和栈底的元素无法得到一样！··························A
+            d.pollFirst();            
+        return q.poll();
+    }
+}
+
+//第四版 第三版的问题出在了A处代码处 很奇怪 明明我的Deque和Queue都是<Integer>的，为什么用 == 不行 而需要equals？
+此外，还有以下感悟：
+
+1）对于Deque而言 Queue 的三个函数add poll peek 怎么理解呢？分别等价于Deque的哪几个函数？
+2）注意：队列的队尾元素无法得到，就和栈底的元素无法得到一样！但是双端队列Deque就可以
+3）Deque和Queue都是<Integer>的，为什么用 == 不行 而需要equals？
+  答：解释见链接 https://zhuanlan.zhihu.com/p/260474519
+
+修正后成功运行：
+执行结果：
+通过
+执行用时：
+30 ms
+, 在所有 Java 提交中击败了
+99.15%
+的用户
+内存消耗：
+46.1 MB
+, 在所有 Java 提交中击败了
+79.79%
+的用户
+class MaxQueue {
+    Queue<Integer> q = new LinkedList<>();
+    Deque<Integer> d = new LinkedList<>();
+    public MaxQueue() {
+
+    }
+    
+    public int max_value() {
+        return (d.isEmpty() ? -1 : d.peekFirst());
+    }
+    
+    public void push_back(int value) {
+        q.add(value);
+        while(!d.isEmpty() && d.peekLast() < value){
+            d.pollLast();
+        }
+        d.addLast(value);//对于Deque而言 Queue的三个函数add poll peek 怎么理解呢？
+    }
+    
+    public int pop_front() {
+        if(q.isEmpty())
+            return -1;
+        if(q.peek().equals(d.peekFirst()))//队列的队尾元素无法得到，就和栈底的元素无法得到一样！
+            d.pollFirst();            
+        return q.poll();
+    }
+}
+
+本题可以和30题 单调栈 互相参考
+
+简单分析了一下 无论是要最小值 还是最大值 应该是都可以的
+
