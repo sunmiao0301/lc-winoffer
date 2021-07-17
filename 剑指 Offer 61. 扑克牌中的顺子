@@ -158,6 +158,7 @@ class Solution {
 }
 
 //第五版
+或者是把数组传递进去，这样也可以改变 见第七版
 执行结果：
 通过
 执行用时：
@@ -224,5 +225,60 @@ class Solution {
             else if(nums[i] == nums[i + 1]) return false; // 若有重复，提前返回 false
         }
         return nums[4] - nums[joker] < 5; // 最大牌 - 最小牌 < 5 则可构成顺子
+    }
+}
+
+//第七版
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+36 MB
+, 在所有 Java 提交中击败了
+13.11%
+的用户’
+class Solution {
+    public boolean isStraight(int[] nums) {
+    /*
+    先排序 
+    然后 找到非0的最小值
+    维护的有
+    1）nums[]
+    2）0的数
+    3）当前的数下标
+    思路：
+    当前数的下个数与当前数差距大于0的数量 false 否则就将0的数量减去差距
+    然后开始下一个数 直到当前数下标为4
+    */
+    int zero = 0;
+    for(int i = 0; i < nums.length; i++){
+        if(nums[i] == 0){
+            swap(nums, i, zero);
+            zero++;
+        }
+    }
+    for(int i = zero; i < nums.length; i++){
+        for(int j = i+1; j < nums.length; j++){
+            if(nums[i] > nums[j])
+                swap(nums, i, j);
+        }
+    }//排序
+    for(int i = zero; i < nums.length - 1; i++){
+        zero = zero - (nums[i+1] - nums[i] - 1 < 0 ? 100 : nums[i+1] - nums[i] - 1);
+        if(zero < 0)
+            break;
+    }
+    if(zero < 0)
+        return false;
+    return true;
+    }
+    void swap(int[] nums, int a, int b){
+        int temp = nums[a];
+        nums[a] = nums[b]; 
+        nums[b] = temp;
     }
 }
