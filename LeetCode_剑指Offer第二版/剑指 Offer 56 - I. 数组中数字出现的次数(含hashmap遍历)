@@ -1,0 +1,266 @@
+//第一版 用的hashmap 效果不好 
+需要注意的是 hashmap 的遍历方式是：五种方法见链接:https://blog.csdn.net/w605283073/article/details/80708943
+// Iterating entries using a For Each loop
+		for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+		}
+ 
+	}
+执行结果：
+通过
+执行用时：
+10 ms
+, 在所有 Java 提交中击败了
+16.84%
+的用户
+内存消耗：
+40.1 MB
+, 在所有 Java 提交中击败了
+57.13%
+的用户
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+    //输出：[1,6] 或 [6,1] 所以输出不需要有序
+    Map<Integer, Integer> map = new HashMap<>();
+    for(int i = 0; i < nums.length; i++){
+        //可能需要建立两个map 哦 不需要 因为一个数最多出现两次 如果有 第二次之后就没有了
+        if(map.containsKey(nums[i]))
+            map.remove(nums[i]);
+        else
+            map.put(nums[i], 1);
+        //map.getOrDefault(nums[i], -1) == -1?map.put(nums[i], 1):remove(nums[i]);
+    }
+    int[] ret = new int[2];
+    int i = 0;
+    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+			ret[i] = entry.getKey();
+            i++;
+    }
+    return ret;
+    }
+}
+
+//第二版 K神 
+链接：https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/solution/jian-zhi-offer-56-i-shu-zu-zhong-shu-zi-tykom/
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        int x = 0, y = 0, n = 0, m = 1;
+        for(int num : nums)               // 1. 遍历异或
+            n ^= num;
+        while((n & m) == 0)               // 2. 循环左移，计算 m
+            m <<= 1;
+        for(int num: nums) {              // 3. 遍历 nums 分组
+            if((num & m) != 0) x ^= num;  // 4. 当 num & m != 0
+            else y ^= num;                // 4. 当 num & m == 0
+        }
+        return new int[] {x, y};          // 5. 返回出现一次的数字
+    }
+}
+
+//第三版 额外知识 通过异或可以“不使用第三个变量，交换两个变量的值”
+a = 5
+b = 1
+现在不借助第三个值 交换a b的值
+首先将a b表示为二进制
+a = 0 0 0 1 = 1
+b = 0 1 0 1 = 5
+然后对a 异或b
+a = 0 0 0 1
+b = 0 1 0 1
+———————————
+a’= 0 1 0 0 
+这个值覆盖a
+
+然后对b 异或a’
+b = 0 1 0 1
+a’= 0 1 0 0
+———————————
+b’= 0 0 0 1 = 1 = a
+
+然后对a’ 异或b’
+a’= 0 1 0 0
+b’= 0 0 0 1
+———————————
+a’’=0 1 0 1 = 5 = b
+
+//第四版
+不准备用异或 还是用56-II的方法结合56-I处理要找两个数的处理思想 看看效率如何
+但是下面这个写法是错的，找区分两个数组的那个位，不能用下面A处的代码，因为会破坏数据nums[l]
+改正后见第五版
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        //不准备用异或 还是用56-II的方法结合56-I处理要找两个数的处理思想
+        int[] sum = new int[32];
+        for(int i = 0; i < nums.length; i++){
+            for(int j = 0; j < 32; j++){
+                sum[31 - j] += nums[i] & 1;
+                nums[i] >>= 1;
+            }
+        }
+        int k = 0;············································A
+        for( ; k < 32; k++){
+            if((sum[k] % 2) == 1){//29
+                break;
+            }
+        }·····················································A
+        int[] ret_a = new int[32];
+        int[] ret_b = new int[32];
+        for(int l = 0; l < nums.length; l++){
+            if(nums[l]>>(31 - k) == 1){·······················A
+                for(int i = 0; i < 32; i++){
+                    ret_a[31 - i] = (ret_a[31 - i] + (nums[l] & 1)) % 2;
+                    nums[l] >>= 1;               
+                }
+            }
+            else{
+                for(int j = 0; j < 32; j++){
+                    ret_b[31 - j] =(ret_b[31 - j] + (nums[l] & 1)) % 2;
+                    nums[l] >>= 1;               
+                } 
+            }         
+        }
+        int[] ret = new int[2];
+        int a = 0;
+        int b = 0;
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                a = a | ret_a[i];
+                break;
+            }  
+            a = a | ret_a[i];
+            a = a << 1;
+        }
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                b = b | ret_b[i];
+                break;
+            }  
+            b = b | ret_b[i];
+            b = b << 1;
+        }
+        ret[0] = a;
+        ret[1] = b;
+        return ret_a;
+    }
+}
+
+//第五版 啼笑皆非了 写到一半发现这一题必须得是用异或 
+用我这个方法空间复杂度不能o（1） 因为第一次统计（两A之间的代码）各个位的时候就会把nums[]里面的数位搞没了 必须得copy一份相同数组存起来 不过这一版写的过程中也有收获
+解决这些问题之后 第六版成功运行
+第六版是异或法
+执行结果：
+通过
+执行用时：
+19 ms
+, 在所有 Java 提交中击败了
+5.94%
+的用户
+内存消耗：
+40.4 MB
+, 在所有 Java 提交中击败了
+8.33%
+的用户
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        //不准备用异或 还是用56-II的方法结合56-I处理要找两个数的处理思想
+        int[] nums_copy = nums.clone();
+        int[] sum = new int[32];
+        for(int i = 0; i < nums.length; i++){·······························A
+            for(int j = 0; j < 32; j++){
+                sum[31 - j] += nums_copy[i] & 1;
+                nums_copy[i] >>= 1;
+            }
+        }···································································A
+        int bit = 0;
+        for(int k = 0, flag = 0 ; k < 32; k++){
+            if((sum[k] % 2 == 1 && flag == 0)){
+                bit = bit | 1;
+                flag = 1;
+                continue;
+            }
+            bit <<= 1;
+        }
+        int[] ret_a = new int[32];
+        int[] ret_b = new int[32];
+        for(int l = 0; l < nums.length; l++){
+            if((nums[l] & bit) == 0){
+                for(int i = 0; i < 32; i++){
+                    ret_a[31 - i] += (nums[l] & 1);
+                    nums[l] >>= 1;               
+                }
+            }
+            else{
+                for(int j = 0; j < 32; j++){
+                    ret_b[31 - j] += (nums[l] & 1);
+                    nums[l] >>= 1;               
+                } 
+            }         
+        }
+        int[] ret = new int[2];
+        int a = 0;
+        int b = 0;
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                a = a | (ret_a[i] % 2);
+                break;
+            }  
+            a = a | (ret_a[i] % 2);
+            a = a << 1;
+        }
+        for(int i = 0; i < 32; i++){
+            if(i == 31){
+                b = b | (ret_b[i] % 2);
+                break;
+            }  
+            b = b |(ret_b[i] % 2);
+            b = b << 1;
+        }
+        ret[0] = a;
+        ret[1] = b;
+        return ret;
+    }
+}
+
+//第六版
+执行结果：
+通过
+执行用时：
+1 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+40.2 MB
+, 在所有 Java 提交中击败了
+38.42%
+的用户
+以下三个问题需要重点注意
+1）找到find_one中右数第一个1的位置 K神的方法 很好
+2）最后初始化返回数组时，初始化为多少？答案是0，任何数与0异或仍旧是这个数本身
+3）A处代码是影响执行速度的关键，根据之前的推导我们知道find_one中是必然有一个1的，所以不需要用for循环32中找，而是直接while即可！
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+    //还是用异或吧
+    int find_one = nums[0];
+    for(int i = 1; i < nums.length; i++){
+        find_one ^= nums[i];
+    }
+    /*
+    怎么找到那个右边起第一个为1的数位 
+    并且单独移出来 是个难题 不过消耗更多的空间也能解决 
+    但是K神的方法很nb 简单的方法找出右数第一个1
+    如下
+    */
+    int one = 1;
+    while((find_one & one) == 0) ························A
+        one <<= 1;·······································A
+    int[] ret = new int[2];
+    for(int i = 0; i < nums.length; i++){
+        if((nums[i] & one) == 0)
+            ret[0] ^= nums[i];
+        else
+            ret[1] ^= nums[i];
+    }
+    return ret;
+    }
+}

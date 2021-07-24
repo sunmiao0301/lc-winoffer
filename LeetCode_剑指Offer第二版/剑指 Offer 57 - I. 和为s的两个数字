@@ -1,0 +1,81 @@
+//第一版
+双指针试了一下 效果还行 但是不是100%
+执行结果：
+通过
+执行用时：
+2 ms
+, 在所有 Java 提交中击败了
+95.40%
+的用户
+内存消耗：
+55.4 MB
+, 在所有 Java 提交中击败了
+39.14%
+的用户
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        //双指针先试试
+        int small = 0, big = nums.length - 1;
+        while(nums[small] + nums[big] != target){
+            if(nums[small] + nums[big] > target)
+                big--;
+            else
+                small++;
+        }
+        return new int[]{nums[small], nums[big]};
+    }
+}
+
+//第二版 尝试优化 效果不大
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int small = 0, big = nums.length - 1;
+        while(nums[small] + nums[big] != target){
+            if(nums[small] + nums[big] > target){
+                while(nums[big-1] == nums[big])
+                    big--;
+                big--;
+            }
+            else{
+                while(nums[small+1] == nums[small])
+                    small++;
+                small++;
+            }
+        }
+        return new int[]{nums[small], nums[big]};
+    }
+}
+
+//第三版 K神 与我方法一样
+“
+解题思路：
+利用 HashMap 可以通过遍历数组找到数字组合，时间和空间复杂度均为 O(N)O(N) ；
+注意本题的 numsnums 是 排序数组 ，因此可使用 双指针法 将空间复杂度降低至 O(1)O(1) 。
+”
+如果不是排序数组 考虑hashmap
+
+执行结果：
+通过
+执行用时：
+2 ms
+, 在所有 Java 提交中击败了
+95.40%
+的用户
+内存消耗：
+55.5 MB
+, 在所有 Java 提交中击败了
+27.70%
+的用户
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int i = 0, j = nums.length - 1;
+        while(i < j) {
+            int s = nums[i] + nums[j];
+            if(s < target) i++;
+            else if(s > target) j--;
+            else return new int[] { nums[i], nums[j] };
+        }
+        return new int[0];
+    }
+}
+

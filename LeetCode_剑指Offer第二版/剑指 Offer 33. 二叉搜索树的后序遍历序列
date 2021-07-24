@@ -1,0 +1,199 @@
+//第一版 但是leetcode上不支持方法copyOfRange 故无法验证此方法
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+    /*后序遍历 即“左——右——根” 的顺序（对应的大小关系是“小——大——中”）
+    ·假设输入的数组的任意两个数字都互不相同。
+    二叉查找树（Binary Search Tree）
+    （又：二叉搜索树，二叉排序树）
+    它或者是一棵空树
+    或者是具有下列性质的二叉树： 
+    1）若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值； 
+    2）若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值； 
+    3）它的左、右子树也分别为二叉排序树。
+
+    我感觉想要判断其为true是困难的 但是要判断其为false应该是不难的
+    
+    小大中 小大 小中 大中 //小 大 中
+
+    有可能是和递归有关
+    因为最后一个值就是根节点 所以小于根的就是左子树 大于根值的就是右子树 但是数组不好递归啊 要新建很多子数组吗
+    或者用字符串来存？
+    那么是不是对于每一次递归只要都满足
+    “小 大 中”
+    “小 中”
+    “大 中”
+    即可
+    （反正就是在分界线出现之后 分界线如何确定呢 那么就是出最后一个值之外 第一个比最后一个值大的 如果有 就是含大 那么就是
+    那么第一个小是否需要判断呢 如果数组有类似substring这样的 其实也不一定好用 还行 那就用copy试试）
+    （而不能出现小 大 小 中 等其他情况）
+    */
+    if(postorder.length == 1)
+        return true;
+    if(postorder[0] > postorder[postorder.length - 1])
+        return verifyPostorder(copyOfRange(postorder, 0, postorder.length - 2));
+    
+    int index = 0;
+    for(; index < postorder.length; index++){
+        if(postorder[index] > postorder[postorder.length - 1])
+            break;
+    }
+
+    if(index == postorder.length)
+        return verifyPostorder(copyOfRange(postorder,0,index - 2));
+    for(int i = 0; i < index; i++){
+        if(postorder[i] > postorder[postorder.length - 1])
+            return false;
+    }
+    for(int j = index + 1; j < postorder.length - 1; j++){
+        if(postorder[j] < postorder[postorder.length - 1])
+            return false;
+    }
+    return verifyPostorder(copyOfRange(postorder, 0, index - 1)) && verifyPostorder(copyOfRange(postorder, index, postorder.length - 2));
+    }
+}
+
+//第二版 看一下题解使用的方法 于是我们在题解使用的替代copyOfRange方法的基础上 继续使用我们的思路 如下
+其实完全不需要在每一层递归 都新建两个数组用来存储左右子树 因为其实有一个最初的树即可 在这个树的基础上进行即可
+需要注意的是 由于Solution方法的参数是数组类型 所以我们必须另开一个方法（起到copyOfRange的作用）
+但是这一版本 在第20个样例的时候 不能通过
+20 / 23 个通过测试用例
+状态：解答错误
+提交时间：18 分钟前
+最后执行的输入：
+[1,2,5,10,6,9,4,3]
+
+class Solution {
+    //何时return false 是个问题
+    public boolean verifyPostorder(int[] postorder) {
+        if(postorder == null || postorder.length < 3)
+            return true;
+        int right_begin = 0;
+        while(postorder[right_begin] < postorder[postorder.length - 1])
+            right_begin++;
+        for(int i = right_begin; i < postorder.length - 1; i++){
+            if(postorder[i] < postorder[postorder.length - 1])
+                return false;
+        }
+        if(right_begin == 0 || right_begin == postorder.length - 1)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, 0, postorder.length - 2);
+        return helper(postorder, 0 , right_begin - 1) && helper(postorder, right_begin, postorder.length - 2);
+    }
+    public static boolean helper(int[] postorder, int right_begin, int right_end){
+        if(right_end - right_begin == 1 || right_end - right_end == 0)····················································A
+            return true;
+        int temp_right_begin = right_begin;
+        while(postorder[temp_right_begin] < postorder[right_end])//right_end对应的是新子树的根节点
+            temp_right_begin++;
+        for(int i = temp_right_begin; i < right_end; i++){
+            if(postorder[i] < postorder[right_end])
+                return false;
+        }
+        if(temp_right_begin == right_begin || temp_right_begin == right_end)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, right_begin, right_end - 1);
+        if(right_end - right_begin == 2)
+            return true;
+        return helper(postorder, right_begin , temp_right_begin) && helper(postorder, temp_right_begin, right_end - 1);
+    }
+}
+
+//第三版 通过 将A处代码改正即可通过 
+if(postorder == null || right_end - right_begin < 2)//right_end - right_begin == 1 || right_end - right_end == 0
+分析原因有两种分析方法：
+1）Solution主类方法应该和helper递归方法一致 因为本来就是同一个问题的递归解决 不应该有不一样的地方（除了第一步判断是否为空）
+2）粗心 把第二个判断条件打错了“right_end - right_end == 0” 导致 在子递归中第一步“right_end - right_end == 0”始终成立 左右子树的递归结果都是true，故最终为true。
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.7 MB
+, 在所有 Java 提交中击败了
+84.73%
+的用户
+class Solution {
+    //何时return false 是个问题
+    public boolean verifyPostorder(int[] postorder) {
+        if(postorder == null || postorder.length < 3)
+            return true;
+        int right_begin = 0;
+        while(postorder[right_begin] < postorder[postorder.length - 1]){
+            right_begin++;
+        }
+        for(int i = right_begin; i < postorder.length - 1; i++){
+            if(postorder[i] < postorder[postorder.length - 1])
+                return false;
+        }
+        if(right_begin == 0 || right_begin == postorder.length - 1)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, 0, postorder.length - 2);
+        return helper(postorder, 0 , right_begin - 1) && helper(postorder, right_begin, postorder.length - 2);
+    }
+    public static boolean helper(int[] postorder, int right_begin, int right_end){
+        if(postorder == null || right_end - right_begin < 2)//right_end - right_begin == 1 || right_end - right_end == 0
+            return true;
+        int temp_right_begin = right_begin;
+        while(postorder[temp_right_begin] < postorder[right_end]){//right_end对应的是新子树的根节点
+            temp_right_begin++;
+        }
+        for(int i = temp_right_begin; i < right_end; i++){
+            if(postorder[i] < postorder[right_end])
+                return false;
+        }
+        if(temp_right_begin == right_begin || temp_right_begin == right_end)//全大 都在右子树上 或 全小 都在左子树上
+            return helper(postorder, right_begin, right_end - 1);
+        if(right_end - right_begin == 2)
+            return true;
+        return helper(postorder, right_begin , temp_right_begin) && helper(postorder, temp_right_begin, right_end - 1);
+    }
+}
+
+//第四版 K神题解 思路与我一致 如下：
+方法一：递归分治
+根据二叉搜索树的定义，可以通过递归，判断所有子树的 正确性 （即其后序遍历是否满足二叉搜索树的定义） ，若所有子树都正确，则此序列为二叉搜索树的后序遍历。
+递归解析：
+终止条件： 当 i \geq ji≥j ，说明此子树节点数量 \leq 1≤1 ，无需判别正确性，因此直接返回 truetrue ；
+递推工作：
+划分左右子树： 遍历后序遍历的 [i, j][i,j] 区间元素，寻找 第一个大于根节点 的节点，索引记为 mm 。此时，可划分出左子树区间 [i,m-1][i,m−1] 、右子树区间 [m, j - 1][m,j−1] 、根节点索引 jj 。
+判断是否为二叉搜索树：
+左子树区间 [i, m - 1][i,m−1] 内的所有节点都应 << postorder[j]postorder[j] 。而第 1.划分左右子树 步骤已经保证左子树区间的正确性，因此只需要判断右子树区间即可。
+右子树区间 [m, j-1][m,j−1] 内的所有节点都应 >> postorder[j]postorder[j] 。实现方式为遍历，当遇到 \leq postorder[j]≤postorder[j] 的节点则跳出；则可通过 p = jp=j 判断是否为二叉搜索树。
+返回值： 所有子树都需正确才可判定正确，因此使用 与逻辑符 \&\&&& 连接。
+p = jp=j ： 判断 此树 是否正确。
+recur(i, m - 1)recur(i,m−1) ： 判断 此树的左子树 是否正确。
+recur(m, j - 1)recur(m,j−1) ： 判断 此树的右子树 是否正确。
+复杂度分析：
+时间复杂度 O(N^2) ： 每次调用 recur(i,j)recur(i,j) 减去一个根节点，因此递归占用 O(N)O(N) ；最差情况下（即当树退化为链表），每轮递归都需遍历树所有节点，占用 O(N)O(N) 。
+空间复杂度 O(N) ： 最差情况下（即当树退化为链表），递归深度将达到 N。
+
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+        return recur(postorder, 0, postorder.length - 1);
+    }
+    boolean recur(int[] postorder, int i, int j) {
+        if(i >= j) return true;
+        int p = i;
+        while(postorder[p] < postorder[j]) p++;
+        int m = p;
+        while(postorder[p] > postorder[j]) p++;
+        return p == j && recur(postorder, i, m - 1) && recur(postorder, m, j - 1);
+    }
+}
+
+//第五版 方法二：辅助单调栈
+时间复杂度 O(N)O(N) ： 遍历 postorderpostorder 所有节点，各节点均入栈 / 出栈一次，使用 O(N)O(N) 时间。
+空间复杂度 O(N)O(N) ： 最差情况下，单调栈 stackstack 存储所有节点，使用 O(N)O(N) 额外空间。
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+        Stack<Integer> stack = new Stack<>();
+        int root = Integer.MAX_VALUE;
+        for(int i = postorder.length - 1; i >= 0; i--) {
+            if(postorder[i] > root) return false;
+            while(!stack.isEmpty() && stack.peek() > postorder[i])
+            	root = stack.pop();
+            stack.add(postorder[i]);
+        }
+        return true;
+    }
+}

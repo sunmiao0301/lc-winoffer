@@ -1,0 +1,183 @@
+//第一版 使用递归把所有数按照顺序记录 然后找到arr中下标为 arr.size() - k 的数
+但是时间空间都不太好
+所以想做优化
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    //注意二叉树的三种遍历！！！！！
+    List<Integer> arr = new ArrayList<>();
+    public int kthLargest(TreeNode root, int k) {
+    /*
+    递归回溯？先得到从小到大的序列存入数组 然后得到第k大的数
+    二叉搜索树能否有重复数？
+    二叉搜索数的中序遍历是递增序列？左根右
+    {
+        return find(left);
+        system.out(root);
+        return find(right);
+    }
+    */
+    
+    helper(root);
+    return arr.get(arr.size() - k);
+    }
+    void helper(TreeNode root){
+        if(root.left != null)
+            helper(root.left);
+        arr.add(root.val);
+        if(root.right != null)
+            helper(root.right);
+    }
+}
+
+//第二版
+存的时候就先右后左 然后少一个求size()
+明显优化的远远不够
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    {
+        return find(left);
+        system.out(root);
+        return find(right);
+    }
+    */
+    helper(root);
+    return arr.get(k - 1);
+    }
+    void helper(TreeNode root){
+        if(root.right != null)
+            helper(root.right);
+        arr.add(root.val);
+        if(root.left != null)
+            helper(root.left);
+    }
+}
+
+//第三版
+看了一下K神 用的是K作参数来递归传递 于是我修改如下
+但是在如下样例处卡住了
+推算一下是k的递减设置的不对
+想了一晚上也没想到合适的解决办法
+16 / 91 个通过测试用例
+状态：解答错误
+提交时间：12 小时前
+最后执行的输入：
+[1,null,2]
+2
+class Solution {
+    int ret;
+    public int kthLargest(TreeNode root, int k) {
+    //递归的结束通过return实现 K神选的不是数组 而是通过k递减
+    helper(root, k);
+    return ret;
+    }
+    void helper(TreeNode root, int k){
+        if(root.right != null){   
+            helper(root.right, --k);
+            if(k == 0)
+                return;
+        }
+        if(k == 0){
+            ret = root.val;
+            return;
+        }
+        if(root.left != null){     
+            helper(root.left, --k);
+            if(k == 0)
+                return;    
+        }
+    }
+}
+
+//第四版 想了很久 我决定把写到k函数里面
+但是这样写如果进去的找不到出来的就出不来
+也就是会报错：
+error: incompatible types: missing return value（留下A）
+或者是
+error: missing return statement（删除A）
+如此看来，还是必须得有void helper辅助函数
+但是用辅助函数的话，k怎么传进去呢？
+
+K神提供了解决办法！“this.k = k”!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+class Solution {
+    int ret;
+    public int kthLargest(TreeNode root, int k) {
+        if(root.right != null){
+            return kthLargest(root.right, k);
+        }
+        if(--k == 0){
+            ret = root.val;
+            return ret;
+        }
+        if(root.left != null){
+            return kthLargest(root.left, k);
+        }
+    //return ; ································A
+    }
+}
+
+//第五版 成功！
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+38.1 MB
+, 在所有 Java 提交中击败了
+85.22%
+的用户
+成功的原因就是把函数 KthLargest 的系统输入的参数k给到了全局变量k 使得调用的函数 helper 也能改变 k 了
+class Solution {
+    int ret, K;···················································大写的K是全局变量
+    public int kthLargest(TreeNode root, int k) {
+        this.K = k;···············································通过this.K = k 使得全局变量被参数赋值
+        helper(root);
+        return ret;
+    }
+    void helper(TreeNode root){
+        if(root.right != null && K != 0)
+            helper(root.right);
+        if(--K == 0){
+            ret = root.val;
+            return;
+        }
+        if(root.left != null && K != 0)
+            helper(root.left);   
+    }
+}
+
+//第六版 K神
+class Solution {
+    int res, k;
+    public int kthLargest(TreeNode root, int k) {
+        this.k = k;
+        dfs(root);
+        return res;
+    }
+    void dfs(TreeNode root) {
+        if(root == null) return;
+        dfs(root.right);
+        if(k == 0) return;
+        if(--k == 0) res = root.val;
+        dfs(root.left);
+    }
+}

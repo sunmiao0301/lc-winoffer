@@ -1,0 +1,91 @@
+//第一版
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+41.2 MB
+, 在所有 Java 提交中击败了
+80.01%
+的用户
+
+A处代码的位置是有讲究的，不然在数组长度为1 或 2时都可能出错
+也就是会出现报错：
+执行结果：
+解答错误
+输入：
+[1]
+1
+输出：
+0
+预期结果：
+1
+class Solution {
+    int ret = 0;
+    public int search(int[] nums, int target) {
+    //排序数组
+    if(nums.length == 0)
+        return 0;
+    return find(nums, target, 0, nums.length - 1);
+    }
+    int find(int[] nums, int target, int left, int right){
+        //int mid = left + (right - left) / 2;  
+        int mid = (left + right) / 2;
+        if(nums[mid] == target){
+            ret++;
+            for(int i = mid + 1; i <= right; i++){
+                if(nums[i] == target)
+                    ret++;
+                if(nums[i] != target)
+                    break;
+            }
+            for(int j = mid - 1; j >= left; j--){
+                if(nums[j] == target)
+                    ret++;
+                if(nums[j] != target)
+                    break;                
+            }
+            return ret;
+        }
+        if(left >= right)//这个位置是有讲究的··································A
+            return 0;
+        if(nums[mid] < target){
+            left = mid + 1;
+            return find(nums, target, left, right);
+        }
+        if(nums[mid] > target){
+            right = mid - 1;
+            return find(nums, target, left, right);
+        }
+    return -1;
+    }
+}
+
+//k神
+https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/solution/mian-shi-ti-53-i-zai-pai-xu-shu-zu-zhong-cha-zha-5/
+class Solution {
+    public int search(int[] nums, int target) {
+        // 搜索右边界 right
+        int i = 0, j = nums.length - 1;
+        while(i <= j) {
+            int m = (i + j) / 2;
+            if(nums[m] <= target) i = m + 1;
+            else j = m - 1;
+        }
+        int right = i;
+        // 若数组中无 target ，则提前返回
+        if(j >= 0 && nums[j] != target) return 0;
+        // 搜索左边界 right
+        i = 0; j = nums.length - 1;
+        while(i <= j) {
+            int m = (i + j) / 2;
+            if(nums[m] < target) i = m + 1;
+            else j = m - 1;
+        }
+        int left = j;
+        return right - left - 1;
+    }
+}

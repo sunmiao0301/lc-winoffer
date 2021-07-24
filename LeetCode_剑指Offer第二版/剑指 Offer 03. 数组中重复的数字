@@ -1,0 +1,77 @@
+//第一版 但是击败率不太好
+class Solution {
+    public int findRepeatNumber(int[] nums) {
+        //要是两个for还是应该是最慢的方法了
+        //可以先用复杂度较低的排序算法排序 然后遍历找一前一后？
+        //好的答案有两种 一是利用数据结构HashSet 如下
+        int ret = 0;
+        HashSet<Integer> set = new HashSet<Integer>();
+        for(int i = 0; i < nums.length; i++){
+            set.add(nums[i]);
+            if(set.size() != i + 1){
+                ret =  nums[i];
+                break;
+            }
+        }
+    return ret;
+    }
+}
+
+//第二版 直接return 节省了一些空间和时间
+class Solution {
+    public int findRepeatNumber(int[] nums) {
+        //要是两个for还是应该是最慢的方法了
+        //可以先用复杂度较低的排序算法排序 然后遍历找一前一后？
+        //好的答案有两种 一是利用数据结构HashSet 如下
+        int ret = 0;
+        HashSet<Integer> set = new HashSet<Integer>();
+        set.add(nums[0]);
+        for(int i = 1; i < nums.length; i++){
+            if(set.contains(nums[i])){
+                return nums[i];
+                
+            }
+            set.add(nums[i]);
+        }
+    return -1;
+    }
+}
+
+//第三版 另辟蹊径 原地置换
+class Solution {
+    public int findRepeatNumber(int[] nums) {
+        int[] arr = new int[nums.length];
+        for(int i = 0; i < nums.length; i++){
+            if(arr[nums[i]] == 0){
+                arr[nums[i]] = 1;
+            }
+            else{
+                return nums[i];
+            }
+        }
+        return -1;//虽然题意中给出的条件已经不可能到这一步了 但是还是要加一个异常返回？
+    }
+}
+
+//第四版 执行用时：
+2 ms
+, 在所有 Java 提交中击败了
+65.28%
+的用户
+内存消耗：
+46 MB
+, 在所有 Java 提交中击败了
+85.67%
+的用户
+class Solution {
+    public int findRepeatNumber(int[] nums) {
+        int[] arr = new int[nums.length];
+        for(int i = 0; i < nums.length; i++){
+            arr[nums[i]]++;
+            if(arr[nums[i]] > 1)
+                return nums[i];
+            }
+    return -1;
+    }
+}
+

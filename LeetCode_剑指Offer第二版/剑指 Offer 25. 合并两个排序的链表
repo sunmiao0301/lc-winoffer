@@ -1,0 +1,166 @@
+//第一版 运行会报错cannot find symbol ‘temp_head’ 和 ‘head’
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if(l1.val <= l2.val){
+            ListNode head = l1;
+            ListNode temp_head = l1;
+            l1 = l1.next;
+        }
+        else{
+            ListNode head = l2;
+            ListNode temp_head = l2;
+            l2 = l2.next;
+        }
+
+        while(l1 != null && l2 != null){//必须都不为null
+            if(l1.val <= l2.val){
+                temp_head.next = l1;
+                temp_head = temp_head.next;
+                if(l1.next == null)
+                    break;
+                l1 = l1.next;
+            }
+            else{
+                temp_head.next = l2;
+                temp_head = temp_head.next;
+                if(l2.next == null)
+                    break;
+                l2 = l2.next;
+            }
+        }
+        return head;
+    }
+}
+
+//第二版 通过 第一版的问题在于把ListNode的定义写在了if语句内 导致其是作为局部变量不能在后面使用
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = l1;
+        ListNode temp_head = l1;
+        if(l1 == null)
+            return l2;
+        if(l2 == null)
+            return l1;
+        //下面的代码 导致当li长度为1时 它的第一位数必不能比另外一个小
+        if(l1.next == null && l1.val <= l2.val){
+            head = l1;
+            head.next = l2;
+            return head;
+        }
+        if(l2.next == null && l2.val <= l1.val){
+            head = l2;
+            head.next = l1;
+            return head;
+        }
+        //“下面的代码”
+        if(l1.val <= l2.val){
+            head = l1;
+            temp_head = l1;
+            l1 = l1.next;
+        }
+        else{
+            head = l2;
+            temp_head = l2;
+            l2 = l2.next;
+        }
+
+        while(l1 != null && l2 != null){//必须都不为null
+            if(l1.val <= l2.val){
+                temp_head.next = l1;
+                temp_head = temp_head.next;
+                if(l1.next == null){
+                    temp_head.next = l2;
+                    temp_head = temp_head.next;
+                    break;
+                }
+                    
+                l1 = l1.next;
+            }
+            else{
+                temp_head.next = l2;
+                temp_head = temp_head.next;
+                if(l2.next == null){
+                    temp_head.next = l1;
+                    temp_head = temp_head.next;
+                    break;
+                }
+                l2 = l2.next;
+            }           
+        }      
+        return head;
+    }
+}
+
+//第三版 看了标答思路之后自己写的优雅版
+第二版虽然通过 但是用的是最原始的新设head 在判断后 将head 赋值为l1 或是l2 这样就会多出许多判断和步骤
+简便的方法是新建一个temp 方法是把temp 连接到l1 或是 l2之前 这样最后返回temp.next 即可 
+并且这样写可以把l1 l2 为空的情况排除而不影响主代码写法(可以把 初始就空 和 因为读取导致的空 结合到一起判断)
+如果直接把temp = l1 或者是 temp = l2 就必须保证l1 / l2 不为null
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode();
+        ListNode temp = head;
+        //temp用于连链表 最后返回head.next即可
+        while(l1 != null && l2 != null){
+            if(l1.val <= l2.val){
+                temp.next = l1;
+                temp = temp.next;
+                l1 = l1.next;
+            }
+            else{
+                temp.next = l2;
+                temp = temp.next;
+                l2 = l2.next;
+            }
+        }
+        if(l1 == null)
+            temp.next = l2;
+        if(l2 == null)
+            temp.next = l1;
+        return head.next;
+    }
+}
+
+//第四把 标准题解
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dum = new ListNode(0), cur = dum;
+        while(l1 != null && l2 != null) {
+            if(l1.val < l2.val) {
+                cur.next = l1;
+                l1 = l1.next;
+            }
+            else {
+                cur.next = l2;
+                l2 = l2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = l1 != null ? l1 : l2;
+        return dum.next;
+    }
+}

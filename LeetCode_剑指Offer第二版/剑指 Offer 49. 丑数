@@ -1,0 +1,149 @@
+//第一版
+class Solution {
+    public int nthUglyNumber(int n) {
+    /*
+    “只包含质因子 2 3 5 是什么意思”
+    偷看了一眼题解
+    大概是动态规划解决 通过
+    1 2 3 5
+    构造dp[]
+    1 2 3
+    4 5 6 8 10 12 15 16 18 20 
+    思路应该是
+    求dp[i]时
+    通过前面的值 乘以2 3 5 得到与当前dp[i-1]最相近的值
+    但是如何构造算法是个问题
+    观察丑数数列 我突然发现
+    6 = 2 3
+
+    8 = 2 4
+    10 = 2 5
+    12 = 2 6
+    15 = 3 5
+    16 = 4 4
+    18 = 
+    看来找规律是行不通的 于是又偷瞟了一眼 原来和我之前的思路一样
+    通过乘以2 3 5(一个丑数通过另一个丑数 * 2 3 5得到)
+    */
+    int dp1 = 1;
+    int dp2 = 2;
+    int dp3 = 3;
+    int flag = 3;
+    for(int i = 3; i < n; i++){
+        /*
+        dp1 * 2
+        dp1 * 3 dp2 * 2
+        dp1 * 5 dp2 * 2
+        dp1 * 5 dp2 * 3  
+        dp2 * 5
+        dp3 * 2
+        但是K神提出：
+        根根据递推性质，丑数 x_{n+1}x n+1
+        只可能是以下三种情况其中之一（索引 a, b, ca,b,c 为未知数）：
+        */
+        if(dp1 * 2 > dp3){
+            dp1 *= 2;
+            swap(dp1, dp3);//始终保证dp1 < dp2 < dp3
+            continue;
+        }
+        if(dp1 * 5 > dp2 * 2)
+        if(dp2 * 2 > dp3){//dp1 * 3
+            dp2 *= 2;
+            swap(dp2, dp3);
+            continue;
+        }
+        if(dp)
+    }
+    }
+    void swap(int a, int b){
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+}
+·······················································
+写到这里的时候
+我突然发现
+由于初始值dp[1] dp[2] dp[3] 没有选取好
+导致后面也都不好 思路也乱
+其实应该是三指针 大数组
+
+
+//第二版 耽搁了两天 一遍过
+模仿题解写的
+K神思路巧妙在于
+
+把*2 *3 *5分给三个指针进行 这样化比较多个数为比较3个数即可
+然后三个指针的移动设定更是巧妙
+不是指向自己造成的那个新数
+而是指向dp[]中的下一个值！
+
+一言以蔽之：
+这个题用三指针，
+第一个丑数是1，
+以后的丑数都是基于前面的小丑数分别乘2，3，5构成的。
+我们每次添加进去一个当前计算出来个三个丑数的最小的一个，
+并且是谁计算的，
+谁指针就后移一位。
+
+执行结果：
+通过
+执行用时：
+3 ms
+, 在所有 Java 提交中击败了
+72.12%
+的用户
+内存消耗：
+37.6 MB
+, 在所有 Java 提交中击败了
+35.19%
+的用户
+class Solution {
+    public int nthUglyNumber(int n) {
+    /*
+    三个指针mult_2 mult_3 mult_5 都从0开始
+    然后还有一个quick作为最远指针
+    
+    */
+    int[] dp = new int[n];
+    dp[0] = 1;
+    int mult_2 = 0;
+    int mult_3 = 0;
+    int mult_5 = 0;
+    int quick = 0;
+    while(quick < n - 1){
+        int temp = Math.min(dp[mult_2] * 2, Math.min(dp[mult_3] * 3, dp[mult_5] * 5));
+        if(dp[mult_2] * 2 == temp){
+            dp[quick + 1] = dp[mult_2] * 2;
+            mult_2++;
+        }
+        if(dp[mult_3] * 3 == temp){
+            dp[quick + 1] = dp[mult_3] * 3;
+            mult_3++;
+        }
+        if(dp[mult_5] * 5 == temp){
+            dp[quick + 1] = dp[mult_5] * 5;
+            mult_5++;
+        } 
+        quick++;
+    }
+    return dp[n - 1];
+    }
+}
+
+//第三版 K神题解
+class Solution {
+    public int nthUglyNumber(int n) {
+        int a = 0, b = 0, c = 0;
+        int[] dp = new int[n];
+        dp[0] = 1;
+        for(int i = 1; i < n; i++) {·······································提升速度就在于此 将while(quick < n - 1) 换成 for(int i = 1; i < n; i++) 空间换时间
+            int n2 = dp[a] * 2, n3 = dp[b] * 3, n5 = dp[c] * 5;
+            dp[i] = Math.min(Math.min(n2, n3), n5);
+            if(dp[i] == n2) a++;
+            if(dp[i] == n3) b++;
+            if(dp[i] == n5) c++;
+        }
+        return dp[n - 1];
+    }
+}

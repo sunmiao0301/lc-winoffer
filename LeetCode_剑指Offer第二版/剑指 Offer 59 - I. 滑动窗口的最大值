@@ -1,0 +1,108 @@
+//第一版 16/18样例处 出错
+执行结果：
+解答错误
+输入：
+[9,10,9,-7,-4,-8,2,-6]
+5
+输出：
+[10,10,2,2]
+预期结果：
+[10,10,9,2]
+原因是什么初始化不对 对k个数初始化滑动窗口的时候方法就应该和 AB 之间的代码一样 修正后见第二版
+
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+    //单调队列（滑动窗口实际上就是队列?）
+    if(k == 0)
+        return new int[0];
+    Deque<Integer> deque = new LinkedList<>();
+    int[] ret = new int[nums.length - k + 1];
+    int max = nums[0];
+    for(int i = 1; i < k; i++){
+        if(nums[i] > max)
+            max = nums[i];
+    }
+    deque.add(max);
+    ret[0] = max;
+
+    for(int i = k; i < nums.length; i++){
+        if(nums[i-k] == deque.peekFirst())
+            deque.pollFirst();
+        while(!deque.isEmpty() && deque.peekLast() < nums[i]){··························A
+            deque.pollLast();
+        }
+        deque.add(nums[i]);·····························································B
+        ret[i - k + 1] = deque.peekFirst();
+    }
+    return ret;
+    }
+}
+
+
+//第二版 通过 虽然效率没有到达100% 但是思路与K神一致了
+执行结果：
+通过
+执行用时：
+12 ms
+, 在所有 Java 提交中击败了
+83.01%
+的用户
+内存消耗：
+47.4 MB
+, 在所有 Java 提交中击败了
+25.81%
+的用户
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+    //单调队列（滑动窗口实际上就是队列?）
+    if(k == 0)
+        return new int[0];
+    Deque<Integer> deque = new LinkedList<>();
+    int[] ret = new int[nums.length - k + 1];
+    for(int i = 0; i < k; i++){
+        while(!deque.isEmpty() && deque.peekLast() < nums[i]){
+            deque.pollLast();
+        }
+        deque.add(nums[i]);  
+    }
+    ret[0] = deque.peekFirst();
+
+    for(int i = k; i < nums.length; i++){
+        if(nums[i-k] == deque.peekFirst())
+            deque.pollFirst();
+        while(!deque.isEmpty() && deque.peekLast() < nums[i]){
+            deque.pollLast();
+        }
+        deque.add(nums[i]);
+        ret[i - k + 1] = deque.peekFirst();
+    }
+    return ret;
+    }
+}
+
+//官方题解 —— 优先队列
+虽然时间效率高了 但是是拿空间换得时间 还是第二版好一点
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(k == 0)return new int[0];
+        int n = nums.length;
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] pair1, int[] pair2) {
+                return pair1[0] != pair2[0] ? pair2[0] - pair1[0] : pair2[1] - pair1[1];
+            }
+        });
+        for (int i = 0; i < k; ++i) {
+            pq.offer(new int[]{nums[i], i});
+        }
+        int[] ans = new int[n - k + 1];
+        ans[0] = pq.peek()[0];
+        for (int i = k; i < n; ++i) {
+            pq.offer(new int[]{nums[i], i});
+            while (pq.peek()[1] <= i - k) {
+                pq.poll();
+            }
+            ans[i - k + 1] = pq.peek()[0];
+        }
+        return ans;
+    }
+}

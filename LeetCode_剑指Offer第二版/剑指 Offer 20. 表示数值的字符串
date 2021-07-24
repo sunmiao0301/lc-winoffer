@@ -1,0 +1,461 @@
+//第一版 结果不对 限于时间和难度 明天在写
+class Solution {
+    public boolean isNumber(String s) {
+        //s_pro =
+        //字符串包括空格吗？假设有 先处理一下
+         while(s.charAt(0) == ' '){
+             s = s.substring(1);
+         }
+         int i = 0;
+         while(s.charAt(0) != ' '){
+             if(s.length() == 1){
+                 i++;
+                 break;
+             }
+             s = s.substring(1);
+             i++;
+         }
+         s = s.substring(0,i);//处理掉了空格
+         String s_temp = s;
+         if(s.length() == 0)
+            return false;
+        int j = 0;
+         while(s.length() != 0){
+             if(s.length() == 1){
+                 return (isDecimal(s_temp) || isInteger(s_temp));
+             }
+             if(s.charAt(0) == 'e' || s.charAt(0) == 'E'){
+                 //goto way_1;
+                 break;
+             }
+             j++;
+             s = s.substring(1);
+         }
+         String s_left = s_temp.substring(0,j);
+         String s_right = s_temp.substring(j+1);
+         if((isDecimal(s_left) || isInteger(s_left)) && isInteger(s_right))
+            return true;
+         return false;
+         //return isDecimal(s) || isInteger(s);
+    }
+    public static boolean isDecimal(String s){
+        if(s.charAt(0) == '+' || s.charAt(0) == '-'){
+            s.substring(1);
+        }
+        if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){//这里+ - 和 数字的判断不应该合并 不然后面接. 不能判断是不是正确
+            s.substring(1);
+            while(s.length() != 0){
+                if(s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48){
+                    s.substring(1);
+                    continue;
+                }
+                if(s.charAt(0) == '.'){
+                    s = s.substring(1);
+                    while(s.length() != 0){
+                        if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+                            s = s.substring(1);
+                        }else{
+                            return false;
+                        }
+                    return true;
+                    }
+                return false;
+                }
+            return false;   
+            }
+            return false;
+        }
+        else if(s.charAt(0) == '.'){
+            s = s.substring(1);
+            while(s.length() != 0){
+                if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+                s = s.substring(1);
+                }else{
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static boolean isInteger(String s){
+        //一个数字字符
+        if(s.charAt(0) == '+' || s.charAt(0) == '-' || (s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+        //后面全是数字
+        s = s.substring(1);
+        while(s.length() != 0){
+            if((s.charAt(0) >= '0' - 48 && s.charAt(0) <= '9' - 48)){
+                s = s.substring(1);
+            }else{
+                return false;
+            }
+        }
+        return true;
+        }else{
+            return false;
+        }
+    }
+}
+
+//第二天 第二版 写了将近四个小时 史上最恶心的题 再也不想看到了 
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+4 ms
+, 在所有 Java 提交中击败了
+44.92%
+的用户
+内存消耗：
+38.4 MB
+, 在所有 Java 提交中击败了
+71.07%
+的用户
+class Solution {
+    public boolean isNumber(String s) {
+        //字符串包括空格吗？假设有 先处理一下
+        //看题意应该是前后必有空格啊 示例没有 奇怪
+        while(s.charAt(0) == ' '){//处理掉前面的空格
+            s = s.substring(1);
+            if(s.length() == 0)
+                return false;
+        }
+        String s_temp = s;//存一下s为s_temp
+
+        int i = 0;//开始处理后面的空格
+
+        //首先得确定后面都是空格
+        String s_1space4 = s;
+
+        while(s_1space4.charAt(0) != ' '){
+                s_1space4 = s_1space4.substring(1);
+                if(s_1space4.length() == 0)
+                    break;
+        }
+        if(s_1space4.length() != 0){
+            while(s_1space4.charAt(0) == ' '){
+                s_1space4 = s_1space4.substring(1);
+                if(s_1space4.length() == 0)
+                    break;
+                }
+            if(s_1space4.length() != 0 && s_1space4.charAt(0) != ' ')
+                return false;
+        }
+        
+        while(s.charAt(0) != ' '){//为什么这里一直报错:原因是当此时的s = "0"时（也就是后面没有空格时，会导致s = ""，那么此时s.charAt(0)是无意义的）
+
+            s = s.substring(1);
+            i++;
+            if(s.length() == 0)
+                break;
+        }
+        
+        s = s_temp.substring(0,i);//处理掉了空格
+        
+        String s_findE = s;
+        if(s.length() == 0)//根据题意可知应该是不可能全为空格的字符串的 示例里面却有。。。。
+            return false;
+
+        int j = 0;
+        while(s_findE.length() != 0){
+            if(s_findE.charAt(0) == 'e' || s_findE.charAt(0) == 'E'){
+                //goto way_1;
+                break;
+            }
+            if(s_findE.length() == 1){
+                return isInteger(s) || isDecimal(s);
+                //return (isDecimal(s) || isInteger(s));
+            }
+            j++;
+            s_findE = s_findE.substring(1);
+        }
+        //找到了E
+        String s_left = s.substring(0,j);
+        String s_right = s.substring(j+1);
+        if(s_left.length() == 0 || s_right.length() == 0)//注意 可选的“（可选）一个 'e' 或 'E' ，后面跟着一个 整数”表示的是一旦有了E，则后面的整数部分也必须有
+            return false;
+        if((isDecimal(s_left) || isInteger(s_left)) && isInteger(s_right))
+            return true;
+        return false;
+        //return isDecimal(s) || isInteger(s);
+    }
+
+    public static boolean isDecimal(String s){
+        if(s.charAt(0) == '+' || s.charAt(0) == '-'){
+            s = s.substring(1);
+        }
+        if(s.length() == 0)
+            return false;
+        if((s.charAt(0) >= '0' && s.charAt(0) <= '9')){//这里 + - 和 数字的判断不应该合并 不然后面接 . 不能判断是不是正确
+            if(s.length() == 1)
+                return true;
+            s = s.substring(1);
+            while(s.length() != 0){
+                if(s.charAt(0) >= '0' && s.charAt(0) <= '9'){
+                    if(s.length() == 1)
+                        return true;//全数字
+                    s = s.substring(1);
+                    continue;
+                }
+                if(s.charAt(0) == '.'){
+                    s = s.substring(1);
+                    while(s.length() != 0){
+                        if((s.charAt(0) >= '0' && s.charAt(0) <= '9')){
+                            if(s.length() == 1)
+                                return true;//后面必须一直数字才对
+                            s = s.substring(1);
+                        }
+                        else{
+                            return false;
+                        }
+                    //return true;
+                    }
+                return true;//后面只有一个点
+                }
+
+            return false;   
+            }
+        //return true;
+        }
+        else if(s.charAt(0) == '.'){
+            s = s.substring(1);
+            while(s.length() != 0){
+                if((s.charAt(0) >= '0' && s.charAt(0) <= '9')){
+                    if(s.length() == 1)
+                        return true;
+                    s = s.substring(1);
+                    continue;
+                }
+                return false;  
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public static boolean isInteger(String s){
+
+        if(s.charAt(0) == '+' || s.charAt(0) == '-'){
+            s = s.substring(1);
+        }
+        if(s.length() == 0)
+            return false;
+        if(s.charAt(0) >= '0' && s.charAt(0) <= '9'){
+            if(s.length() == 1)
+                return true;
+            while(s.length() != 0){
+                if((s.charAt(0) >= '0' && s.charAt(0) <= '9')){
+                    if(s.length() == 1)
+                        return true;
+                    s = s.substring(1);
+                    continue;
+                }
+                return false;
+            }
+            //return true;//多余？
+        }
+
+        return false;
+    }
+}
+
+//第三版 标准答案1（确定有限状态自动机）
+class Solution {
+    public boolean isNumber(String s) {
+        Map<State, Map<CharType, State>> transfer = new HashMap<State, Map<CharType, State>>();
+        Map<CharType, State> initialMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_SPACE, State.STATE_INITIAL);
+            put(CharType.CHAR_NUMBER, State.STATE_INTEGER);
+            put(CharType.CHAR_POINT, State.STATE_POINT_WITHOUT_INT);
+            put(CharType.CHAR_SIGN, State.STATE_INT_SIGN);
+        }};
+        transfer.put(State.STATE_INITIAL, initialMap);
+        Map<CharType, State> intSignMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_INTEGER);
+            put(CharType.CHAR_POINT, State.STATE_POINT_WITHOUT_INT);
+        }};
+        transfer.put(State.STATE_INT_SIGN, intSignMap);
+        Map<CharType, State> integerMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_INTEGER);
+            put(CharType.CHAR_EXP, State.STATE_EXP);
+            put(CharType.CHAR_POINT, State.STATE_POINT);
+            put(CharType.CHAR_SPACE, State.STATE_END);
+        }};
+        transfer.put(State.STATE_INTEGER, integerMap);
+        Map<CharType, State> pointMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_FRACTION);
+            put(CharType.CHAR_EXP, State.STATE_EXP);
+            put(CharType.CHAR_SPACE, State.STATE_END);
+        }};
+        transfer.put(State.STATE_POINT, pointMap);
+        Map<CharType, State> pointWithoutIntMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_FRACTION);
+        }};
+        transfer.put(State.STATE_POINT_WITHOUT_INT, pointWithoutIntMap);
+        Map<CharType, State> fractionMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_FRACTION);
+            put(CharType.CHAR_EXP, State.STATE_EXP);
+            put(CharType.CHAR_SPACE, State.STATE_END);
+        }};
+        transfer.put(State.STATE_FRACTION, fractionMap);
+        Map<CharType, State> expMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_EXP_NUMBER);
+            put(CharType.CHAR_SIGN, State.STATE_EXP_SIGN);
+        }};
+        transfer.put(State.STATE_EXP, expMap);
+        Map<CharType, State> expSignMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_EXP_NUMBER);
+        }};
+        transfer.put(State.STATE_EXP_SIGN, expSignMap);
+        Map<CharType, State> expNumberMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_NUMBER, State.STATE_EXP_NUMBER);
+            put(CharType.CHAR_SPACE, State.STATE_END);
+        }};
+        transfer.put(State.STATE_EXP_NUMBER, expNumberMap);
+        Map<CharType, State> endMap = new HashMap<CharType, State>() {{
+            put(CharType.CHAR_SPACE, State.STATE_END);
+        }};
+        transfer.put(State.STATE_END, endMap);
+
+        int length = s.length();
+        State state = State.STATE_INITIAL;
+
+        for (int i = 0; i < length; i++) {
+            CharType type = toCharType(s.charAt(i));
+            if (!transfer.get(state).containsKey(type)) {
+                return false;
+            } else {
+                state = transfer.get(state).get(type);
+            }
+        }
+        return state == State.STATE_INTEGER || state == State.STATE_POINT || state == State.STATE_FRACTION || state == State.STATE_EXP_NUMBER || state == State.STATE_END;
+    }
+
+    public CharType toCharType(char ch) {
+        if (ch >= '0' && ch <= '9') {
+            return CharType.CHAR_NUMBER;
+        } else if (ch == 'e' || ch == 'E') {
+            return CharType.CHAR_EXP;
+        } else if (ch == '.') {
+            return CharType.CHAR_POINT;
+        } else if (ch == '+' || ch == '-') {
+            return CharType.CHAR_SIGN;
+        } else if (ch == ' ') {
+            return CharType.CHAR_SPACE;
+        } else {
+            return CharType.CHAR_ILLEGAL;
+        }
+    }
+
+    enum State {
+        STATE_INITIAL,
+        STATE_INT_SIGN,
+        STATE_INTEGER,
+        STATE_POINT,
+        STATE_POINT_WITHOUT_INT,
+        STATE_FRACTION,
+        STATE_EXP,
+        STATE_EXP_SIGN,
+        STATE_EXP_NUMBER,
+        STATE_END,
+    }
+
+    enum CharType {
+        CHAR_NUMBER,
+        CHAR_EXP,
+        CHAR_POINT,
+        CHAR_SIGN,
+        CHAR_SPACE,
+        CHAR_ILLEGAL,
+    }
+}
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/biao-shi-shu-zhi-de-zi-fu-chuan-lcof/solution/biao-shi-shu-zhi-de-zi-fu-chuan-by-leetcode-soluti/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+//第四版 
+思路
+什么有限状态自动机的我不太懂，常规解法可以做就不想搞这种可能只有这道题会用到的解法
+
+我首先想到的是判断否false而不是判断是true，毕竟有这么多条件满足才能判断true，但是只要有一个条件不满足就可以判断false，最后代码的效率也还可以，那么接下来进入正题吧：
+
+首先定义了四个flag，对应四种字符
+是否有数字：hasNum
+是否有e：hasE
+是否有正负符号：hasSign
+是否有点：hasDot
+其余还定义了字符串长度n以及字符串索引index
+先处理一下开头的空格，index相应的后移
+然后进入循环，遍历字符串
+如果当前字符c是数字：将hasNum置为true，index往后移动一直到非数字或遍历到末尾位置；如果已遍历到末尾(index == n)，结束循环
+如果当前字符c是'e'或'E'：如果e已经出现或者当前e之前没有出现过数字，返回fasle；否则令hasE = true，并且将其他3个flag全部置为false，因为要开始遍历e后面的新数字了
+如果当前字符c是+或-：如果已经出现过+或-或者已经出现过数字或者已经出现过'.'，返回flase；否则令hasSign = true
+如果当前字符c是'.'：如果已经出现过'.'或者已经出现过'e'或'E'，返回false；否则令hasDot = true
+如果当前字符c是' '：结束循环，因为可能是末尾的空格了，但也有可能是字符串中间的空格，在循环外继续处理
+如果当前字符c是除了上面5种情况以外的其他字符，直接返回false
+处理空格，index相应的后移
+如果当前索引index与字符串长度相等，说明遍历到了末尾，但是还要满足hasNum为true才可以最终返回true，因为如果字符串里全是符号没有数字的话是不行的，而且e后面没有数字也是不行的，但是没有符号是可以的，所以4个flag里只要判断一下hasNum就行；所以最后返回的是hasNum && index == n
+如果字符串中间有空格，按以上思路是无法遍历到末尾的，index不会与n相等，返回的就是false
+代码
+JavaPython3
+
+class Solution {
+    public boolean isNumber(String s) {
+        int n = s.length();
+        int index = 0;
+        boolean hasNum = false, hasE = false;
+        boolean hasSign = false, hasDot = false;
+        while(index < n && s.charAt(index) == ' ')
+            index++;
+        while(index < n){
+            while(index < n && s.charAt(index) >= '0' && s.charAt(index) <= '9'){
+                index++;
+                hasNum = true;
+            }
+            if(index == n){
+                break;
+            }
+            char c = s.charAt(index);
+            if(c == 'e' || c == 'E'){
+                if(hasE || !hasNum){
+                    return false;
+                }
+                hasE = true;
+                hasNum = false; hasSign = false; hasDot = false;
+            }else if(c == '+' || c == '-'){
+                if(hasSign || hasNum || hasDot){
+                    return false;
+                }
+                hasSign = true;
+            }else if(c == '.'){
+                if(hasDot || hasE){
+                    return false;
+                }
+                hasDot = true;
+            }else if(c == ' '){
+                break;
+            }else{
+                return false;
+            }
+            index++;
+        }
+        while(index < n && s.charAt(index) == ' ')
+            index++;
+        return hasNum && index == n;
+    }
+}
+复杂度分析
+
+时间复杂度：O(n)O(n)
+空间复杂度：O(1)O(1)
+
+作者：edelweisskoko
+链接：https://leetcode-cn.com/problems/biao-shi-shu-zhi-de-zi-fu-chuan-lcof/solution/jian-zhi-offer-20-biao-shi-shu-zhi-de-zi-060v/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

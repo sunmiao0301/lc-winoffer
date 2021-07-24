@@ -1,0 +1,391 @@
+//第一版（修正版）
+出错：
+输入
+[5,4,8,11,null,13,4,7,2,null,null,5,1]
+22
+输出
+[[5,4,11,8,4,1],[5,4,11,8,4,1]]
+预期结果
+[[5,4,11,2],[5,8,4,5]]
+这是为什么呢？难道是对这个函数方法理解不对？不是移除链表最后面的值么？
+于是进行了下面的测试
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    LinkedList<Integer> list = new LinkedList<>(); 
+    LinkedList<List<Integer>> ret_list = new LinkedList<>();
+    list.add(root.val);
+    list.removeLast();
+    list.add(root.left.val);
+    ret_list.add(list);
+    return ret_list;
+    }
+}
+[5,4,8,11,null,13,4,7,2,null,null,5,1]
+22
+输出
+[[4]]
+证明方法没错 应该是我写的逻辑里面有错
+于是我将一部分代码改成：
+else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                ret_list.add(list);
+                list.removeLast();	//删除并返回最后一个元素。path.removeLast();
+                list.add(node.right.val);
+                ret_list.add(list);
+                return;
+            }
+结果是：
+输入
+[5,4,8,11,null,13,4,7,2,null,null,5,1]
+22
+输出
+[[5,8],[5,8]]
+问题就出现了，很显然 肯定是后面的影响了前面的 即使“前面的list看似已经存到ret_list里面去了”
+解决方法很简单，如下：
+else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                ret_list.add(new LinkedList(list))；
+                list.removeLast();	//删除并返回最后一个元素。path.removeLast();
+                list.add(node.right.val);
+                ret_list.add(list);
+                return;
+            }
+于是我将最后的代码改成：
+if(node.left == null && node.right == null){
+                ret_list.add(new LinkedList(list));
+                return;
+            }
+这样结果就变成了：
+输入
+[5,4,8,11,null,13,4,7,2,null,null,5,1]
+22
+输出
+[[5,4,11,2],[5,4,11,8,4,5]]
+于是我把left和right的前后顺序调换了一下，结果：
+输入
+[5,4,8,11,null,13,4,7,2,null,null,5,1]
+22
+输出
+[[5,8,4,5],[5,8,4,4,11,2]]
+这说明在一条路没有走完的时候 还是会影响到另外的路
+解决办法呼之欲出，如下：
+else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                helper(node.left, sum, new LinkedList(list), ret_list, target);
+                list.removeLast();	//删除并返回最后一个元素。path.removeLast();
+                list.add(node.right.val);
+                helper(node.right, sum, new LinkedList(list), ret_list, target);
+            }
+使用如下方法后，代码见第二版
+关于D处 有一种好的解决办法是 把root.left/root.right作为参数而不是把加入了 root.left/root.right 了之后的链表 list 作为参数
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    //这返回的是一个链表组成的链表 原因是所有返回的值的头结点都是原树的根结点
+    //相当于是取其中符合条件的那部分新建一个树（不对）
+    //相当于是每条路径都自存一个链表 如果到叶结点时候满足 就将这条路径加到链表中（对）
+    //注意：起点必须是根结点 终点必须是叶结点
+    //不必最后判断 只要大于就不满足 不 这样反而不好 因为在每个节点都要判断一次 不如到最终根节点再判断
+    //但是也说不准 可能这样效果更好 因为能掐断很多一开始就不满足的
+    
+    LinkedList<Integer> list = new LinkedList<>();   // 普通创建方法·····················
+    LinkedList<List<Integer>> ret_list = new LinkedList<>();····························
+    if(root == null || root.val > target)return null;
+    list.add(root.val);//维护一个重要参数list
+    helper(root, 0, list, ret_list, target);
+    return ret_list;
+    }
+    public static void helper(TreeNode node, int sum, LinkedList<Integer> list, LinkedList<List<Integer>> ret_list, int target){······················
+        sum += node.val;
+        if(sum > target)return ;
+        if(sum < target){
+            if(node.left == null && node.right == null)return ;
+            else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                helper(node.left, sum, list, ret_list, target);
+                list.removeLast();	//删除并返回最后一个元素。path.removeLast();·········································································D
+                list.add(node.right.val);
+                helper(node.right, sum, list, ret_list, target);
+            }
+            else{
+                list.add(node.left == null?node.right.val:node.left.val);
+                helper(node.left == null?node.right:node.left, sum, list, ret_list, target);
+            }
+        }
+        else if(sum == target){
+            if(node.left == null && node.right == null){
+                ret_list.add(list);
+                return;
+            }
+            else
+            return;
+        }
+    }
+}
+
+//第二版
+但是在测试样例：
+81 / 114 个通过测试用例
+状态：解答错误
+提交时间：几秒前
+最后执行的输入：
+[-2,null,-3]
+-5
+时发生了错误，因为现在相当于是在减小以达到target 所以我这种半途确认的方法可能不太对 可能还是要都走到叶节点才好
+果然大神的题解中提到：“终止条件： 若节点 root 为空，则直接返回。”
+所以我们对第二版再做修改 重写 见第三版
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    LinkedList<Integer> list = new LinkedList<>();   // 普通创建方法
+    LinkedList<List<Integer>> ret_list = new LinkedList<>();
+    if(root == null || root.val > target)return ret_list;
+    list.add(root.val);//维护一个重要参数list
+    helper(root, 0, list, ret_list, target);
+    return ret_list;
+    }
+    public static void helper(TreeNode node, int sum, LinkedList<Integer> list, LinkedList<List<Integer>> ret_list, int target){
+        sum += node.val;
+        if(sum > target)return ;
+        if(sum < target){
+            if(node.left == null && node.right == null)return ;
+            else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                helper(node.left, sum, new LinkedList(list), ret_list, target);
+                list.removeLast();	//删除并返回最后一个元素。path.removeLast();
+                list.add(node.right.val);
+                helper(node.right, sum, new LinkedList(list), ret_list, target);
+            }
+            else{
+                list.add(node.left == null?node.right.val:node.left.val);
+                helper(node.left == null?node.right:node.left, sum, list, ret_list, target);
+            }
+        }
+        else if(sum == target){
+            if(node.left == null && node.right == null){
+                ret_list.add(new LinkedList(list));
+                return;
+            }
+            else
+            return;
+        }
+    }
+}
+
+//第三版
+但是这一版还有错误 样例如下：
+执行结果：
+解答错误
+输入：
+[1,-2,-3,1,3,-2,null,-1]
+-1
+输出：
+[]
+预期结果：
+[[1,-2,1,-1]]
+处
+分析了一下
+我的结束条件还是写的不对 因为结束应该是在到叶节点 而不是在sum == target时 因此 修改为第四版
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    LinkedList<List<Integer>> ret_list= new LinkedList<>();
+    if(root == null)return ret_list;
+    LinkedList<Integer> list = new LinkedList<>();
+    list.add(root.val);
+    helper(root, target, 0, list, ret_list);
+    return ret_list;
+    }
+    public static void helper(TreeNode node, int target, int sum, LinkedList<Integer> list, LinkedList<List<Integer>> ret_list){
+        sum += node.val;
+        if(sum == target){
+            if(node.left == null && node.right == null){
+            ret_list.add(list);
+            return;
+            }
+            else if(node.left != null || node.right != null){
+            return;
+            }
+        }
+        else if(sum != target){
+            if(node.left == null && node.right == null){
+                return;
+            }
+            else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                helper(node.left, target, sum, new LinkedList(list), ret_list);
+                list.removeLast();
+                list.add(node.right.val);
+                helper(node.right, target, sum, new LinkedList(list), ret_list);
+            }
+            else{
+                list.add(node.left == null?node.right.val:node.left.val);
+                helper(node.left == null?node.right:node.left, target, sum, new LinkedList(list), ret_list);
+            }
+        }
+    }
+}
+
+//第四版 虽然通过 但是效果很差 下面进行优化
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+8 ms
+, 在所有 Java 提交中击败了
+7.98%
+的用户
+内存消耗：
+39.2 MB
+, 在所有 Java 提交中击败了
+6.68%
+的用户
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    LinkedList<List<Integer>> ret_list= new LinkedList<>();
+    if(root == null)return ret_list;
+    LinkedList<Integer> list = new LinkedList<>();
+    list.add(root.val);
+    helper(root, target, 0, list, ret_list);
+    return ret_list;
+    }
+    public static void helper(TreeNode node, int target, int sum, LinkedList<Integer> list, LinkedList<List<Integer>> ret_list){
+        sum += node.val;
+        if(sum == target){
+            if(node.left == null && node.right == null){
+                ret_list.add(list);
+                return;
+            }
+            else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                helper(node.left, target, sum, new LinkedList(list), ret_list);
+                list.removeLast();
+                list.add(node.right.val);
+                helper(node.right, target, sum, new LinkedList(list), ret_list);
+            }
+            else{
+                list.add(node.left == null?node.right.val:node.left.val);
+                helper(node.left == null?node.right:node.left, target, sum, new LinkedList(list), ret_list);
+            }
+        }
+        else if(sum != target){
+            if(node.left == null && node.right == null){
+                return;
+            }
+            else if(node.left != null && node.right != null){
+                list.add(node.left.val);
+                helper(node.left, target, sum, new LinkedList(list), ret_list);
+                list.removeLast();
+                list.add(node.right.val);
+                helper(node.right, target, sum, new LinkedList(list), ret_list);
+            }
+            else{
+                list.add(node.left == null?node.right.val:node.left.val);
+                helper(node.left == null?node.right:node.left, target, sum, new LinkedList(list), ret_list);
+            }
+        }
+    }
+}
+
+//第五版 还是不理想
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+8 ms
+, 在所有 Java 提交中击败了
+7.98%
+的用户
+内存消耗：
+39.2 MB
+, 在所有 Java 提交中击败了
+7.04%
+的用户
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    LinkedList<List<Integer>> ret_list= new LinkedList<>();
+    if(root == null)return ret_list;
+    LinkedList<Integer> list = new LinkedList<>();
+    list.add(root.val);
+    helper(root, target, 0, list, ret_list);
+    return ret_list;
+    }
+    public static void helper(TreeNode node, int target, int sum, LinkedList<Integer> list, LinkedList<List<Integer>> ret_list){
+        sum += node.val;
+        if(node.left == null && node.right == null){
+            if(sum == target){
+                ret_list.add(list);
+            return;
+            }
+        }
+        else if(node.left != null && node.right != null){
+            list.add(node.left.val);
+            helper(node.left, target, sum, new LinkedList(list), ret_list);
+            list.removeLast();
+            list.add(node.right.val);
+            helper(node.right, target, sum, new LinkedList(list), ret_list);
+        }
+        else{
+            list.add(node.left == null?node.right.val:node.left.val);
+            helper(node.left == null?node.right:node.left, target, sum, new LinkedList(list), ret_list);
+        }
+    }
+}
+
+//第六版 大神解法
+class Solution {
+    LinkedList<List<Integer>> res = new LinkedList<>();
+    LinkedList<Integer> path = new LinkedList<>(); 
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        recur(root, sum);
+        return res;
+    }
+    void recur(TreeNode root, int tar) {
+        if(root == null) return;
+        path.add(root.val);
+        tar -= root.val;
+        if(tar == 0 && root.left == null && root.right == null)
+            res.add(new LinkedList(path));
+        recur(root.left, tar);
+        recur(root.right, tar);
+        path.removeLast();//
+    }
+}
+作者：jyd
+
+//模仿的改写
+class Solution {
+    LinkedList<List<Integer>> ret_list= new LinkedList<>();//注意 局部变量变全体变量很关键 这样就不要多余的参数传递
+    LinkedList<Integer> list = new LinkedList<>();//
+    public List<List<Integer>> pathSum(TreeNode root, int target) {
+    helper(root, target);
+    return ret_list;
+    }
+    public void helper(TreeNode node, int sum){
+        if(node == null)return;
+        list.add(node.val);
+        sum -= node.val;
+        if(node.left == null && node.right == null && sum == 0)//{
+            ret_list.add(new LinkedList(list));
+
+            helper(node.left, sum);
+            helper(node.right, sum);
+            list.removeLast();
+    }
+}

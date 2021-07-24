@@ -1,0 +1,165 @@
+//第一版 先暴力 增强信心 （超时）
+class Solution {
+    public int countDigitOne(int n) {
+    /*
+    正整数1~n
+    */
+    int ret = 0;
+    for(int i = 1; i <= n; i++){
+        while(i != 0){
+            if(i % 10 == 1)
+                ret++;
+            i = i / 10;
+        }
+    }
+    return ret;
+    }
+}
+
+//第二版 看了大佬题解自己写的 虽然时间没超 但是效果很差
+执行结果：
+通过
+执行用时：
+5 ms
+, 在所有 Java 提交中击败了
+5.33%
+的用户
+内存消耗：
+35.6 MB
+, 在所有 Java 提交中击败了
+5.25%
+的用户
+class Solution {
+    public int countDigitOne(int n) {
+    /*
+    正整数1~n
+    大佬提出的 密码锁法
+    由于题目要求的是：“十进制表示中各个位1出现的次数总和”而不是“十进制表示中出现1的数的次数总和”
+    所以可以对各个数位依次考虑
+    让我们以一个四位数为例 依次考虑求第二位为1的情况有多少种
+    对于1201 也就是第一位为1 第二位0 的情况
+        这种情况下，让第二位为1，则其大于位必须是0-11，也就是12（大于位的数）种，个位为0-9，也就是10种。
+    对于1211 也就是第一位为1 第二位1 的情况
+        这种情况下，让第二位为1，则需要分两种情况考虑，第一种情况是大于位是0-11，个位为0-9，同之前
+        但是当大于位为12，也就是大于位只有一种情况，此时个位（小于位）只有2种（小于位+1）；
+    对于12（2、3、4、5···）1 也就是第一位为1 第二位为大于1的数 的情况
+        这种情况下，让第二位为1 则大于位就是13（大于位+1）种情况，小于位就是0-9，也就是10（10的1（小于位位数）次方）种。
+
+    为了确保以上结论的普适性，我们试着对四位数的第三位进行分析。
+    对于1021，也就是第四位为1，第三位为0的情况
+        这种情况下，让第三位为1，则第四位不能为1 只能为0 也就是1（大于位的数）种情况，小于位为0-99，100种（10的2（小于位的位数）次方）
+    对于1121，也就是第四位为1，第三位为1的情况
+        这种情况下，让第三位为1，则上面的情况包括之后，还得再考虑第四位和第三位是11的情况，这种情况下，小于位就是0-21 = 22（小于位+1）
+    对于1（2、3、4、5···）21，也就是第四位为1，第三位为（2、3、4、5···）的情况
+        这种情况下，让第三位为1，第四位可以是0-1（大于位+1）种情况，小于位就是0-99(100,10的2次方)
+    
+    综上分析，我们可知
+    对于每一位，
+    如果这一位是0 则其为1的情况数为：大于位的数 * （10 ^ 小于位的位数）（1）
+    如果这一位是1 则其为1的情况数为：大于位的数 * （10 ^ 小于位的位数） +（小于位的数 + 1）
+    如果这一位是2、3、4、5··· 则其为1的情况数为：（大于位的数 + 1）* （10 ^ 小于位的位数）
+    substring(int beginIndex, int endIndex)
+    返回从起始位置（beginIndex）到目标位置（endIndex）之间的字符串，但不包含目标位置（endIndex）
+    */
+    String s = "" + n;
+    int ret = 0;
+    for(int i = 0; i < s.length(); i++){
+        if(s.charAt(i) == '0'){
+            if(i == s.length() - 1)
+                ret += Integer.parseInt(s.substring(0,i));
+            else
+                ret += Integer.parseInt(s.substring(0,i)) * Math.pow(10, s.length() - i - 1);
+        }
+        else if(s.charAt(i) == '1'){
+            if(i == 0 && i == s.length() - 1){ret = 1;}//只有一位 且不是0 那么ret 必为1
+            else if(i == 0)
+                ret += Integer.parseInt(s.substring(i + 1)) + 1;
+            else if(i == s.length() - 1)
+                ret += Integer.parseInt(s.substring(0,i)) * (Math.pow(10, s.length() - i - 1)) + 1;
+            else
+                ret += Integer.parseInt(s.substring(0,i)) * Math.pow(10, s.length() - i - 1) + Integer.parseInt(s.substring(i + 1)) + 1;
+        }
+        else{//s.charAt(i) == "2\3\4\5\6···"
+            if(i == 0 && i == s.length() - 1){ret = 1;}
+            else if(i == 0)
+                ret += Math.pow(10, s.length() - i - 1);
+            else if(i == s.length() - 1)
+                ret += Integer.parseInt(s.substring(0,i)) + 1;
+            else
+                ret += (Integer.parseInt(s.substring(0,i)) + 1) * Math.pow(10, s.length() - i - 1);
+        }
+    }
+    return ret;
+    }
+}
+
+//第三版 看了一下大佬的具体写法 果然是通过/10 和 %10 来实现位数的缩减 使得要处理的位越来越少 这样效率就高了 在这种思路的基础上 我自己写的如下：
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.1 MB
+, 在所有 Java 提交中击败了
+68.58%
+的用户
+
+需要注意的有几点:
+1)需要存储的变量有以下几个：大于位的数 high、小于位的数 low、小于位的位数 i、当前位的数 cur、最后要返回的值 ret。
+2）low需要是double 不然会报错 “可能发生的类型导致数据精丢失”
+    具体原因是：Math.pow() 返回的是double
+    当然也可以把C处的代码改成：
+    low = n % (int)Math.pow(10, ++i);
+    这样A处的代码就可以改成：
+    int low = 0;
+    
+class Solution {
+    public int countDigitOne(int n) {
+    /*
+    对于每一位，
+    如果这一位是0 则其为1的情况数为：大于位的数 * （10 ^ 小于位的位数）
+    如果这一位是1 则其为1的情况数为：大于位的数 * （10 ^ 小于位的位数） +（小于位的数 + 1）
+    如果这一位是2、3、4、5··· 则其为1的情况数为：（大于位的数 + 1）* （10 ^ 小于位的位数）
+    先从最低位开始处理
+    */
+    int i = 0;//小于位的位数···································
+    int high = n / 10;
+    double low = 0;············································B
+    int cur = n % 10;
+    int ret = 0;
+    while(low != n){
+        if(cur == 0)
+            ret += high * Math.pow(10, i);
+        else if(cur == 1)
+            ret += high * Math.pow(10, i) + (low + 1);
+        else
+            ret += (high + 1) * Math.pow(10, i);
+
+        cur = high % 10;
+        high = high / 10;
+        low = n % Math.pow(10, ++i);···························C
+        }
+    return ret;
+    }
+}
+
+//第四版 K神
+class Solution {
+    public int countDigitOne(int n) {
+        int digit = 1, res = 0;
+        int high = n / 10, cur = n % 10, low = 0;
+        while(high != 0 || cur != 0) {
+            if(cur == 0) res += high * digit;
+            else if(cur == 1) res += high * digit + low + 1;
+            else res += (high + 1) * digit;
+            low += cur * digit;
+            cur = high % 10;
+            high /= 10;
+            digit *= 10;
+        }
+        return res;
+    }
+}

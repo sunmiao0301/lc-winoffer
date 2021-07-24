@@ -1,0 +1,172 @@
+//第一版 递归 方法对 但是会超时
+24 / 51 个通过测试用例
+状态：超出时间限制
+提交时间：22 分钟前
+最后执行的输入：
+44
+
+class Solution {
+    public int fib(int n) {
+        return helper(n) % 1000000007;
+    }
+    int helper(int n){
+        if(n == 0)return 0;
+        else if(n == 1)return 1;
+        else return helper(n - 1) + helper(n - 2);
+    }
+}
+
+//第二版 采取空间换时间的策略 （如果直接递归 会导致多次重复运算 用数组可以保证算过的不用再再算）
+27 / 51 个通过测试用例
+状态：解答错误
+提交时间：11 小时前
+最后执行的输入：
+48
+卡在48处
+可能是超界了 换成long试试 见第三版
+
+class Solution {
+    public int fib(int n) {
+        int[] arr = new int[n+1];
+        helper(n, arr);
+        return arr[n] % 1000000007;
+    }
+    void helper(int n, int[] arr){
+        for(int i = 0; i < n+1; i++){
+            if(i == 0) arr[i] = 0;
+            else if(i == 1) arr[i] = 1;
+            else arr[i] = arr[i-1] + arr[i-2];
+        }
+    }
+}
+
+//第三版 把第二版的int转换成long
+47 / 51 个通过测试用例
+执行结果：
+解答错误
+输入：
+95
+输出：
+-757628988
+预期结果：
+407059028
+我们可以试试更大的long long
+
+class Solution {
+    public int fib(int n) {
+        long[] arr = new long[n+1];
+        helper(n, arr);
+        return (int)(arr[n] % 1000000007);
+    }
+    void helper(int n, long[] arr){
+        for(int i = 0; i < n+1; i++){
+            if(i == 0) arr[i] = 0;
+            else if(i == 1) arr[i] = 1;
+            else arr[i] = arr[i-1] + arr[i-2];
+        }
+    }
+}
+
+//第四版 long long数组不存在 所以换一种思路 如下：
+    if a = b + c
+    then a % 1000000007 = b % 1000000007 + c % 1000000007
+    但是这不对
+    举个范例
+    a = 1000000007
+    b = 1000000006
+    c = 1
+    那么
+    a % 1000000007 = 0
+    b % 1000000007 = 1000000006
+    c % 1000000007 = 1
+    也就是当 a 分割出的两个数 不是很大时
+    就需要再对 b % 1000000007 + c % 1000000007 进行一次取模
+    这控制了数组中的数始终保持在比较小的范围内 对时间效果好
+    综上
+    也就是
+    if a = b + c
+    then a % 1000000007 = (b % 1000000007 + c % 1000000007) % 1000000007
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.4 MB
+, 在所有 Java 提交中击败了
+9.98%
+的用户
+class Solution {
+    public int fib(int n) {
+        int[] arr = new int[n+1];
+        helper(n, arr);
+        return arr[n];
+    }
+    void helper(int n, int[] arr){
+        for(int i = 0; i < n+1; i++){
+            if(i == 0) arr[i] = 0;
+            else if(i == 1) arr[i] = 1;
+            else arr[i] = (arr[i-1] % 1000000007 + arr[i-2] % 1000000007) % 1000000007;
+        }
+    }
+}
+
+//第五版 空间复杂度很差 想办法优化 其实从斐波那契的第三个数开始 就只与前两个数有关了 所以我们其实只需要存两个数即可 不需要建一个那么长的数组
+实现如下
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+35.2 MB
+, 在所有 Java 提交中击败了
+58.40%
+的用户
+但是即使就用了两个值 空间复杂度还是不能达到100% 但是再次运行了一次达到了90+ 对比第六版 K神的 我的还不错
+class Solution {
+    public int fib(int n) {
+        int oushu_bit = 0;
+        int jishu_bit = 1;
+        for(int i = 1; i <= n; i++){//第n项就是当i=n时
+            if(i % 2 == 1)
+                jishu_bit = (oushu_bit % 1000000007 + jishu_bit % 1000000007) % 1000000007;
+            else
+                oushu_bit = (oushu_bit % 1000000007 + jishu_bit % 1000000007) % 1000000007;
+        }
+        return n % 2 == 1 ? jishu_bit : oushu_bit;
+    }
+}
+
+//第六版 K神
+斐波那契数列的定义是 f(n + 1) = f(n) + f(n - 1)f(n+1)=f(n)+f(n−1) ，生成第 nn 项的做法有以下几种：
+
+递归法：
+原理： 把 f(n)f(n) 问题的计算拆分成 f(n-1)f(n−1) 和 f(n-2)f(n−2) 两个子问题的计算，并递归，以 f(0)f(0) 和 f(1)f(1) 为终止条件。
+缺点： 大量重复的递归计算，例如 f(n)f(n) 和 f(n - 1)f(n−1) 两者向下递归需要 各自计算 f(n - 2)f(n−2) 的值。
+
+记忆化递归法：
+原理： 在递归法的基础上，新建一个长度为 nn 的数组，用于在递归时存储 f(0)f(0) 至 f(n)f(n) 的数字值，重复遇到某数字则直接从数组取用，避免了重复的递归计算。
+缺点： 记忆化存储需要使用 O(N)O(N) 的额外空间。
+
+动态规划：
+原理： 以斐波那契数列性质 f(n + 1) = f(n) + f(n - 1)f(n+1)=f(n)+f(n−1) 为转移方程。
+从计算效率、空间复杂度上看，动态规划是本题的最佳解法。
+class Solution {
+    public int fib(int n) {
+        int a = 0, b = 1, sum;
+        for(int i = 0; i < n; i++){
+            sum = (a + b) % 1000000007;
+            a = b;
+            b = sum;
+        }
+        return a;
+    }
+}

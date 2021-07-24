@@ -1,0 +1,129 @@
+//第一版 自己写的 效果还行
+执行结果：
+通过
+执行用时：
+1 ms
+, 在所有 Java 提交中击败了
+99.78%
+的用户
+内存消耗：
+38.6 MB
+, 在所有 Java 提交中击败了
+39.28%
+的用户
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int[] levelOrder(TreeNode root) {
+    /*
+    二叉树层次遍历
+    也就是二叉树的广度优先遍历
+    也就是只能用非递归方法 通过队列实现
+    栈的进出 判空是···
+    队列的进出 判空是···
+    LinkedList有Queue接口 相应的方法也就是LinkedList的方法 完整版如链接：https://www.runoob.com/java/java-linkedlist.html
+    主要方法有:
+    1)public boolean offer(E e)	向链表末尾添加元素，返回是否成功，成功为 true，失败为 false。
+    2)public E poll()	删除并返回第一个元素。
+    3)public E peek()	返回第一个元素。
+    4)public int size()	返回链表元素个数。
+    */
+    if(root == null)return new int[0];
+    Queue<TreeNode> queue_A = new LinkedList<>();//LinkedList有Queue接口 相应的方法也就是LinkedList的方法
+    queue_A.offer(root);
+    Queue<TreeNode> queue_B = new LinkedList<>();
+    while(!queue_A.isEmpty()){//是isEmpty 
+        if(queue_A.peek().left != null)
+            queue_A.offer(queue_A.peek().left);
+        if(queue_A.peek().right != null)
+            queue_A.offer(queue_A.peek().right);
+        queue_B.offer(queue_A.poll());
+    }
+    int[] ret = new int[queue_B.size()];
+    int i = 0;
+    while(!queue_B.isEmpty()){
+        ret[i] = queue_B.poll().val;
+        i++;
+    }
+    return ret;
+    }
+}
+
+//第二版 K神 思路基本一致 不同之处在于
+对于辅助队列（用于存储生成最后返回的数组的值）
+K神选择的是动态数组 ArrayList 方法也相应的改变
+
+PS：Arraylist 与 LinkedList 的区别在于？
+ArrayList与LinkedList都是List接口的实现类,因此都实现了List的所有未实现的方法,只是实现的方式有所不同
+ArrayList实现了List接口,它是以数组的方式来实现的,数组的特性是可以使用索引的方式来快速定位对象的位置,因此对于快速的随机取得对象的需求,使用ArrayList实现执行效率上会比较好. 
+LinkedList是采用链表的方式来实现List接口的,它本身有自己特定的方法，如: addFirst(),addLast(),getFirst(),removeFirst()等. 
+由于是采用链表实现的,因此在进行insert和remove动作时在效率上要比ArrayList要好得多!适合用来实现Stack(堆栈)与Queue(队列),前者先进后出，后者是先进先出.
+因为ArrayList是使用数组实现的,若要从数组中删除或插入某一个对象，需要移动后段的数组元素，从而会重新调整索引顺序,调整索引顺序会消耗一定的时间，所以速度上就会比LinkedList要慢许多. 
+相反,LinkedList是使用链表实现的,若要从链表中删除或插入某一个对象,只需要改变前后对象的引用即可!
+综上 在本题中 对于辅助数据结构的选择 
+ArrayList是更好的
+
+
+ArrayList就是动态数组，用MSDN中的说法，就是Array的复杂版本，它提供了动态的增加和减少元素，实现了ICollection和IList接口，灵活的设置数组的大小等好处
+
+class Solution {
+    public int[] levelOrder(TreeNode root) {
+        if(root == null) return new int[0];
+        Queue<TreeNode> queue = new LinkedList<>(){{ add(root); }};
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            ans.add(node.val);
+            if(node.left != null) queue.add(node.left);
+            if(node.right != null) queue.add(node.right);
+        }
+        int[] res = new int[ans.size()];
+        for(int i = 0; i < ans.size(); i++)
+            res[i] = ans.get(i);
+        return res;
+    }
+}
+
+//第三版 有人对第二版代码提出质疑 如下
+
+大佬，我看到网上的博客说，
+Queue使用时要尽量避免Collection的add()和remove()方法，
+而是要使用offer()来加入元素，使用poll()来获取并移出元素。
+它们的优点是通过返回值可以判断成功与否，
+add()和remove()方法在失败的时候会抛出异常。 
+修改完的代码如下：
+
+class Solution {
+    public int[] levelOrder(TreeNode root) {
+        if (root == null) // 空树则返回空数组
+            return new int[0];
+        Queue<TreeNode> q = new LinkedList<> (); // 借助一个队列，通过 BFS 实现按层遍历二叉树
+        ArrayList<Integer> tmp =new ArrayList<> (); // 申请一个动态数组 ArrayList 动态添加节点值
+        
+        q.offer(root); // 根结点先入队
+        while (q.size() != 0) {
+            TreeNode node = q.poll(); // 取出当前队首元素
+            tmp.add(node.val); 
+            if(node.left != null) q.offer(node.left); // 左子节点入队
+            if(node.right != null) q.offer(node.right); // 右子节点入队
+        }
+
+        // 将 ArrayList 转为 int数组并返回
+        int[] res = new int[tmp.size()];
+        for (int i=0; i<res.length; i++) {
+            res[i] = tmp.get(i);
+        }
+        return res;
+    }
+}
+
+Krahets
+2020-06-29
+感谢分享！~

@@ -1,0 +1,104 @@
+//第一版 这一版写的过程也说明了 每天都得坚持代码 不然一下就手生了
+执行结果：
+通过
+执行用时：
+3 ms
+, 在所有 Java 提交中击败了
+83.40%
+的用户
+内存消耗：
+41 MB
+, 在所有 Java 提交中击败了
+73.60%
+的用户
+class Solution {
+    public int maxValue(int[][] grid) {
+    /*
+    一看就是简单的动态规划 比回溯剪枝好思考多了
+    简单的原因是只能向右向下
+    那么首先就是建立二维数组dp[][]
+    其中位于第i行第j列的dp[i][j]的值代表
+    在(i,j)位置时 礼物的最大价值
+    
+    //构思一下 发现其实不需要这么麻烦 每个点其实只能来自其上其左的位置
+    然后第一行和第一列是无法变化的 固定的“最大值”
+    遍历每个点 建立新的“最大值矩阵”
+    能不能不建立新的？ 可以 这样空间复杂度就是o(1)
+    具体思路就是
+    f(i,j) = max( f(i-1,j) , f(i,j-1) ) + val( f(i,j) ); 
+    0 < grid.length <= 200
+    0 < grid[0].length <= 200
+    */
+    for(int j = 1; j < grid[0].length; j++){
+        grid[0][j] += grid[0][j-1];
+    }
+    for(int i = 1; i < grid.length; i++){
+        grid[i][0] += grid[i-1][0];
+    }
+    for(int i = 1; i < grid.length; i++){
+        for(int j = 1; j < grid[0].length; j++){
+            grid[i][j] = Math.max(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+        }
+    }
+    return grid[grid.length - 1][grid[0].length - 1];
+    }
+}
+
+//写完这一版之后 我就想到 其实两个在外面的for可以融入到总的for里面去
+class Solution {
+    public int maxValue(int[][] grid) {
+    /*
+    把外面的两个for融入到里面去
+    */
+    for(int i = 0; i < grid.length; i++){
+        for(int j = 0; j < grid[0].length; j++){
+            if(i == 0 && j == 0)continue;
+            if(i == 0){
+                grid[0][j] += grid[0][j-1];
+                continue;
+            }
+            if(j == 0){
+                grid[i][0] += grid[i-1][0];
+                continue;
+            }
+            grid[i][j] = Math.max(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+        }
+    }
+    return grid[grid.length - 1][grid[0].length - 1];
+    }
+}
+
+//第三版 K神方法与我一致 并且K神对两种方法进行了分析 如下：
+1）对第一行/第一列的初始化放在里面
+代码逻辑清晰，和转移方程直接对应，但仍可提升效率：
+当 gridgrid 矩阵很大时， i = 0 或 j = 0 的情况仅占极少数，相当循环每轮都冗余了一次判断。因此，可先初始化矩阵第一行和第一列，再开始遍历递推。
+如2）所示
+class Solution {
+    public int maxValue(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(i == 0 && j == 0) continue;
+                if(i == 0) grid[i][j] += grid[i][j - 1] ;
+                else if(j == 0) grid[i][j] += grid[i - 1][j];
+                else grid[i][j] += Math.max(grid[i][j - 1], grid[i - 1][j]);
+            }
+        }
+        return grid[m - 1][n - 1];
+    }
+}
+
+2）对第一行/第一列的初始化放在外面（按照k神说法 这种方法在矩阵很大时 比1）要好）
+class Solution {
+    public int maxValue(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        for(int j = 1; j < n; j++) // 初始化第一行
+            grid[0][j] += grid[0][j - 1];
+        for(int i = 1; i < m; i++) // 初始化第一列
+            grid[i][0] += grid[i - 1][0];
+        for(int i = 1; i < m; i++)
+            for(int j = 1; j < n; j++) 
+                grid[i][j] += Math.max(grid[i][j - 1], grid[i - 1][j]);
+        return grid[m - 1][n - 1];
+    }
+}

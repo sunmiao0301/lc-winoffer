@@ -1,0 +1,357 @@
+//第一版
+状态：执行出错
+提交时间：几秒前
+最后执行的输入：
+1
+[1]
+[1]
+0
+0
+出错的原因是当两个链表完全一致
+或者一个链是另外一个链的子链
+时，就会导致下面的错误：
+java.util.EmptyStackException
+  at line 102, java.base/java.util.Stack.peek
+  
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    /*
+    返回的是第一个相交的节点
+    相交不是有一个相等，而是从这个相交点开始，后面都一样
+    如果不相交，很好判断，两个链表遍历到终点处的节点不一样就是
+    三个栈也行
+    ···在返回结果后，两个链表仍须保持原有的结构。
+    */
+    if(headA == null || headB == null)
+        return null;
+    Stack<ListNode> stack_A = new Stack<>();
+    Stack<ListNode> stack_B = new Stack<>();
+    //Stack<ListNode> stack_C = new Stack<>();
+    while(headA.next != null){
+        stack_A.push(headA);
+        headA = headA.next;
+    }
+    while(headB.next != null){
+        stack_B.push(headB);
+        headB = headB.next;
+    }
+    ListNode temp_A = headA;//这算指针么？
+    ListNode temp_B = headB;
+    if(temp_A.val != temp_B.val)
+        return null;
+    while(stack_A.peek() == stack_B.peek()){
+        temp_A = stack_A.pop();
+        temp_B = stack_B.pop();
+    }
+    return temp_A;
+    }
+}
+
+//第二版·
+与第一版唯一的区别就在于A处代码，其作用是当两个链完全相同或者是一个链是另外一个链的子链时，就会在短的那条链到达头部时退出while 返回前一个节点值
+执行结果：
+通过
+执行用时：
+3 ms
+, 在所有 Java 提交中击败了
+14.80%
+的用户
+内存消耗：
+41.3 MB
+, 在所有 Java 提交中击败了
+35.23%
+的用户
+对一版进行修正得到如下结果：
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    if(headA == null || headB == null)
+        return null;
+    Stack<ListNode> stack_A = new Stack<>();
+    Stack<ListNode> stack_B = new Stack<>();
+    //Stack<ListNode> stack_C = new Stack<>();
+    while(headA.next != null){
+        stack_A.push(headA);
+        headA = headA.next;
+    }
+    while(headB.next != null){
+        stack_B.push(headB);
+        headB = headB.next;
+    }
+    ListNode temp_A = headA;//这算指针么？
+    ListNode temp_B = headB;
+    if(temp_A.val != temp_B.val)
+        return null;
+    while(!stack_A.isEmpty() && !stack_B.isEmpty() && stack_A.peek() == stack_B.peek()){···············A
+        temp_A = stack_A.pop();
+        temp_B = stack_B.pop();
+    }
+    return temp_A;
+    }
+}
+
+//第三版 尝试优化 删除了一些冗余代码 效果不明显
+执行结果：
+通过
+执行用时：
+4 ms
+, 在所有 Java 提交中击败了
+13.24%
+的用户
+内存消耗：
+41.6 MB
+, 在所有 Java 提交中击败了
+8.31%
+的用户
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    if(headA == null || headB == null)
+        return null;
+    Stack<ListNode> stack_A = new Stack<>();
+    Stack<ListNode> stack_B = new Stack<>();
+    while(headA.next != null){
+        stack_A.push(headA);
+        headA = headA.next;
+    }
+    while(headB.next != null){
+        stack_B.push(headB);
+        headB = headB.next;
+    }
+    ListNode temp_A = headA;//这算指针么？
+    //ListNode temp_B = headB;·····················
+    if(headA.val != headB.val)
+        return null;
+    while(!stack_A.isEmpty() && !stack_B.isEmpty() && stack_A.peek() == stack_B.peek()){
+        temp_A = stack_A.pop();
+        stack_B.pop();·····························
+    }
+    return temp_A;
+    }
+}
+
+//其实我这解法好像是最垃圾的 哪怕是遍历也比我这好...
+
+
+//第四版
+偷瞟了一下题解 是双指针 思考了一会 我写出了正解
+执行结果：
+通过
+执行用时：
+1 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+41.2 MB
+, 在所有 Java 提交中击败了
+52.65% ·······································但是空间效率并不好 做了优化
+的用户
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    //如果是双指针 我的想法就是先确定两个链表长度，然后开始取差值，让两个从相对于终点相等距离的起始点开始走
+    if(headA == null || headB == null)
+        return null;
+    ListNode temp_A = headA;
+    ListNode temp_B = headB;
+    int length_A = 0;
+    int length_B = 0;
+    while(headA != null){
+        headA = headA.next;
+        length_A++;
+    }
+    while(headB != null){
+        headB = headB.next;
+        length_B++;
+    }
+    if(length_A >= length_B){
+        for(int i = 0; i < length_A - length_B; i++){
+            temp_A = temp_A.next;
+        }
+        while(temp_A != temp_B && temp_A.next != null){
+            temp_A = temp_A.next;
+            temp_B = temp_B.next;
+        }
+        if(temp_A == temp_B)   
+            return temp_A;
+        return null;
+    }
+    else{
+        for(int i = 0; i < length_B - length_A; i++){
+            temp_B = temp_B.next;
+        }
+        while(temp_A != temp_B && temp_A.next != null){
+            temp_A = temp_A.next;
+            temp_B = temp_B.next;
+        }
+        if(temp_A == temp_B)   
+            return temp_A;
+        return null;
+    }
+    }
+}
+
+//第五版
+把length_B删除，空间略好一些
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    //如果是双指针 我的想法就是先确定两个链表长度，然后开始取差值，让两个从相对于终点相等距离的起始点开始走
+    if(headA == null || headB == null)
+        return null;
+    ListNode temp_A = headA;
+    ListNode temp_B = headB;
+    int length_A = 0;
+    //int length_B = 0;
+    while(headA != null){
+        headA = headA.next;
+        length_A++;
+    }
+    while(headB != null){
+        headB = headB.next;
+        length_A--;
+    }
+    if(length_A >= 0){
+        for(int i = 0; i < length_A; i++){
+            temp_A = temp_A.next;
+        }
+        while(temp_A != temp_B && temp_A.next != null){
+            temp_A = temp_A.next;
+            temp_B = temp_B.next;
+        }
+        if(temp_A == temp_B)   
+            return temp_A;
+        return null;
+    }
+    else{
+        for(int i = 0; i < -length_A; i++){
+            temp_B = temp_B.next;
+        }
+        while(temp_A != temp_B && temp_A.next != null){
+            temp_A = temp_A.next;
+            temp_B = temp_B.next;
+        }
+        if(temp_A == temp_B)   
+            return temp_A;
+        return null;
+    }
+    }
+}
+
+//第六版
+看了大神题解 恍然大悟 第五版先遍历一遍得到两个链表的长度多此一举
+其实可以通过一种更巧妙的方法使得“两个从相对于终点相等距离的起始点开始走”
+那就是先来一遍走，当谁先走到尽头，就回到对方的起点，然后等到另外一个也走到头，再返回对方的头，此时就是“两个从相对于终点相等距离的起始点开始走”
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    if(headA == null || headB == null)
+        return null;
+    ListNode temp_A = headA;
+    ListNode temp_B = headB;
+    while(headA.next != null && headB.next != null){
+        headA = headA.next;
+        headB = headB.next;
+    }
+    if(headA.next == null){
+        while(headB.next != null){
+            temp_B = temp_B.next;//
+            headB = headB.next;
+        }
+        while(temp_A != temp_B && temp_A.next != null){
+            temp_A = temp_A.next;
+            temp_B = temp_B.next;
+        }
+        if(temp_A == temp_B)
+            return temp_A;
+        return null;
+    }
+    //else{
+        while(headA.next != null){
+            temp_A = temp_A.next;
+            headA = headA.next;
+        }
+        while(temp_B != temp_A && temp_B.next != null){
+            temp_A = temp_A.next;
+            temp_B = temp_B.next;
+        }
+        if(temp_A == temp_B)
+            return temp_A;
+        return null;
+    //    }
+    }
+}
+
+//第七版 一样的思路 K神还是K神
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode A = headA, B = headB;
+        while (A != B) {
+            A = A != null ? A.next : headB;
+            B = B != null ? B.next : headA;
+        }
+        return A;
+    }
+}

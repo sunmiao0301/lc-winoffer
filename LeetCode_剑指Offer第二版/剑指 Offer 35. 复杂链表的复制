@@ -1,0 +1,385 @@
+//第一版
+报错：
+Random pointer of node with val 13 points to a node not in the copied list
+应该是在A处的代码处理的不对
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+class Solution {
+    public Node copyRandomList(Node head) {
+    //可能需要两遍遍历 第一遍确定next 第二遍确定random
+    //这里有一个问题在于怎么新建一个新节点 
+    //以此来解决报错“Node with label 13 was not copied but a reference to the original one.”
+    //上面的问题解决了 但是需要注意的是 random 指向的是被指向的节点在链表其中的排序 不是值
+    Node ret = new Node(head.val);
+    Node head_for_random = head;
+    Node temp = ret;
+    while(head.next != null){
+        temp.next = new Node(head.next.val);
+        temp = temp.next;
+        head = head.next;
+    }
+    temp.next = null;
+
+    //temp = ret;
+    temp = ret;
+    //int index = 0;
+    while(head_for_random.next != null){
+        if(head_for_random.random == null)
+            temp.random = null;
+        else
+            temp.random = new Node(head_for_random.random.val); ··································A
+        temp = temp.next;
+        head_for_random = head_for_random.next;
+    }
+    return ret;
+    }
+}
+
+//第二版
+不管A处怎么填 总是：random位置为1（这是为什么？）
+此外BC之间的代码也是不行的 因为如果不填random 那么random默认就是null了
+输入
+[[7,2],[13,null],[11,4],[10,2],[1,0]]
+输出
+[[7,null],[13,1],[11,null],[10,null],[1,null]]
+预期结果
+[[7,2],[13,null],[11,4],[10,2],[1,0]]
+class Solution {
+    public Node copyRandomList(Node head) {
+    Node head_for_random = head;//为了random
+    Node ret = new Node(head.val);
+    Node temp = ret;
+    Queue<Integer> queue = new LinkedList<>();
+    
+    while(head.next != null){
+        temp.next = new Node(head.next.val);
+        if(head.random == null){········································B
+            temp.random = ret;·····························A
+        }
+        else{
+            queue.offer(head.random.val);
+        }·······························································C
+        temp = temp.next;
+        head = head.next;
+    }
+    temp.next = null;
+    
+    temp = ret;//temp 再次回到新链表（未配置random）的头
+    Node temp_internal = ret;
+    while(head_for_random.next != null){
+        if(temp.random == null){}
+        else{
+            temp_internal = ret;
+            for(int i = 0; i < queue.poll(); i++){
+            temp_internal = temp_internal.next;
+            }
+            temp.random = temp_internal;
+        }
+        temp = temp.next;
+        head_for_random = head_for_random.next;
+    }
+    return ret;
+    }
+}
+
+//第三版 写的不好 太乱了 思路都搞不清 得换个数据结构 用queue不如用hashmap
+class Solution {
+    public Node copyRandomList(Node head) {
+    //可能需要两遍遍历 第一遍确定next 第二遍确定random
+    //这里有一个问题在于怎么新建一个新节点 
+    //以此来解决报错“Node with label 13 was not copied but a reference to the original one.”
+    //上面的问题解决了 但是需要注意的是 random 指向的是被指向的节点在链表其中的排序 不是值
+    //但是这个“指向排序而不是值”怎么解决呢 因为排序并不是节点的值啊 难道要新建一个含排序值的数组？
+    //可是题目中说的是“random 指针指向链表中的任意节点或者 null”啊
+    Node head_for_random = head;//为了random
+    Node ret = new Node(head.val);
+    Node temp = ret;
+    Node temp_internal = head_for_random;//
+    Queue<Integer> queue = new LinkedList<>();
+    
+    while(head.next != null){
+        temp.next = new Node(head.next.val);
+        temp_internal = head_for_random;
+        int i = 0;
+        if(head.random != null){
+            while(temp_internal != head.random){
+                temp_internal = temp_internal.next;
+                i++;
+            }
+            queue.offer(i);
+            temp.random = ret;//先指向第一个值 作为标记
+        }
+        temp = temp.next;
+        head = head.next;
+    }
+    temp.next = null;
+    
+    temp = ret;//temp 再次回到新链表（未配置random）的头
+    
+    while(head_for_random.next != null){
+        while(temp.random != null){
+            temp_internal = ret;
+            int i = queue.poll();
+            while(i != 0){
+                temp_internal = temp_internal.next;
+                i--;
+            }
+            temp.random = temp_internal.random;
+        }
+        temp = temp.next;
+        head_for_random = head_for_random.next;
+    }
+    return ret;
+    }
+}
+
+//第四版
+但是写到最后一行我发现 只记载temp 与 head.random 的对应关系是没用的
+
+写到这里 最大的问题也就出现了 如下分析所示
+class Solution {
+    public Node copyRandomList(Node head) {
+        Node cur = head;
+        Node ret = new Node(0), temp = ret;·············································A
+        while(cur != null) {
+            Node node = new Node(cur.val); // 复制节点 cur
+            temp.next = node;               // 新链表的 前驱节点 -> 当前节点
+            // temp.random = "???";         // 新链表的 「 前驱节点 -> 当前节点 」 无法确定
+            cur = cur.next;                // 遍历下一节点
+            temp = node;                    // 保存当前新节点
+        }
+        return ret.next;·······························································B
+    }
+}
+此外AB两行代码在这种需要新建链表的题中 是很巧妙的 务必掌握
+class Solution {
+    /*
+    就我来想 这题的核心思想应该是至少走两次的
+    第一次要连成一个串 顺便记录下random的情况
+    第二次就把random解决
+    本次试试用哈希表
+    */
+    public Node copyRandomList(Node head) {
+        Hashmap<Node, Node> hashmap = new Hashmap<>();
+        Node ret = new Node(head.val);
+        Node temp = ret;
+        while(head.next != null){
+            temp.next = new Node(head.next.val);
+            hashmap.put(temp, head.random);//但是写到这里我发现 只记载temp 与 head.random 的对应关系是没用的
+        }
+    }
+}
+
+//第五版 “但是写到最后一行我发现 只记载temp 与 head.random 的对应关系是没用的” 因为你无法知道head.random在新链表中对应的那个节点是谁，继而无法把random引用连起来
+正确的应该记载到hashmap中的信息应该是 temp 和 与temp在新链表中对应的在旧链表中的节点cur 
+这样通过cur找到cur.random 然后通过cur.random 又知道了其指向的那个cur 有了这个random指向的cur，通过hashmap又能得到其对应的temp为何。
+//最终结果
+输入
+[[7,2],[13,null],[11,4],[10,2],[1,0]]
+输出
+[[7,2],[13,null],[11,null],[10,2],[1,0]]·································还是有错 原因是我在A处写的退出条件是cur.next!= null 导致最后一个对应键值对没存进去 解决后见第六版
+预期结果
+[[7,2],[13,null],[11,4],[10,2],[1,0]]
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null)return null;
+        //Hashmap<Node, Node> map = new Hashmap<>();
+        Map<Node, Node> map = new HashMap<>();
+        Node ret_is_next = new Node(0);
+        Node temp = ret_is_next;
+        temp.next = new Node(head.val);
+        temp = temp.next;
+        Node cur = head;
+        while(cur.next != null){················································A
+            temp.next = new Node(cur.next.val);
+            map.put(cur, temp);//
+            temp = temp.next;
+            cur = cur.next;
+        }
+        temp.next = null;//这一句是否需要？
+
+        temp = ret_is_next.next;
+        cur = head;
+        while(temp != null){
+        /*如果你只想获取 key，可以使用 keySet() 方法，然后可以通过 get(key) 获取对应的 value，
+        如果你只想获取 value，可以使用 values() 方法。
+        */
+            if(cur.random != null){
+                temp.random = map.get(cur.random);
+            }
+                //此处需要之前的hashmap是 建立 “原节点 -> 新节点” 而不能是 “新节点 -> 原节点” 的 Map 映射 不然这里找不到
+                //temp.random = map.((map.get(temp)).random).values();
+            temp = temp.next;
+            cur = cur.next;
+        }
+
+        return ret_is_next.next;
+    }
+}
+
+//第六版 通过AB之间的代码解决了第五版的问题
+ 但是还能优化 那就是把next和random都放在第二遍解决，第一遍只负责建立节点 并存入map 见第七版
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null)return null;
+        //Hashmap<Node, Node> map = new Hashmap<>();
+        Map<Node, Node> map = new HashMap<>();
+        Node ret_is_next = new Node(0);
+        Node temp = ret_is_next;
+        temp.next = new Node(head.val);
+        temp = temp.next;
+        Node cur = head;
+        while(cur != null){··························A
+            if(cur.next == null){
+                temp.next = null;
+                map.put(cur, temp);
+                break;
+            }·········································B
+            temp.next = new Node(cur.next.val);
+            map.put(cur, temp);//
+            temp = temp.next;
+            cur = cur.next;
+        }
+        //temp.next = null;//这一句是否需要？
+
+        temp = ret_is_next.next;
+        cur = head;
+        while(temp != null){
+        /*如果你只想获取 key，可以使用 keySet() 方法，然后可以通过 get(key) 获取对应的 value，
+        如果你只想获取 value，可以使用 values() 方法。
+        */
+            if(cur.random != null){
+                temp.random = map.get(cur.random);
+            }
+                //此处需要之前的hashmap是 建立 “原节点 -> 新节点” 的 Map 映射 不然这里找不到
+                //temp.random = map.((map.get(temp)).random).values();
+            temp = temp.next;
+            cur = cur.next;
+        }
+
+        return ret_is_next.next;
+    }
+}
+
+//第七版 自己写的 通过
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+38 MB
+, 在所有 Java 提交中击败了
+60.73%
+的用户
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+class Solution {
+    //把next和random放在一起处理 第一次遍历先只创建节点 不连接
+    public Node copyRandomList(Node head) {
+        Map<Node, Node> map = new HashMap<>();
+        Node ret_is_next = new Node(0);
+        //Node temp = ret_is_next;
+        Node cur = head;
+        while(cur != null){//新建若干节点 并对应的存入map
+            Node temp = new Node(cur.val);
+            map.put(cur, temp);
+            cur = cur.next;
+        }
+        cur = head;
+        ret_is_next.next = map.get(cur);
+        //cur = cur.next;
+        while(cur != null){
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        return ret_is_next.next;
+        
+    }
+}
+
+//第八版 K神方法一：哈希表
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null) return null;
+        Node cur = head;
+        Map<Node, Node> map = new HashMap<>();
+        // 3. 复制各节点，并建立 “原节点 -> 新节点” 的 Map 映射
+        while(cur != null) {
+            map.put(cur, new Node(cur.val));
+            cur = cur.next;
+        }
+        cur = head;
+        // 4. 构建新链表的 next 和 random 指向
+        while(cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        // 5. 返回新链表的头节点
+        return map.get(head);
+    }
+}
+
+//第九版 K神拼接 + 拆分
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null) return null;
+        Node cur = head;
+        // 1. 复制各节点，并构建拼接链表
+        while(cur != null) {
+            Node tmp = new Node(cur.val);
+            tmp.next = cur.next;
+            cur.next = tmp;
+            cur = tmp.next;
+        }
+        // 2. 构建各新节点的 random 指向
+        cur = head;
+        while(cur != null) {
+            if(cur.random != null)
+                cur.next.random = cur.random.next;
+            cur = cur.next.next;
+        }
+        // 3. 拆分两链表
+        cur = head.next;
+        Node pre = head, res = head.next;
+        while(cur.next != null) {
+            pre.next = pre.next.next;
+            cur.next = cur.next.next;
+            pre = pre.next;
+            cur = cur.next;
+        }
+        pre.next = null; // 单独处理原链表尾节点
+        return res;      // 返回新链表头节点
+    }
+}

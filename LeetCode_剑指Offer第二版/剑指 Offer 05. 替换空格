@@ -1,0 +1,70 @@
+//第一版 虽然对 效果很垃圾
+执行结果：
+通过
+显示详情
+执行用时：
+7 ms
+, 在所有 Java 提交中击败了
+5.44%
+的用户
+内存消耗：
+38.4 MB
+, 在所有 Java 提交中击败了
+5.01%
+的用户
+class Solution {
+    public String replaceSpace(String s) {
+    String s_ret = "";
+            for(int i = 0; i < s.length(); i++){//怎么判断读到结尾了
+                if(s.charAt(i) != ' '){
+                    s_ret += s.charAt(i);
+                }
+                else{
+                    s_ret += "%20";
+                }
+        }
+    return s_ret;
+    }
+}
+
+//我想到的优化方法是遍历s 如果是空格 就替换为%20 但是这种方法用charAT肯定行不通 可能需要链表？ 但是那样把s读入链表里面需要的时间又很长
+//看题解可知使用链表的话 时间和空间复杂度都是o（n） 但是用字符数组就很好了 然后数组初始化为原字符串长度的三倍就行了 可以保证在最多空格的情况下 也能容纳下
+执行结果：
+通过
+显示详情
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+36.2 MB
+, 在所有 Java 提交中击败了
+72.97%
+的用户
+class Solution {
+    public String replaceSpace(String s) {
+        int i = 0;
+        char[] ret = new char[3 * s.length()];
+            for(int j = 0; j < s.length(); i++,j++){//java的for循环初始化多个变量的方法是 for(int i=0,j=0;;)
+                if(s.charAt(j) == ' '){
+                    ret[i] = '%';
+                    ret[i+1] = '2';
+                    ret[i+2] = '0';
+                    i += 2;
+                }else{
+                    ret[i] = s.charAt(j);
+                }
+            }
+            //String s_ret = new String(ret);//如果这样写 最后就会返回
+            //"We%20are%20happy.\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+            //因为空的字符数组位置会被填上\u0000 
+            //正确的方法是:
+            //String newStr = new String(array, 0, size); 
+            //return newStr;
+
+            String s_ret = new String(ret, 0, i);
+            return s_ret;
+    }
+}
+

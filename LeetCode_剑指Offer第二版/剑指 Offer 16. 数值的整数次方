@@ -1,0 +1,209 @@
+//第一版 
+299 / 304 个通过测试用例
+状态：超出时间限制
+提交时间：几秒前
+最后执行的输入：
+1.00000
+2147483647
+class Solution {
+    public double myPow(double x, int n) {
+        //考察高中数学？
+        
+        if(n == 0 && x != 0){
+            return 1;
+        }
+        else if(n == 0 && x == 0){
+            return -1.111111;
+        }
+        else if(n > 0){
+            double ret = x;
+            while(n > 1){
+                ret = ret * x;
+                n--;
+            }
+            return ret;
+            
+        }
+        else if(n < 0){
+            double ret = x;
+            while(n < -1){
+                ret = ret * x;
+                n++;
+            }
+            return 1 / ret;
+            
+        }
+        return 3.1415;
+    }
+}
+
+//第二版 
+301 / 304 个通过测试用例
+状态：超出时间限制
+提交时间：几秒前
+最后执行的输入：
+2.00000
+-2147483648
+分析可知，当幂指数是 - 2 ^ 32 时，先乘方再取倒数不行，因为取倒数之前就超出了2 ^ 32 的范围。
+class Solution {
+    public double myPow(double x, int n) {
+        //考察高中数学？
+        if(x - 1 == 0){
+            return 1;
+        }
+        if(n == 0 && x != 0){
+            return 1;
+        }
+        else if(n == 0 && x == 0){
+            return -1.111111;
+        }
+        else if(n > 0){
+            double ret = x;
+            while(n > 1){
+                ret = ret * x;
+                n--;
+            }
+            return ret;
+            
+        }
+        else if(n < 0){
+            double ret = x;
+            while(n < -1){
+                ret = ret * x;
+                n++;
+            }
+            return 1 / ret;
+            
+        }
+        return 3.1415;
+    }
+}
+
+//第三版 修改了之后还是通不过第301个样例
+class Solution {
+    public double myPow(double x, int n) {
+        //考察高中数学？
+        if(x - 1 == 0){
+            return 1;
+        }
+        if(n == 0 && x != 0){
+            return 1;
+        }
+        else if(n == 0 && x == 0){
+            return -1.111111;
+        }
+        else if(n > 0){
+            double ret = x;
+            while(n > 1){
+                ret = ret * x;
+                n--;
+            }
+            return ret;
+            
+        }
+        else if(n < 0){
+            double ret = 1 / x;
+            while(n < -1){
+                ret = ret * 1 / x;
+                n++;
+            }
+            return ret;
+            
+        }
+        return 3.1415;
+    }
+}
+
+//第四版 自己写的快速幂 问题在于:
+1)使用位运算时，一定要记得打括号;
+2)当n < 0 时，将n = -n 时，-2147483648 不超范围 但是-n 之后就超出了，因此需要用long。
+ 数可以表示为2进制，2进制表示中的每一位1都可以诠释为一次平方
+ 比如x=2，n=10。n二进制表示就是1010，每个1就是x的对应次方数，相当于2^2*2^8，只需要找到每个1在二进制里面的位置，然后x对应次方就完了
+ 比如要求x ^ 11 ，正常的乘积需要循环乘11次，时间复杂度为O(n)
+ 快速幂的思想就是将指数11 可以转成二进制数1011，则原来的式子可以转化成
+ x^{11} = ... ，此时只运算了3次乘积，时间复杂度降至O(logn)
+ class Solution {
+    public double myPow(double x, int n) {
+        if(n == 0)
+            return 1;
+        if(n < 0){
+            n = -n;
+            x = 1/x;
+        }
+        if(n > 0){
+            double res = 1.0;
+            while(n != 0){
+                if(n & 1 == 1){
+                    res = res * x;
+                }
+                n = n >> 1;
+                x = x * x;
+            }
+            return res; 
+        }
+        return 3.14;
+    }
+}
+ 
+//第五版
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+1 ms
+, 在所有 Java 提交中击败了
+98.60%
+的用户
+内存消耗：
+37.4 MB
+, 在所有 Java 提交中击败了
+71.93%
+的用户
+class Solution {
+    public double myPow(double x, int n) {
+        long n_long = n;
+
+        if(n_long == 0)
+            return 1;
+        if(n_long < 0){
+            n_long = -n_long;
+            x = 1/x;
+        }
+        if(n_long > 0){
+            double res = 1.0;
+            while(n_long != 0){
+                if((n_long & 1) == 1){
+                    res = res * x;
+                }
+                n_long = n_long >> 1;
+                x = x * x;
+            }
+            return res; 
+        }
+        return 3.14;
+    }
+}
+
+//第六版 精修一下
+class Solution {
+    public double myPow(double x, int n) {
+        long n_long = n;
+        if(n_long == 0)
+            return 1;
+        if(n_long < 0){
+            n_long = -n_long;
+            x = 1/x;
+        }
+        double res = 1.0;
+        while(n_long != 0){
+            if((n_long & 1) == 1){
+                res = res * x;
+            }
+            n_long = n_long >> 1;
+            x = x * x;
+        }
+        return res; 
+    }
+}

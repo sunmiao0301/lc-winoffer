@@ -1,0 +1,182 @@
+//第一版 写的不好
+效果很差
+class Solution {
+    public String reverseWords(String s) {
+    /*
+    为简单起见，标点符号和普通字母一样处理。
+    输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+    如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+    先入后出？
+    */
+    if(s.length() == 0)return "";
+    Stack<String> stack = new Stack<>();
+    int l = 0;
+    int r = 0;
+    for(l = r; l < s.length(); l++){
+        if(s.charAt(l) == ' ')
+            continue;
+        r = l;
+        for(r = l; r < s.length(); r++){
+            if(s.charAt(r) != ' ' && r != s.length() - 1)
+                continue;
+            if(r == s.length() - 1 && s.charAt(r) != ' '){
+                stack.push(s.substring(l));
+                break;
+            }
+            stack.push(s.substring(l, r));
+                break;
+        }
+        l = r;
+    }
+    String ret = "";
+    while(!stack.isEmpty()){
+        ret += stack.pop() + " ";
+    }
+    if(ret == "")
+        return "";
+    return ret.substring(0, ret.length() - 1);
+    }
+}
+
+//第二版 优化了半天 没好多少
+class Solution {
+    public String reverseWords(String s) {
+    /*
+    为简单起见，标点符号和普通字母一样处理。
+    输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+    如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+    先入后出？
+    */
+    for(int i = s.length() - 1; i >= -1; i--){
+        if(i == -1 || s.charAt(i) != ' '){
+            s = s.substring(0, i + 1);
+            break;            
+        }
+    }
+    if(s.length() == 0)return "";
+    Stack<String> stack = new Stack<>();
+    int l = 0;
+    int r = 0;
+    for(l = r; l < s.length(); l++){
+        if(s.charAt(l) == ' ')
+            continue;
+        r = l;
+        for(r = l; r < s.length(); r++){
+            if(s.charAt(r) != ' ' && r != s.length() - 1)
+                continue;
+            stack.push(s.substring(l, r + 1));//+1
+                break;
+        }
+        l = r;
+    }
+    String ret = "";
+    if(!stack.isEmpty())
+        ret += stack.pop() + " ";
+    while(!stack.isEmpty()){
+        ret += stack.pop();
+    }
+    return ret.substring(0, ret.length() - 1);
+    }
+}
+
+//第三版 又优化了半天 效果还是不明显
+class Solution {
+    public String reverseWords(String s) {
+    s = s + " ";//"  THE SKY   "len = 12
+    int temp = 0;
+    int flag = 0;
+    Stack<String> stack = new Stack<>();
+    for(int i = 0; i < s.length(); i++){//
+        if(s.charAt(i) == ' '){
+            //else if(flag == 0){
+                //i++;
+            //}
+            if(flag == 1){
+                stack.push(s.substring(temp, i));
+                temp = i;
+                //i++;
+                flag = 0;
+            }
+        }
+        else if(s.charAt(i) != ' '){
+            if(flag == 0){
+                temp = i;
+                flag = 1;      
+            }
+            //else if(flag == 1){
+                //i++;
+            //}
+        }
+    }
+    String ret = "";
+    while(!stack.isEmpty()){
+        ret += stack.pop() + " ";
+    }
+    if(ret.length() == 0)
+        return ret;
+    return ret.substring(0, ret.length() - 1);
+    }
+}
+
+//第四版
+对第三版整理一下 但是效果没有提升
+
+我的处理方案巧妙之处在于在s后面加个" "
+使得B处代码一定能到结尾处必有" "
+从而保证不需要额外的判断来对substrin函数有改动
+否则 i 可能超出范围
+
+class Solution {
+    public String reverseWords(String s) {
+    s = s + " ";···························A
+    int temp = 0;
+    int flag = 0;
+    Stack<String> stack = new Stack<>();
+    for(int i = 0; i < s.length(); i++){
+        if(s.charAt(i) == ' ' && flag == 1){···································B
+                stack.push(s.substring(temp, i));
+                temp = i;
+                flag = 0;
+        }
+        else if(s.charAt(i) != ' ' && flag == 0){
+                temp = i;
+                flag = 1;      
+        }
+    }
+    String ret = "";
+    while(!stack.isEmpty()){
+        ret += stack.pop() + " ";
+    }
+    if(ret.length() == 0)
+        return ret;
+    return ret.substring(0, ret.length() - 1);
+    }
+}
+
+//K 神
+执行结果：
+通过
+执行用时：
+3 ms
+, 在所有 Java 提交中击败了
+68.61%
+的用户
+内存消耗：
+38.4 MB
+, 在所有 Java 提交中击败了
+32.37%
+的用户
+class Solution {
+    public String reverseWords(String s) {
+        s = s.trim(); // 删除首尾空格
+        int j = s.length() - 1, i = j;
+        StringBuilder res = new StringBuilder();
+        while(i >= 0) {
+            while(i >= 0 && s.charAt(i) != ' ') i--; // 搜索首个空格
+            res.append(s.substring(i + 1, j + 1) + " "); // 添加单词
+            while(i >= 0 && s.charAt(i) == ' ') i--; // 跳过单词间空格
+            j = i; // j 指向下个单词的尾字符
+        }
+        return res.toString().trim(); // 转化为字符串并返回
+    }
+}
