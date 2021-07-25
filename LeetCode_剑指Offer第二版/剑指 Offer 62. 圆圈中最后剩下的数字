@@ -1,0 +1,59 @@
+//第一版 思路思考
+class Solution {
+    public int lastRemaining(int n, int m) {
+    /*
+    第一个开始的数字算在里面 是第一个数
+    从数字0开始
+    我感觉直接推导出来好像有点悬 还是先算一下试试
+    目前发现的规律是
+    减去从当前起第三个 从当前起第四个 从当前起第五个（注意超出就除以总数
+    但是一看范围就知道 肯定不能硬算
+    好像也不是不能硬算
+    首先初始化一个数组（里面各个值是圆圈上的值）
+    求一下数组的总和
+    然后不停的从总和值减去各个值
+    这样操作的话有没有可能重复删除 有可能 所以上面的思路有欠缺
+    用一个LinkedList会好一些
+    */
+    }
+}
+
+//第二版 题解的思路是模拟法 也就是按照题目的设计来
+结果超时了 
+具体分析如下：
+
+
+class Solution {
+    /*
+    int len = 5
+    m = 3
+    int index = 0
+    0 1 2 3 4 remove(2 = 0 + 3 - 1 % 5)
+    2
+    0 1 3 4 remove(0 = 2 + 3 - 1 % 4)
+    0
+    1 3 4 remove(2 = 0 + 3 - 1 % 3)
+    4
+    1 3 remove(0 = 2 + 3 - 1 % 2)
+    3==
+    这一轮删除的是上一轮的数的下标是(index + 3 - 1) % 剩余数字数 
+    */
+    public int lastRemaining(int n, int m) {
+    List<Integer> list = new LinkedList<>();
+    for(int i = 0; i < n; i++){
+        list.add(i);
+    }
+    int len = n + 1;
+    int index = 0;
+    //注意圆圈是从0开始
+    for(int i = 1; i < n; i++){
+        index = (index + m - 1) % (--len);
+        list.remove(index);//remove()的参数是索引从0开始
+    }
+    return list.get(0);
+    }
+}
+
+
+//第三版 看了题解
+我第一版中想到要用链表是对的（因为要避免重复删除的问题），但是用ArrayList更快
