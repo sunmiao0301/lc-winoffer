@@ -1,0 +1,26 @@
+//以下是当时写的 漏洞还是很多
+/**
+ * 输入一个int数组，输出一个int数组，要求：
+ * 1. 输出数组的元素是输入数组中出现频率最高的k个元素
+ * 2. 输出数组需要按照元素出现频率的高低进行排序
+ * 举个例子，比如输入nums=int[]{5,6,6,7,7,7,8,8,8,8},k=2,则输出数组{8,7}
+ */
+public static int[]topKFrequent(int[]nums,int k){
+  	int[] temp = new int[nums.length+1];
+  	for(int i = 0; i < nums.length; i++){
+    	temp[nums[i]]++;
+    }
+  	int[] arr_k = new int[k];
+    for(int i = 0; i < k; i++){
+      	int max = 0;
+      	int jj = 0;
+    	for(int j = 0; j < temp.length; j++){
+        	if(temp[j] > max)
+              	max = temp[j];
+        }
+      	arr_k[i] = max;
+      	
+    }
+  return arr_k;
+      // TODO:
+}
