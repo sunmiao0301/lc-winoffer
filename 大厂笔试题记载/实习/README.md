@@ -1,3 +1,3 @@
-# Internet-enterprises-written-examination
+# 大厂实习笔试题记载
 记载一些笔试里面没做出的编程题
 本记载从4.16开始 之前的阿里等不记得了 等秋招再记
