@@ -18,11 +18,9 @@ class Solution {
     }
 }
 
-//第二版 题解的思路是模拟法 也就是按照题目的设计来
-结果超时了 
-具体分析如下：
-
-
+//第二版 
+题解的思路是模拟法 也就是按照题目的设计来
+结果超时了 甜提出改成ArrayList即可 见第三版
 class Solution {
     /*
     int len = 5
@@ -54,6 +52,92 @@ class Solution {
     }
 }
 
+//第三版 但是这并不是模拟法的极限 第四版将对模拟法进行优化
+执行结果：
+通过
+执行用时：
+1344 ms
+, 在所有 Java 提交中击败了
+5.29%
+的用户
+内存消耗：
+40.3 MB
+, 在所有 Java 提交中击败了
+30.02%
+的用户
 
-//第三版 看了题解
-我第一版中想到要用链表是对的（因为要避免重复删除的问题），但是用ArrayList更快
+用ArrayList更快
+原因：
+至于这种思路的代码实现，
+我尝试了下 LinkedList 会超时，
+我猜是因为 LinkedList 虽然删除指定节点的时间复杂度是 O(1)O(1) 的，
+但是在 remove 时间复杂度仍然是 O(n)O(n) 的，
+因为需要从头遍历到需要删除的位置。
+那 ArrayList 呢？
+索引到需要删除的位置，时间复杂度是 O(1)O(1)，
+删除元素时间复杂度是 O(n)O(n)（因为后续元素需要向前移位）， 
+remove 整体时间复杂度是 O(n)O(n) 的。
+看起来LinkedList 和 ArrayList 单次删除操作的时间复杂度是一样的 ？
+所累哇多卡纳！
+ArrayList 的 remove 操作在后续移位的时候，
+其实是内存连续空间的拷贝的！
+所以相比于LinkedList大量非连续性地址访问，
+ArrayList的性能是很 OK 的！
+
+具体分析如下：
+链接：https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/javajie-jue-yue-se-fu-huan-wen-ti-gao-su-ni-wei-sh/
+
+class Solution {
+    public int lastRemaining(int n, int m) {
+    List<Integer> list = new ArrayList<>();
+    for(int i = 0; i < n; i++){
+        list.add(i);
+    }
+    int len = n + 1;
+    int index = 0;
+    //注意圆圈是从0开始
+    for(int i = 1; i < n; i++){
+        index = (index + m - 1) % (--len);
+        list.remove(index);//remove()的参数是索引从0开始
+    }
+    return list.get(0);
+    }
+}
+
+//第四版
+执行结果：
+通过
+执行用时：
+1336 ms
+, 在所有 Java 提交中击败了
+5.29%
+的用户
+内存消耗：
+40.5 MB
+, 在所有 Java 提交中击败了
+13.99%
+的用户
+优化之处在于：
+1）在知道数组大小的情况下，初始化动态数组的大小，防止中途扩容影响速度
+2）把for改为while循环，通过n变化，减少len变量所占空间。
+class Solution {
+    public int lastRemaining(int n, int m) {
+    List<Integer> list = new ArrayList<>(n);//   1）初始化ArrayList(动态数组)如果知道大小，最好预设，防止半途扩容影响速度。
+    for(int i = 0; i < n; i++){
+        list.add(i);
+    }
+    int index = 0;
+    while(n > 1){//   2）把for改为while循环，通过n变化，减少len变量所占空间。
+        index = (index + m - 1) % (n);
+        list.remove(index);
+        n--;
+    }
+    return list.get(0);
+    }
+}
+
+//第五版 标准题解
+K神等众大佬的看不懂
+下面链接的思路是一种已知公式，反推思路的做法，虽然不符原理 但是好理解：
+https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-j30k/
+
