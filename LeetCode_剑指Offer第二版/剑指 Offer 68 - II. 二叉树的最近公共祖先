@@ -1,0 +1,28 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    /*
+    这次是二叉树 不是搜索二叉树了
+    所有节点的值都是唯一的。
+    p、q 为不同节点且均存在于给定的二叉树中。
+    猜测是递归回溯
+    实际上不用回溯 直接DFS即可
+    分析一下：
+    对于任何一个当前root值 都进行如下递归
+    1）如果左边有，右边有，就返回root
+    2）如果左边无，右边有，就进入左边找，如果左边有，就返回root，如果左边无，就返回root.right
+    3）如果右边无，左边有，就进入右边找，如果右边有，就返回root，如果右边无，就返回root.left
+    4）如果左右都无，就继续进入左右
+    5）如果到了叶子都无，就返回null
+    */
+    if(root.left == null )
+    }
+}
