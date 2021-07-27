@@ -1,0 +1,93 @@
+//第一版 
+执行结果：
+通过
+执行用时：
+5 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+39 MB
+, 在所有 Java 提交中击败了
+53.70%
+的用户
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    /*
+    最近
+    公共祖先 
+    为什么要求x尽可能大？哦哦理解错了 x不是深度 是节点 所以x越深就是越接近两个节点
+    p、q 为不同节点且均存在于给定的二叉搜索树中。
+    分析一下
+    如果pq同层，肯定能找到一个最深的值 大于小于pq //一旦找到立马就返回 因为那就是最近的一个
+    如果pq不同层，则最近公共祖先是盘pq中较高的一个
+    */
+    //首先得找出pq哪个大  我们设置p小q大
+    //TreeNode temp = new TreeNode(q);
+    if(p.val > q.val){
+        TreeNode temp = q;//不同于TreeNode temp = new TreeNode(q);
+        q = p;
+        p = temp;
+    }
+    while(root.val < p.val || root.val > q.val){
+        if(root.val < p.val){//root.right != null && 
+            root = root.right;
+        }
+        else
+            root = root.left;
+    }
+    return root;
+    }
+}
+
+//第二版 K神
+注意 这里K神在对“循环迭代 和 递归”时间和空间复杂度分析时 有如下分析：
+
+while循环迭代复杂度分析：
+时间复杂度 O(N)O(N) ： 其中 NN 为二叉树节点数；每循环一轮排除一层，二叉搜索树的层数最小为 \log NlogN （满二叉树），最大为 NN （退化为链表）。
+空间复杂度 O(1)O(1) ： 使用常数大小的额外空间。
+
+递归复杂度分析：
+时间复杂度 O(N)O(N) ： 其中 NN 为二叉树节点数；每循环一轮排除一层，二叉搜索树的层数最小为 \log NlogN （满二叉树），最大为 NN （退化为链表）。
+空间复杂度 O(N)O(N) ： 最差情况下，即树退化为链表时，递归深度达到树的层数 NN 。
+
+K神链接https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-zui-jin-gong-gong-zu-xian-lcof/solution/mian-shi-ti-68-i-er-cha-sou-suo-shu-de-zui-jin-g-7/
+
+K的while循环迭代：
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(p.val > q.val) { // 保证 p.val < q.val
+            TreeNode tmp = p;
+            p = q;
+            q = tmp;
+        }
+        while(root != null) {
+            if(root.val < p.val) // p,q 都在 root 的右子树中
+                root = root.right; // 遍历至右子节点
+            else if(root.val > q.val) // p,q 都在 root 的左子树中
+                root = root.left; // 遍历至左子节点
+            else break;
+        }
+        return root;
+    }
+}
+
+K的递归：
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root.val < p.val && root.val < q.val)
+            return lowestCommonAncestor(root.right, p, q);
+        if(root.val > p.val && root.val > q.val)
+            return lowestCommonAncestor(root.left, p, q);
+        return root;
+    }
+}
