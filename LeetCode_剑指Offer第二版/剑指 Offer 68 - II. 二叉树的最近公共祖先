@@ -1,3 +1,11 @@
+//第一版
+15 / 31 个通过测试用例
+状态：解答错误
+提交时间：几秒前
+最后执行的输入：
+[1,2,3,null,4]
+4
+1
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -23,6 +31,29 @@ class Solution {
     4）如果左右都无，就继续进入左右
     5）如果到了叶子都无，就返回null
     */
-    if(root.left == null )
+    if(root.left == null && root.right == null)return null;
+    else if(root.left == null && root.right != null){
+        if(root.right.val != p.val && root.right.val != q.val)
+            return lowestCommonAncestor(root.right, p, q);
+        return root;
+    }
+    else if(root.left != null && root.right == null){
+        if(root.left.val != p.val && root.left.val != q.val)
+            return lowestCommonAncestor(root.left, p, q);
+        return root;
+    }
+    else if((root.left.val == p.val && root.right.val == q.val) || (root.left.val == q.val && root.right.val ==p.val))return root;
+    //所有节点的值都是唯一的。
+    else if((root.left.val == p.val || root.left.val == q.val)){
+        if((lowestCommonAncestor(root.right, p, q)) != null)return root;
+        return root.left;
+    }
+    else if((root.right.val == p.val || root.left.val == q.val)){
+        if((lowestCommonAncestor(root.left, p, q)) != null)return root;
+        return root.right;
+    }
+    if(lowestCommonAncestor(root.left, p, q) != null)
+        return lowestCommonAncestor(root.left, p, q);
+    return lowestCommonAncestor(root.right, p, q);
     }
 }
