@@ -91,3 +91,63 @@ class Solution {
     return false;
     }
 }
+
+//第三版
+对第二版检查了很久 发现了问题所在：
+因为isExist函数无法在递归中返回，也就是如果进入了多层递归，那么即使得到目标节点pq，执行的return true也无法传递到最外层的isExist
+如果改成：
+boolean isExist(TreeNode root, TreeNode p, TreeNode q){//分析包括root在内的下面的节点是否含有p或q
+    if(root.left != null)
+        return isExist(root.left, p, q);
+    if(root.val == p.val || root.val == q.val)return true;
+    if(root.right != null)
+        return isExist(root.right, p, q);
+    return false;
+    }
+那么一旦进入内层递归，就必须return一个值
+为了解决这个问题 我选择使用全局变量flag
+但是卡在了
+25 / 31 个通过测试用例
+状态：解答错误
+提交时间：4 分钟前
+最后执行的输入：
+[37,-34,-48,null,-100,-101,48,null,null,null,null,-54,null,-71,-22,null,null,null,8]
+-71
+48
+class Solution {
+    boolean flag = false;
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root.val == p.val || root.val == q.val)
+            return root;
+        isExist(root.left, p, q);
+        if(flag == true){
+            flag = false;
+            isExist(root.right, p, q);
+            if(flag == true)
+                return root;
+        }
+        isExist(root.left, p, q);
+        if(flag == true){
+        if(root.left.val == p.val || root.left.val == q.val)
+            return root.left;
+        return lowestCommonAncestor(root.left, p, q);
+        }
+        isExist(root.right, p, q);
+        if(flag == true){
+        if(root.right.val == p.val || root.right.val == q.val)
+            return root.right;
+        return lowestCommonAncestor(root.right, p, q);
+        }
+        return new TreeNode(0);
+    }
+    void isExist(TreeNode root, TreeNode p, TreeNode q){//分析包括root在内的下面的节点是否含有p或q
+        if(root.left != null)
+            isExist(root.left, p, q);
+        if(root.val == p.val || root.val == q.val){
+            flag = true;
+            return;       
+        }
+        if(root.right != null)
+            isExist(root.right, p, q);
+    }
+}
