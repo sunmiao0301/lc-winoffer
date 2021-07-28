@@ -114,6 +114,12 @@ boolean isExist(TreeNode root, TreeNode p, TreeNode q){//分析包括root在内�
 [37,-34,-48,null,-100,-101,48,null,null,null,null,-54,null,-71,-22,null,null,null,8]
 -71
 48
+其实这个例子和
+[5,null,1,2,3,null,null,null,4]
+2
+4
+是一样的，就是由于lowestCommonAncestor的第一个参数传递了一个null进入isExits，导致isExist里面直接出错，修改方法很简单，在isExist里加一个判空即可
+见第四版
 class Solution {
     boolean flag = false;
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
@@ -149,5 +155,69 @@ class Solution {
         }
         if(root.right != null)
             isExist(root.right, p, q);
+    }
+}
+
+//第四版
+执行用时：
+1320 ms
+, 在所有 Java 提交中击败了
+5.70%
+的用户
+内存消耗：
+40.1 MB
+, 在所有 Java 提交中击败了
+12.85%
+的用户
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    boolean flag = false;
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root.val == p.val || root.val == q.val)
+            return root;
+        isExist(root.left, p, q);
+        if(flag == true){
+            flag = false;
+            isExist(root.right, p, q);
+            if(flag == true)
+                return root;
+        }
+        isExist(root.left, p, q);
+        if(flag == true){
+            flag = false;
+            if(root.left.val == p.val || root.left.val == q.val)
+                return root.left;
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        isExist(root.right, p, q);
+        if(flag == true){
+            flag = false;
+            if(root.right.val == p.val || root.right.val == q.val)
+                return root.right;
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        return new TreeNode(0);
+    }
+    void isExist(TreeNode root, TreeNode p, TreeNode q){//分析包括root在内的下面的节点是否含有p或q
+        if(root == null)
+            return;
+        if(root.left != null)
+            isExist(root.left, p, q);
+        if(root.val == p.val || root.val == q.val){
+            flag = true;
+            return;       
+        }
+        if(root.right != null)
+            isExist(root.right, p, q);
+        //flag = false;
+        //return false;
     }
 }
