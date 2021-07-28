@@ -57,3 +57,37 @@ class Solution {
     return lowestCommonAncestor(root.right, p, q);
     }
 }
+
+//第二版
+老是卡在此处：
+输入
+[1,2,3,null,4]
+4
+3
+输出
+3
+预期结果
+1
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root.val == p.val || root.val == q.val)return root;
+        else if(isExist(root.left, p, q) && isExist(root.right, p, q))return root;
+        else if(isExist(root.left, p, q)){
+            if(root.left.val == p.val || root.left.val == q.val)return root.left;
+        return lowestCommonAncestor(root.left, p, q);
+        }
+        else if(isExist(root.right, p, q)){
+            if(root.right.val == p.val || root.right.val == q.val)return root.right;
+        return lowestCommonAncestor(root.right, p, q);
+        }
+        return new TreeNode(0);
+    }
+    boolean isExist(TreeNode root, TreeNode p, TreeNode q){//分析包括root在内的下面的节点是否含有p或q
+    if(root.left != null)
+        isExist(root.left, p, q);
+    if(root.val == p.val || root.val == q.val)return true;
+    if(root.right != null)
+        isExist(root.right, p, q);
+    return false;
+    }
+}
