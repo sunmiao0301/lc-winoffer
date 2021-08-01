@@ -75,4 +75,24 @@ class Solution {
 [4,5,11,14,9,16,10,20,8]
 */
 
-//
+//第二版 
+就是想不要优化第一版速度的办法 
+下面直接挂标准题解：
+其实题解的思路与我的差别不大，关键在于
+1）在更新min的时候 由于用的是双指针 所以节省了大量时间？把我用的Deque.size()修改成了双指针的hi - lo（没有用Deque）
+
+············那么，是否滑动窗口问题都可以用双指针 而不必用 Deque 呢
+
+class Solution {    
+    public int minSubArrayLen(int target, int[] nums) {
+        int lo = 0, hi = 0, sum = 0, min = Integer.MAX_VALUE;
+        while (hi < nums.length) {
+            sum += nums[hi++];
+            while (sum >= target) {
+                min = Math.min(min, hi - lo);
+                sum -= nums[lo++];
+            }
+        }
+        return min == Integer.MAX_VALUE ? 0 : min;
+    }
+}
