@@ -38,7 +38,7 @@ class Solution {
     ListNode ret = head.next;···························································四个结点及以上
     ListNode temp2 = head;
     ListNode temp1 = head.next;
-    while(head != null && head.next != null && head.next.next != null && head.next.next.next != null){//head != null && head.next != null && 好像不需要
+    while(head.next.next != null && head.next.next.next != null){//head != null && head.next != null && 好像不需要
         head.next = head.next.next.next;//1
         temp2 = temp1.next;//存储3 也就是下一个head'
         temp1.next = head;
@@ -50,3 +50,45 @@ class Solution {
     return ret;
     }
 }
+
+//第二版 题解：
+
+方法一：递归
+
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = head.next;
+        head.next = swapPairs(newHead.next);
+        newHead.next = head;
+        return newHead;
+    }
+}
+复杂度分析
+时间复杂度：O(n)O(n)，其中 nn 是链表的节点数量。需要对每个节点进行更新指针的操作。
+空间复杂度：O(n)O(n)，其中 nn 是链表的节点数量。空间复杂度主要取决于递归调用的栈空间
+
+方法二：迭代
+
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode temp = dummyHead;
+        while (temp.next != null && temp.next.next != null) {
+            ListNode node1 = temp.next;
+            ListNode node2 = temp.next.next;
+            temp.next = node2;
+            node1.next = node2.next;
+            node2.next = node1;
+            temp = node1;
+        }
+        return dummyHead.next;
+    }
+}
+复杂度分析
+时间复杂度：O(n)O(n)，其中 nn 是链表的节点数量。需要对每个节点进行更新指针的操作。
+空间复杂度：O(1)O(1)。
+
