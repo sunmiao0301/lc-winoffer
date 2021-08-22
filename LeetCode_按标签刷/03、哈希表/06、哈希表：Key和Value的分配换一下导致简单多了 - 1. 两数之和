@@ -1,4 +1,4 @@
-//第一版 通过 但是效率很差=
+//第一版 通过 但是效率很差
 执行结果：
 通过
 执行用时：
@@ -121,6 +121,11 @@ class Solution {
 也能找到数组下标 
 因为数组下标是Value了 
 用get就能找到
+
+原因是hashmap支持的方法，只能判断有没有Key/有没有Value/通过Key找Value，而不支持通过Value找Key：
+1）get()	获取指定 key 对应对 value
+2）containsKey()	检查 hashMap 中是否存在指定的 key 对应的映射关系。
+3）containsValue()	检查 hashMap 中是否存在指定的 value 对应的映射关系。
 
 执行结果：
 通过
