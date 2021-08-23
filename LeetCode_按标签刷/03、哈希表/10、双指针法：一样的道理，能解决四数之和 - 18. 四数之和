@@ -1,0 +1,50 @@
+//第一版 瞟了一眼题解之后 一遍过
+
+对于这类《几个数之和》题型 在此稍微总结一下：
+1）如果这几个数是来着多个数组，那么HashMap即可解决，通过一分为2可以降低空间复杂度
+   比如来自四个数组的《四数之和》
+   那么 1 + 1 + 1 + 1 就可以化为 2 + 2
+2) 如果这几个数是来自一个数组，且不允许重复（也就是求组合的结果，不是求排列结果）
+   那么就用双指针，之前的嵌套层数是 数字数 - 2（双指针）
+   比如《三数之和》 就是 3 - 2 = 1，双指针之外的for嵌套就是一层
+   比如《四数之和》 就和 4 - 2 = 2，双指针之外的for嵌套就是两层
+   
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+    /*
+    给你一个由 n 个整数组成的数组 nums
+    a、b、c 和 d 互不相同
+    是否可以认为这n个整数互不相同呢？
+    不可以。。。这题的隐藏含义与三数之和一样
+    */
+    List<List<Integer>> ret = new ArrayList<>();
+    Arrays.sort(nums);
+    for(int i = 0; i < nums.length - 3; i++){
+        if(i > 0 && nums[i] == nums[i - 1])continue;//·······················注意这里
+        for(int j = i + 1; j < nums.length - 2; j++){
+            if(j != i + 1 && nums[j] == nums[j - 1])continue;//······················注意这里，第一个数要除掉，不然j的第一个值如果和i值一样，就取不到j的第一个值了
+            int l = j + 1;
+            int r = nums.length - 1;
+            while(l < r){
+                if(nums[i] + nums[j] + nums[l] + nums[r] > target)
+                    r--;
+                else if(nums[i] + nums[j] + nums[l] + nums[r] < target)
+                    l++;
+                else{
+                    List<Integer> list = new ArrayList<>();
+                    list.add(nums[i]);
+                    list.add(nums[j]);
+                    list.add(nums[l]);
+                    list.add(nums[r]);
+                    ret.add(list);
+                    r--;
+                    while(l < r && nums[r] == nums[r + 1]){
+                        r--;
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+    }
+}
