@@ -128,6 +128,50 @@ class Solution {
     }
 }
 
+//第三版 for循环中用 i = i + 2 * k 而不是 i++
+大大减少了代码行数
+class Solution {
+    public String reverseStr(String s, int k) {
+        char[] c = s.toCharArray();
+        int i;
+        for(i = 0; i < s.length(); i += 2 * k){//用闭区间
+            int l = i;
+            int r = i + k - 1 < s.length() ? i + k - 1 : s.length() - 1;
+            while(l < r){
+                char temp = c[l];
+                c[l] = c[r];
+                c[r] = temp;                    
+                l++;
+                r--;
+                }
+            /*
+            if(i + k - 1 < s.length()){
+                int l = i;
+                int r = i + k - 1;
+                while(l < r){
+                    char temp = c[l];
+                    c[l] = c[r];
+                    c[r] = temp;
+                    l++;
+                    r--;
+                }
+            }
+            else{
+                int l = i;
+                int r = s.length() - 1;
+                while(l < r){
+                    char temp = c[l];
+                    c[l] = c[r];
+                    c[r] = temp;
+                    l++;
+                    r--;
+                }
+            }
+            */
+        }
+        return String.valueOf(c);
+    }
+}
 
 //标准题解
 class Solution {
