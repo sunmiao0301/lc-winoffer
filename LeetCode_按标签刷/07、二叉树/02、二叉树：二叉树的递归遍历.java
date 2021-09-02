@@ -20,7 +20,7 @@ class tree{
 class solution{
   void preOrder(TreeNode root){
     if(root == null) return;
-    System.out.println(root);
+    System.out.println(root.val);
     preOrder(root.left);
     preOrder(root.right);
   }
@@ -31,7 +31,7 @@ class solution{
   void inOrder(TreeNode root){
     if(root == null) return;
     preOrder(root.left);
-    System.out.println(root);
+    System.out.println(root.val);
     preOrder(root.right);
   }
 }
@@ -42,7 +42,7 @@ class solution{
     if(root == null) return;
     preOrder(root.left);
     preOrder(root.right);
-    System.out.println(root);
+    System.out.println(root.val);
   }
 }
 
