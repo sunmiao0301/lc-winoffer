@@ -100,25 +100,39 @@ class Solution {
 实际上迭代法的非中序遍历的核心在于一句话：
 递归的调用过程是不断往左边走，当左边走不下去了，就打印节点，并转向右边，然后右边继续这个过程。
 只要理解了中序遍历的 左 根 右 的核心是这句话 就不难实现了
-
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-	public List<Integer> inorderTraversal(TreeNode root) {
-		List<Integer> res = new ArrayList<Integer>();
-		Stack<TreeNode> stack = new Stack<TreeNode>();
-		while(stack.size()>0 || root!=null) {
-			//不断往左子树方向走，每走一次就将当前节点保存到栈中
-			//这是模拟递归的调用
-			if(root!=null) {
-				stack.add(root);
-				root = root.left;
-			//当前节点为空，说明左边走到头了，从栈中弹出节点并保存
-			//然后转向右边节点，继续上面整个过程
-			} else {
-				TreeNode tmp = stack.pop();
-				res.add(tmp.val);
-				root = tmp.right;
-			}
-		}
-		return res;
-	}
+    /*
+    核心思路是一直到左（中的左）左不动了就入中 然后以中的右为中继续
+    */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        while(!stack.isEmpty() || root != null){
+            if(root != null){
+                stack.push(root);
+                root = root.left;
+            }
+            else{
+                TreeNode temp = stack.pop();
+                list.add(temp.val);
+                root = temp.right;
+            }
+        }
+        return list;
+    }
 }
