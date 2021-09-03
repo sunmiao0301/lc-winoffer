@@ -1,0 +1,90 @@
+//这个思路我当时想到了 但是我是想通过hashmap来记载是否读取过 但是又感觉太麻烦了
+//我没想到是通过加入一个空来实现 
+//或者是新建一个object类来实现
+
+//1）新建一个类来实现：
+class Solution:
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        WHITE, GRAY = 0, 1
+        res = []
+        stack = [(WHITE, root)]
+        while stack:
+            color, node = stack.pop()
+            if node is None: continue
+            if color == WHITE:
+                stack.append((WHITE, node.right))
+                stack.append((GRAY, node))
+                stack.append((WHITE, node.left))
+            else:
+                res.append(node.val)
+        return res
+        
+其核心思想如下：
+使用颜色标记节点的状态，新节点为白色，已访问的节点为灰色。
+如果遇到的节点为白色，则将其标记为灰色，然后将其右子节点、自身、左子节点依次入栈。
+如果遇到的节点为灰色，则将节点的值输出。
+使用这种方法实现的中序遍历如下：
+
+//2）加入空来实现：
+class Solution {
+public List<Integer> inorderTraversal(TreeNode root) {
+    List<Integer> result = new LinkedList<>();
+    Stack<TreeNode> st = new Stack<>();
+    if (root != null) st.push(root);
+    while (!st.empty()) {
+        TreeNode node = st.peek();
+        if (node != null) {
+            st.pop(); // 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中
+            if (node.right!=null) st.push(node.right);  // 添加右节点（空节点不入栈）
+            st.push(node);                          // 添加中节点
+            st.push(null); // 中节点访问过，但是还没有处理，加入空节点做为标记。
+
+            if (node.left!=null) st.push(node.left);    // 添加左节点（空节点不入栈）
+        } else { // 只有遇到空节点的时候，才将下一个节点放进结果集
+            st.pop();           // 将空节点弹出
+            node = st.peek();    // 重新取出栈中元素
+            st.pop();
+            result.add(node.val); // 加入到结果集
+        }
+    }
+    return result;
+}
+}
+
+//3）自己写的
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        if(root == null) return list;
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode temp = stack.pop();
+            if(temp == null){
+                list.add(stack.pop().val);
+                continue;
+            }
+            if(temp.left != null && temp.right != null){
+                stack.push(temp.right);
+                stack.push(temp);
+                stack.push(null);
+                stack.push(temp.left);
+            }
+            else if(temp.left != null){
+                stack.push(temp);
+                stack.push(null);
+                stack.push(temp.left);
+            }
+            else if(temp.right != null){
+                stack.push(temp.right);
+                stack.push(temp);
+                stack.push(null);
+            }
+            else{
+                stack.push(temp);
+                stack.push(null);
+            }
+        }
+        return list;
+    }
+}
