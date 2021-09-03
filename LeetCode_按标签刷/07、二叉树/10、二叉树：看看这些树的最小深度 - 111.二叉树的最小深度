@@ -1,0 +1,67 @@
+//第一版如下 出错 问题在于没有理解题意 
+最小深度是小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+执行结果：
+解答错误
+通过测试用例：
+28 / 52
+输入：
+[2,null,3,null,4,null,5,null,6]
+输出：
+1
+预期结果：
+5
+class Solution {
+    public int minDepth(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        int minDepth = 0;
+        if(root == null) return minDepth;
+        queue.offer(root);
+        minDepth++;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            while(size > 0){
+                TreeNode temp = queue.poll();
+                if(temp.left == null)
+                    return minDepth;
+                else
+                    queue.offer(temp.left);
+                if(temp.right == null)
+                    return minDepth;
+                else
+                    queue.offer(temp.right);
+                size--;
+            }
+            minDepth++;
+        }
+        return minDepth;
+    }
+}
+
+//第二版 通过 其实重点就在于要清楚 叶子结点 的概念
+一棵树当中没有子结点（即度为0）的结点称为叶子结点，简称“叶子”。 叶子是指出度为0的结点，又称为终端结点。
+class Solution {
+    public int minDepth(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        int minDepth = 0;
+        if(root == null) return minDepth;
+        queue.offer(root);
+        minDepth++;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            while(size > 0){
+                TreeNode temp = queue.poll();
+                if(temp.left == null && temp.right == null)//一棵树当中没有子结点（即度为0）的结点称为叶子结点，简称“叶子”。 叶子是指出度为0的结点，又称为终端结点。
+                    return minDepth;
+                if(temp.right != null)
+                    queue.offer(temp.right);
+                if(temp.left != null)
+                    queue.offer(temp.left);
+                size--;
+            }
+            minDepth++;
+        }
+        return 301;
+    }
+}
+
+//此外 本题还可以用递归法做
