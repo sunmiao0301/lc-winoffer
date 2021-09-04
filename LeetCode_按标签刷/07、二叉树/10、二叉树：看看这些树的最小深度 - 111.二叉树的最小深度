@@ -39,6 +39,10 @@ class Solution {
 
 //第二版 通过 其实重点就在于要清楚 叶子结点 的概念
 一棵树当中没有子结点（即度为0）的结点称为叶子结点，简称“叶子”。 叶子是指出度为0的结点，又称为终端结点。
+这一题用层次遍历（广度优先）肯定是最快的
+复杂度分析
+时间复杂度：O(N)O(N)，其中 NN 是树的节点数。对每个节点访问一次。
+空间复杂度：O(H)O(H)，其中 HH 是树的高度。空间复杂度主要取决于递归时栈空间的开销，最坏情况下，树呈现链状，空间复杂度为 O(N)O(N)。平均情况下树的高度与节点数的对数正相关，空间复杂度为 O(\log N)O(logN)。
 class Solution {
     public int minDepth(TreeNode root) {
         Queue<TreeNode> queue = new LinkedList<>();
@@ -64,4 +68,23 @@ class Solution {
     }
 }
 
-//此外 本题还可以用递归法做
+//此外 本题还可以用递归法（深度优先）做 相比广度优先法 这种方法要慢一些
+复杂度分析
+时间复杂度：O(N)O(N)，其中 NN 是树的节点数。对每个节点访问一次。
+空间复杂度：O(N)O(N)，其中 NN 是树的节点数。空间复杂度主要取决于队列的开销，队列中的元素个数不会超过树的节点数。
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root == null) return 0;
+        return helper(root, 1);
+    }
+    int helper(TreeNode root, int num){
+        if(root.left == null && root.right == null) 
+            return num;
+        else if(root.left == null)
+            return helper(root.right, num + 1);
+        else if(root.right == null)
+            return helper(root.left, num + 1);
+        else
+            return Math.min(helper(root.left ,num + 1), helper(root.right, num + 1));
+    }
+}
