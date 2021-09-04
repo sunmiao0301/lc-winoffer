@@ -1,0 +1,50 @@
+//第一版 通过 但是效率一般 用的是最基本的层序遍历（相当于模拟）
+//写完之后发现了下面这句话：
+//遍历树来统计节点是一种时间复杂度为 O(n) 的简单解决方案。你可以设计一个更快的算法吗？
+class Solution {
+    public int countNodes(TreeNode root) {
+    /*
+    完全二叉树通过最右边的值就可以判断这一层是否填满
+    那么用队列来实现的话，就是右边最先进队列 方便判断 然后总数通过一个等比数列层层记载
+    */
+        Queue<TreeNode> queue = new LinkedList<>();
+        int nodeNum = 0;
+        int nodeTwo = 1;
+        if(root == null) return nodeNum;
+        queue.offer(root);
+        nodeNum++;
+        while(queue.peek().right != null){
+            int size = queue.size();
+            while(size > 0){
+                TreeNode temp = queue.poll();
+                queue.offer(temp.right);
+                queue.offer(temp.left);
+                size--;
+            }
+            nodeTwo *= 2;
+            nodeNum += nodeTwo;
+        }
+        nodeTwo *= 2;
+        nodeNum += nodeTwo;
+        while(!queue.isEmpty() && nodeTwo != 0){
+            int size = queue.size();
+            while(size > 0){
+                TreeNode temp = queue.poll();
+                if(temp.right == null) 
+                    nodeNum--;
+                else{
+                    nodeTwo = 0;
+                    break;
+                }
+                if(temp.left == null)
+                    nodeNum--;
+                else{
+                    nodeTwo = 0;
+                    break;
+                }
+                size--;
+            }
+        }
+        return nodeNum;
+    }
+}
