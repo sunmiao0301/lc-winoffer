@@ -68,3 +68,37 @@ class Solution {
         return;
     }
 }
+
+//第三版 但其实 第二版 不是最简单的求最大深度的 写法 如下
+需要注意的是，之所以最大深度比最小深度写的简单 是因为：
+1）最小深度和最大深度 都是在找一个点 那个点的left和right都是null
+2）其中最小深度必须严格遵守这个left和right都为null 而不能用这个：
+        if(root == null) 
+            return num;
+3）但是最大深度不一样 对于一个由上而下的递归 最终肯定有一条递归路线能达到一个最深的地方 所以无需遵守left和right都为null 返回就完事了 反正最后的max会选出最大的那个。所以可以用：
+        if(root == null) 
+            return num;
+class Solution {
+    public int maxDepth(TreeNode root) {
+        return helper(root, 0);
+    }
+    int helper(TreeNode root, int num){//root, 0
+        if(root == null) 
+            return num;
+        else
+            return Math.max(helper(root.left, num + 1), helper(root.right, num + 1));
+    }
+}
+
+//当然 还有更简答的写法 无需helper函数 但是难想到一点：
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        } else {
+            int leftHeight = maxDepth(root.left);
+            int rightHeight = maxDepth(root.right);
+            return Math.max(leftHeight, rightHeight) + 1;
+        }
+    }
+}
