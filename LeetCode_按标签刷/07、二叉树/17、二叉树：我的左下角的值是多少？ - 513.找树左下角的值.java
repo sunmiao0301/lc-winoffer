@@ -56,6 +56,20 @@ class Solution {
 
 //第二版 递归法 我对这一题的递归法的思路就是 由上而下 从左至右 那么每个深度下的第一个值就刷新 该深度下的其余值不刷新 由此就可以得到最后的最深最左值？
 //对的 nice
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+38.2 MB
+, 在所有 Java 提交中击败了
+17.95%
+的用户
+通过测试用例：
+76 / 76
 class Solution {
     int[] arr = new int[]{0, 0};
     public int findBottomLeftValue(TreeNode root) {
