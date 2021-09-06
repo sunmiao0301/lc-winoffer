@@ -1,0 +1,36 @@
+//第一版 没通过 应该还是老问题 递归外部函数没法对主函数内的变量（root1, root2）进行修改 明天再改（新建一个树 或者合并到主函数里面试试） 考研室友睡觉了
+输入
+[1,3,2,5]
+[2,1,3,null,4,null,7]
+输出
+[3,4,5,5]
+预期结果
+[3,4,5,5,4,null,7]
+class Solution {
+    /*
+    合并的规则是如果两个节点重叠，那么将他们的值相加作为节点合并后的新值
+    否则不为 NULL 的节点将直接作为新二叉树的节点。
+    注意: 合并必须从两个树的根节点开始。
+    */
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        combine(root1, root2);
+        return root2;
+    }
+    void combine(TreeNode root1, TreeNode root2){
+        if(root1 != null && root2 != null){
+            root1.val = root1.val + root2.val;
+            combine(root1.left, root2.left);
+            combine(root1.right, root2.right);
+        }
+        else if(root1 != null){
+            root2 = new TreeNode(root1.val, null, null);
+            combine(root1.left, root2.left);
+            combine(root1.right, root2.right);
+        }
+        else if(root2 != null){
+            root1 = new TreeNode(root2.val, null, null);
+            combine(root1.left, root2.left);
+            combine(root1.right, root2.right);
+        }
+    }
+}
