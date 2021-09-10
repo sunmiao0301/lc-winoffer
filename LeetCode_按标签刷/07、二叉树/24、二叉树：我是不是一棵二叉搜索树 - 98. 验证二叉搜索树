@@ -1,0 +1,114 @@
+//第一版 执行出错 就感觉写的时候太简单了 不太对的上中等难度 果然不对
+出错原因是 对二叉搜索树还是理解的不够好 二叉搜索树不是要求当前节点的左节点小于当前节点，而是要求当前节点的左子树内的节点都小于当前节点。
+执行结果：
+解答错误
+通过测试用例：
+72 / 80
+输入：
+[5,4,6,null,null,3,7]
+输出：
+true
+预期结果：
+false
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root.left != null && root.right != null){
+            if(root.left.val < root.val && root.right.val > root.val)
+                return isValidBST(root.left) && isValidBST(root.right);
+            else
+                return false;
+        }
+        else if(root.left != null && root.right == null){
+            if(root.left.val < root.val)    
+                return isValidBST(root.left);
+            return false;
+        }
+        else if(root.left == null && root.right != null){
+            if(root.right.val > root.val)
+                return isValidBST(root.right);
+            return false;
+        }
+        else
+            return true;
+    }
+}
+
+//第二版 虽然解决了上一个错误 但是又有一个新错误例 明天再搞 室友睡觉
+执行结果：
+解答错误
+通过测试用例：
+16 / 80
+输入：
+[120,70,140,50,100,130,160,20,55,75,110,119,135,150,200]
+输出：
+true
+预期结果：
+false
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+    /*
+    再加个参数 根节点的右子树节点的左节点需要大于根节点 那么就加个参数用于存储？或者不加，直接全局变量
+    同理，根节点的左子树节点的右节点需要小于根节点
+    不能用全局变量 因为会进行多个递归 还得用参数
+    应该是用两个参数？因为是两层的就换一下
+    */
+    //if(root == null) return true;
+    if(root.left != null && root.right != null){
+        if(root.left.val < root.val && root.right.val > root.val)
+            return helper(root.left, root.val, false) && helper(root.right, root.val, true);
+        return false;
+    }
+    else if(root.left != null && root.right == null){
+        if(root.left.val < root.val)
+            return helper(root.left, root.val, false);
+        return false;
+    }
+    else if(root.left == null && root.right != null){
+        if(root.right.val > root.val)
+            return helper(root.right, root.val, true);
+        return false;
+    }
+    else
+        return true;
+    }
+    boolean helper(TreeNode root, int bef, boolean isRight){
+        if(root.left != null && root.right != null){
+            if(isRight){
+                if(root.left.val < root.val && root.left.val > bef && root.right.val > root.val)
+                    return helper(root.left, root.val, false) && helper(root.right, root.val, true);
+                return false;
+            }
+            else{
+                if(root.right.val > root.val && root.right.val < bef && root.left.val < root.val)
+                    return helper(root.left, root.val, false) && helper(root.right, root.val, true);
+                return false;
+            }
+        }
+        else if(root.left != null && root.right == null){
+            if(isRight){
+                if(root.left.val < root.val && root.left.val > bef)
+                    return helper(root.left, root.val, false);
+                return false;
+            }
+            else{
+                if(root.left.val < root.val)
+                    return helper(root.left, root.val, false);
+                return false;
+            }
+        }
+        else if(root.left == null && root.right != null){
+            if(isRight){
+                if(root.right.val > root.val)
+                    return helper(root.right, root.val, true);
+                return false;
+            }
+            else{
+                if(root.right.val > root.val && root.right.val < bef)
+                    return helper(root.left, root.val, false);
+                return false;
+            }            
+        }
+        else 
+            return true;
+    }
+}
