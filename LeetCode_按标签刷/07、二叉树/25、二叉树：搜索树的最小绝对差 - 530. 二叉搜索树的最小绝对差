@@ -1,0 +1,41 @@
+//第一版 想的太简单了 最近刷的少了 考虑问题都变简单了
+直接被样例打回：
+执行结果：
+解答错误
+通过测试用例：
+127 / 188
+输入：
+[236,104,701,null,227,null,911]
+输出：
+123
+预期结果：
+9
+class Solution {
+    int min = Integer.MAX_VALUE;
+    public int getMinimumDifference(TreeNode root) {
+    //要是最大值就好了 但是不行 那么比较每两个上下相邻的结点值即可
+    //树中至少有 2 个节点。
+    helper(root);
+    return min;
+    }
+    void helper(TreeNode root){
+        if(root.left != null){
+            min = root.val - root.left.val < min ? root.val - root.left.val : min;
+            helper(root.left);
+        }
+        if(root.right != null){
+            min = root.right.val - root.val < min ? root.right.val - root.val : min;
+            helper(root.right);
+        }
+    }
+}
+
+//室友睡觉 明天再做
+class Solution {
+    public int getMinimumDifference(TreeNode root) {
+    //感觉和按标题刷的时候的 上一题是一样的思路
+    //所有结点都是非负值 这个条件怎么用上？
+    //为什么是差的绝对值的最小值 绝对值意义何在？
+    //想到那句话：搜索二叉树的中序遍历是升序排列 可以用这个 左根右->栈实现
+    }
+}
