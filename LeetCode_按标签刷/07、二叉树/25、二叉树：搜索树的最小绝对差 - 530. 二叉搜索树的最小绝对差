@@ -30,7 +30,7 @@ class Solution {
     }
 }
 
-//室友睡觉 明天再做
+//第二版 室友睡觉 明天再做
 class Solution {
     public int getMinimumDifference(TreeNode root) {
     //感觉和按标题刷的时候的 上一题是一样的思路
@@ -39,3 +39,80 @@ class Solution {
     //想到那句话：搜索二叉树的中序遍历是升序排列 可以用这个 左根右->栈实现
     }
 }
+
+//第三版 没有用栈实现 直接用的递归
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+38.1 MB
+, 在所有 Java 提交中击败了
+68.18%
+的用户
+通过测试用例：
+188 / 188
+炫耀一下:
+class Solution {
+    int min = Integer.MAX_VALUE;
+    int bef;
+    int flag = 1;
+    public int getMinimumDifference(TreeNode root) {
+    //感觉和按标题刷的时候的 上一题是一样的思路
+    //所有结点都是非负值 这个条件怎么用上？ 没发现咋用上，找到用法了！！！非负数使得flag可以和bef用一个变量存就行了
+    //为什么是差的绝对值的最小值 绝对值意义何在？ 意义在于你要知道搜索二叉树各个相邻结点之间的大小关系
+    //想到那句话：搜索二叉树的中序遍历是升序排列 可以用这个 左根右->栈实现 但是明显还是递归简单
+        dfs(root);
+        return min; 
+    }
+    void dfs(TreeNode root){
+        if(root.left != null){
+            dfs(root.left);
+        }
+        if(flag == 1){
+            flag = 0;
+            bef = root.val;
+        }
+        else{
+            if(root.val - bef < min)
+                min = root.val - bef;
+            bef = root.val;
+        }
+        if(root.right != null){
+            dfs(root.right);
+        }
+    }
+}
+
+//实际上我这种写法还浪费了一个 int 的空间 几天没写思维变差了 flag其实可以和bef用一个存
+class Solution {
+    int pre;
+    int ans;
+
+    public int getMinimumDifference(TreeNode root) {
+        ans = Integer.MAX_VALUE;
+        pre = -1;
+        dfs(root);
+        return ans;
+    }
+
+    public void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        if (pre == -1) {
+            pre = root.val;
+        } else {
+            ans = Math.min(ans, root.val - pre);
+            pre = root.val;
+        }
+        dfs(root.right);
+    }
+}
+复杂度分析
+时间复杂度：O(n)O(n)，其中 nn 为二叉搜索树节点的个数。每个节点在中序遍历中都会被访问一次且只会被访问一次，因此总时间复杂度为 O(n)O(n)。
+空间复杂度：O(n)O(n)。递归函数的空间复杂度取决于递归的栈深度，而栈深度在二叉搜索树为一条链的情况下会达到 O(n)O(n) 级别。
