@@ -1,0 +1,37 @@
+//第一版 室友睡觉 明天继续
+class Solution {
+    public int[] findMode(TreeNode root) {
+    /*
+    有相同值 只能用递归
+    不只是二叉树，而是有相同值的二叉搜索树
+    我的思路是通过递归中序遍历 连续的话就通过参数记载 
+    直到不连续就刷新众数 但是怎么不要额外空间来存储众数呢？
+    好想用哈希表 但是不给加空间 但是怎么可能呢 必须得加 至少得加一个动态数组存一下吧
+    */
+    List<Integer> array = new ArrayList<>();
+    int max_freq = 0, bef = 一个不等于搜索二叉树中最小值的值;
+    dfs(root, 0);
+    //return array;
+    }
+    void dfs(TreeNode root, int cur_freq){
+        if(root.left != null){
+            dfs(root.left, cur_freq);
+        }
+        if(root.val == bef)
+            cur_freq++;
+        else
+            cur_freq = 1;
+        if(cur_freq == max_freq){
+            array.add(root.val);
+        }
+        else if(cur_freq > max_freq){
+            max_freq = cur_freq;
+            array.clear();
+            array.add(root.val);
+        }
+        bef = root.val;
+        if(root.right != null){
+            dfs(root.right, cur_freq);
+        }
+    }
+}
