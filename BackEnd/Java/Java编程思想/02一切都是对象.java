@@ -163,4 +163,84 @@ StaticTest st2 = new StaticTest();
 StaticTest.i++;
 其中，++运算符会使变量增值。此时，无论st1.i还是st2.i的值都是48。
 
+2.7 我们的第一个Java程序
+// Property.java 这是一行注释
+import java.util.*;// 这是在导入类
+
+public class Property {// 类名和文件名是一样的 文件中的一个类必须和文件同名（如果没这样做，编译器会作出反应）
+  public static void main(String[] args) {// main()的自变量是包含了String对象的一个数组 args不会在本程序中用到 但需要在这个地方列出 因为它们保存了在命令行调用的自变量
+    System.out.println(new Date());// 该语句一旦执行完毕 Data就不再需要 会被垃圾收集器回收
+    Properties p = System.getProperties();//文档中可以找到getProperties()方法是一个static方法 所以不必创建对象 直接调用即可
+    p.list(System.out);
+    /*
+    一些打印语句 注意加号+在不同情境下不同的表现
+    */
+    System.out.println("--- Memory Usage:");
+    Runtime rt = Runtime.getRuntime();
+    System.out.println("Total Memory = "
+                       + rt.totalMemory()
+                       + " Free Memory = "
+                       + rt.freeMemory());
+  }
+}
+
+2.8 注释和嵌入文档
+有三种类型的注释文档，它们对应于位于注释后面的元素：类、变量、方法。也就是在对应位置使用对应注释 如下
+/** 一个类注释 */
+public class docTest {
+/** 一个变量注释 */
+public int i;
+/** 一个方法注释 */
+public void f() {}
+}
+有一种提取注释的工具javadoc 但是只能提取public和protected的成员注释文档 private的成员注释文档拿不到（但是所有类型的类注释还是能提取到）
+
+2.8.4 引用其他类
+@see 类名
+@see 完整类名
+@see 完整类名#方法名
+
+2.8.5 类文档标记
+@version 版本信息
+@author 作者信息
+
+2.8.6 变量文档标记
+@see 引用
+
+2.8.7 方法文档标记
+@param 参数名 说明
+@return 说明（说明的内容是返回值的含义）
+@exception 完整类名 说明
+@deprecated 指出一些旧功能已由改进过的新功能取代
+
+2.8.8 文档实例
+//:Properties.java
+:冒号 指出了这是包含了源文件名字的一个注释行 最后一行也用这样一条注释结尾 标志着源代码清单的结束
+
+2.9 编码样式
+对于类名，大写类名中每个单词的首字母 如 
+Class AllTheColorsOfRainbow { ... }
+对于方法、字段、以及对象句柄名称，与类名一致，唯一不同在于标识符的第一个字母小写 如 
+Class AllTheColorsOfRainbow { 
+  int anIntegerRepresentingColors;
+  void changeTheHueOfTheColor(int newHue){
+    ...
+  }
+}
+
+2.10 总结
+
+2.11 练习
+(1) 参照本章的第一个例子，创建一个“Hello，World”程序，在屏幕上简单地显示这句话。注意在自己的类里只需一个方法（“main”方法会在程序启动时执行）。记住要把它设为static形式，并置入自变量列表——即使根本不会用到这个列表。用javac编译这个程序，再用java运行它。
+public InputHelloWorld {
+  public static void main (String[] args) {
+    System.out.println ("Hello, world");
+  }
+}
+
+(2) 写一个程序，打印出从命令行获取的三个自变量。
+
+(3) 找出Property.java第二个版本的代码，这是一个简单的注释文档示例。请对文件执行javadoc，并在自己的Web浏览器里观看结果。
+
+(4) 以练习(1)的程序为基础，向其中加入注释文档。利用javadoc，将这个注释文档提取为一个HTML文件，并用Web浏览器观看。
 
