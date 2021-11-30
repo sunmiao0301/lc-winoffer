@@ -150,4 +150,76 @@ public class RecycleA { // 垃圾回收器设计 —— 第一版
 
 16.4 改进设计
 
-16.4.1 “制作更多的对象”
+16.4.1 “制作更多的对象” —— “若设计过于复杂，就制作更多的对象”
+首先考虑Trash对象首次创建的地方，这是 main() 里的一个switch语句：
+    for(int i = 0; i < 30; i++)
+      switch((int)(Math.random() * 3)) {
+        case 0 :
+          bin.addElement(new
+            Aluminum(Math.random() * 100));
+          break;
+        case 1 :
+          bin.addElement(new
+            Paper(Math.random() * 100));
+          break;
+        case 2 :
+          bin.addElement(new
+            Glass(Math.random() * 100));
+      }
+在《Design Patterns》中，它被粗略地称呼为“创建范式”。
+要在这里应用的特殊范式是Factory方法的一种变体。
+在这里，Factory方法属于Trash的一名static（静态）成员
+class Info {
+  int type;
+  // Must change this to add another type:
+  static final int MAX_NUM = 4;
+  double data;
+  Info(int typeNum, double dat) {
+    type = typeNum % MAX_NUM;
+    data = dat;
+  }
+}
+用于这个简单示例的 factory() 方法如下：
+  static Trash factory(Info i) {
+    switch(i.type) {
+      default: // To quiet the compiler
+      case 0:
+        return new Aluminum(i.data);
+      case 1:
+        return new Paper(i.data);
+      case 2:
+        return new Glass(i.data);
+      // Two lines here:
+      case 3: 
+        return new Cardboard(i.data);
+    }
+  }
+新对象在main()中的创建现在变得非常简单和清爽：
+    for(int i = 0; i < 30; i++)
+      bin.addElement(
+        Trash.factory(
+          new Info(
+            (int)(Math.random() * Info.MAX_NUM),
+            Math.random() * 100)));
+
+......
+
+16.5 抽象的应用 —— “如果必须做不雅的事情，至少应将其本地化到一个类里”
+
+16.6 多重派遣
+
+16.7 访问器范式
+
+16.8 RTTI真的有害吗
+由于RTTI常被滥用（让它查找系统中的每一种类型），会造成代码的扩展能力大打折扣——添加一种新类型时，必须找出使用了RTTI的所有代码。
+即使仅遗漏了其中的一个，也不能从编译器那里得到任何帮助。
+
+16.9 总结
+
+16.10 练习
+(1) 将SingletonPattern.java作为起点，创建一个类，用它管理自己固定数量的对象。
+
+(2) 为TrashVisitor.java添加一个名为Plastic（塑料）的类。
+
+(3) 为DynaTrash.java同样添加一个Plastic（塑料）类。
+
