@@ -1,0 +1,19 @@
+\documentclass{setting}
+\begin{document}
+\pagenumbering{gobble} % suppress displaying page number
+
+%%%% 利用tikz来定位照片
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor = north east] at ($(current page.north east)+(-1.5cm,-1cm)$) {\includegraphics[height=2.5cm]{white}};
+\end{tikzpicture}%
+
+\name{孙淼}
+%\basicContactInfo{177-0966-0052}{hfut\_sm@163.com}
+\contactInfo{177-0966-0052}{hfut\_sm@163.com}{https://github.com/sunmiao0301}
+%\contactInfo{13xxx-xxx-xxx}{zheyu.ye18@alumni.imperial.ac.uk}{http://blog.yours.me}
+\centerline{现居地\;安徽合肥 | 生日\;2000-03-01 | 软件开发}
+\input{body}
+
+\input{footer}
+\end{document}
+
