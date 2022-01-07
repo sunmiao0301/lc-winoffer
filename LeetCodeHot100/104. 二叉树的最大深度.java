@@ -50,6 +50,9 @@ class Solution {
 
 ####
 方法一：深度优先搜索
+####
+本方法比我的第一版简单之处在于，其选择了用Math.max()替代了int depth，继而不需要一个全局变量depth
+也就能在一个函数里面就能完成递归而不需要额外的函数
 class Solution {
     public int maxDepth(TreeNode root) {
         if (root == null) {
