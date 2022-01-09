@@ -1,4 +1,3 @@
-```java
 # 摩尔投票不好写 写个排序的
 class Solution {
     public int majorityElement(int[] nums) {
@@ -36,7 +35,3 @@ class Solution {
         return cand_num;
     }
 }
-```
-
-[题解](https://leetcode-cn.com/problems/majority-element/solution/3chong-fang-fa-by-gfu-2/)
-
