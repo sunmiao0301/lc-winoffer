@@ -52,6 +52,9 @@ public class Solution {
             pA = pA == null ? headB : pA.next;
             pB = pB == null ? headA : pB.next;
         }
+        //从这里 return pA 也可以看出
+        //不需要像我一样进行一个flag
+        //因为直接如果没有相交，最后pA pB会同时到达null
         return pA;
     }
 }
