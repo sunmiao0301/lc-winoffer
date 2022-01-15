@@ -1,0 +1,36 @@
+第一版 存在问题 原因好像·是想直接修改树的结构 不能通过
+/**
+比如 root = null;就不生效
+     root.left = null;就生效
+     。。。
+*/
+class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        //一图胜千言
+        TreeNode deletedNode = findDeletedNode(root, key);
+        if(deletedNode == null) return root;
+        TreeNode temp = deletedNode.left;
+        deletedNode = deletedNode.right;//问题应该是出在这了，好像是不能直接对一个TreeNode进行修改，得通过其父节点.left|.right来修改
+        addTemp(temp, deletedNode);
+        return root; 
+    }
+    public TreeNode findDeletedNode(TreeNode root, int key){
+        //有二叉树不包含Key节点的可能性
+        if(root == null)
+            return null;
+        else if(key == root.val)
+            return root;
+        else if(key < root.val)
+            return findDeletedNode(root.left, key);
+        else
+            return findDeletedNode(root.right, key);
+    }
+    public void addTemp(TreeNode temp, TreeNode deletedNode){
+        if(deletedNode == null)
+            deletedNode = temp;
+        if(deletedNode.left != null)
+            addTemp(temp, deletedNode.left);
+        else
+            deletedNode.left = temp;
+    }
+}
