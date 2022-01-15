@@ -1,4 +1,6 @@
-第一版 存在问题 原因好像·是想直接修改树的结构 不能通过
+第一版 
+思路没任何问题
+但是实现存在问题 原因好像·是想直接修改树的结构 不能通过
 /**
 比如 root = null;就不生效
      root.left = null;就生效
@@ -32,5 +34,34 @@ class Solution {
             addTemp(temp, deletedNode.left);
         else
             deletedNode.left = temp;
+    }
+}
+
+#### 题解 思路与我一致 但它的实现没问题
+class Solution {
+ 
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null)return null;
+
+        if (key > root.val)
+            root.right = deleteNode(root.right, key); // 去右子树删除
+
+        else if(key < root.val)    
+            root.left = deleteNode(root.left, key);  // 去左子树删除
+
+        else  {  // 当前节点就是要删除的节点
+            
+            if (root.left == null)   return root.right;      // 情况1，欲删除节点无左子
+            else if (root.right == null)  return root.left;  // 情况2，欲删除节点无右子
+            else if (root.left!=null && root.right !=null){  // 情况3，欲删除节点左右子都有 
+                TreeNode node = root.right;   
+                while (node.left != null)      // 寻找欲删除节点右子树的最左节点
+                    node = node.left;
+
+                node.left = root.left;     // 将欲删除节点的左子树成为其右子树的最左节点的左子树
+                root = root.right;         // 欲删除节点的右子顶替其位置，节点被删除
+            }
+        }
+        return root;    
     }
 }
