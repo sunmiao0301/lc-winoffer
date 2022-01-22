@@ -1,3 +1,25 @@
+2rd
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        int mid = (left + right) / 2;
+        while(left <= right){//防止[2,5] 2 因为left == right的时候还得再判断一下
+            if(nums[mid] == target)
+                return mid;
+            else if(nums[mid] > target){
+                right = mid - 1;
+                mid = (left + right) / 2;
+            }
+            else{
+                left = mid + 1;
+                mid = (left + right) / 2;
+            }
+        }
+        return -1;
+    }
+}
+
 //第一版 空间复杂度不好 优化一下
 执行结果：
 通过
