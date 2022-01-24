@@ -1,3 +1,28 @@
+2rd
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        //我的思路是二分先找到正负分割点，然后左右轮流按照绝对值大小进行平方
+        //但是我思路僵了，不一定要先从最小到最大，从最大到最小构造新数组的话，就可以直接双指针从0和n-1位置就行了
+        int l = 0;
+        int r = nums.length - 1;
+        int index = r;
+        int[] res = new int[nums.length];
+        while(l <= r){
+            if(Math.abs(nums[l]) > Math.abs(nums[r])){
+                res[index] = nums[l] * nums[l];
+                index--;
+                l++;
+            }
+            else{
+                res[index] = nums[r] * nums[r];
+                index--;
+                r--;
+            }
+        }
+        return res;
+    }
+}
+
 //第一版
 非递减？啥意思，是非严格递增的意思么 好像是的
 四种序列的简单区别 
