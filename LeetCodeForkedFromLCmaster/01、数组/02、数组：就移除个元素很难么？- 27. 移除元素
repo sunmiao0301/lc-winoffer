@@ -1,3 +1,31 @@
+2rd
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        //例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。
+        //if(nums.length == 0)return 0;
+        int l = 0;
+        int r = nums.length - 1;
+        int valNums = 0;
+        while(l <= r){
+            if(nums[l] == val){
+                swap(l, r, nums);
+                //l++; //因为换过来的可能还是val 所以不能l++
+                r--;
+                valNums++;
+            }
+            else{
+                l++;
+            }
+        }
+        return nums.length - valNums;
+    }
+    public void swap(int a, int b, int[] nums){
+        int tmp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = tmp;
+    }
+}
+
 //第一版 一遍过
 执行结果：
 通过
