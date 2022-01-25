@@ -1,3 +1,57 @@
+2rd
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        int row = 0;//hang
+        int col = 0;//lie
+        int colBoundaryRight = n;
+        int rowBoundaryBottom = n;
+        int colBoundaryLeft = -1;
+        int rowBoundaryTop = 0;
+        int i = 1;
+        int nSquareAddOne = n * n + 1;
+        while(i < nSquareAddOne){
+            while(col < colBoundaryRight){
+                res[row][col] = i;
+                col++;
+                i++;
+            }
+            if(i >= nSquareAddOne)
+                break;
+            col--;
+            row++;//easy to forget
+            colBoundaryRight--;
+            while(row < rowBoundaryBottom){
+                res[row][col] = i;
+                row++;
+                i++;
+            }
+            row--;
+            col--;
+            rowBoundaryBottom--;
+            while(col > colBoundaryLeft){
+                res[row][col] = i;
+                col--;
+                i++;
+            }
+            if(i >= nSquareAddOne)
+                break;
+            col++;
+            row--;
+            colBoundaryLeft++;
+            while(row > rowBoundaryTop){
+                res[row][col] = i;
+                row--;
+                i++;
+            }
+            row++;
+            col++;
+            rowBoundaryTop++;
+        }
+    return res;
+    }
+}
+
 //第一版 一遍过
 
 卡住的原因是对二维数组没掌握牢固 把arr[行][列] 行 = row 列 = col 弄颠倒了 举个例子
