@@ -1,3 +1,60 @@
+2rd 效率一般
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        /** 
+        我的思路是维护一个数组Deque 
+        如果大于target 就把前面的删除 
+        一旦小于 就在后面再加 直到再次大于 
+        并且维护一个Deque总长的min值
+        */
+        Deque<Integer> d = new LinkedList<>();
+        int res = Integer.MAX_VALUE;
+        int dequeLen = 0;
+        int sum = 0;
+        int len = nums.length;
+        for(int i = 0; i < len; i++){
+            d.offerLast(nums[i]);
+            sum += nums[i];
+            dequeLen++;
+            while(sum >= target){
+                if(dequeLen < res)
+                    res = dequeLen;
+                sum -= d.pollFirst();
+                dequeLen--;
+            }
+        }
+        if(res == Integer.MAX_VALUE)
+            return 0;
+        return res;
+    }
+}
+
+2rd 最佳方法的思路是一致的 区别在于将双端队列Deque替换成了双指针
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int n = nums.length;
+        if (n == 0) {
+            return 0;
+        }
+        int ans = Integer.MAX_VALUE;
+        int start = 0, end = 0;
+        int sum = 0;
+        while (end < n) {
+            sum += nums[end];
+            while (sum >= s) {
+                ans = Math.min(ans, end - start + 1);
+                sum -= nums[start];
+                start++;
+            }
+            end++;
+        }
+        return ans == Integer.MAX_VALUE ? 0 : ans;
+    }
+}
+复杂度分析
+时间复杂度：O(n)，其中 n 是数组的长度。指针 start 和 end 最多各移动 n 次。
+空间复杂度：O(1)。
+
 //第一版 写到深夜 效率一般
 class Solution {
     public int minSubArrayLen(int target, int[] nums) {
