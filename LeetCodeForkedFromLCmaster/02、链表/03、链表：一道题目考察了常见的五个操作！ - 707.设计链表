@@ -1,3 +1,115 @@
+2rd 因为没加哨兵 所以写太丑了 还不对 2rd的第二版 我将加上哨兵 以此美化代码
+class MyLinkedList {
+        int size;
+        Node first;
+        Node last;
+
+    public MyLinkedList() {
+        size = 0;
+        first = null;
+        last = first;
+    }
+
+    public class Node{
+        public int val;
+        public Node next;
+        public Node(int v){
+            val = v;
+            next = null;
+        }
+    }
+    
+    public int get(int index) {
+        Node p = first;
+        while(index > 0 && p != null){
+            p = p.next;
+            index--;
+        }
+        if(p == null)
+            return -1;
+        return p.val;
+    }
+    
+    public void addAtHead(int val) {
+        Node newHead = new Node(val);
+        newHead.next = first;
+        first = newHead;
+        if(size == 0)
+            last = first;
+        size++;
+    }
+    
+    public void addAtTail(int val) {
+        if(size == 0){
+            addAtHead(val);
+        }
+        else{
+        Node newTail = new Node(val);
+        last.next = newTail;
+        last = last.next;
+        size++;
+        }
+    }
+    
+    public void addAtIndex(int index, int val) {
+        if(index <= 0){
+            addAtHead(val);
+            size++;
+        }
+        else if(index == size){
+            addAtTail(val);
+            size++;
+        }
+        else if(index > size)
+            return;
+        else{
+            index--;
+            Node p = first;
+            while(index > 0){
+                p = p.next;
+                index--;
+            }
+            Node newAtIndex = new Node(val);
+            newAtIndex.next = p.next;
+            p.next = newAtIndex;
+            size++;
+        }
+    }
+    
+    public void deleteAtIndex(int index) {
+        //index--;
+        if(index == 0){
+            Node p = first;
+            first = first.next;
+            p.next = null;//把链表搞好看一点
+            size--;
+        }
+        else if(index > 0 && index <= size){
+            index--;
+            Node p = first;
+            while(index > 0){
+                p = p.next;
+                index--;
+            }
+            p.next = p.next.next;
+            size--;
+        }
+        else
+            return;
+    }
+}
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList obj = new MyLinkedList();
+ * int param_1 = obj.get(index);
+ * obj.addAtHead(val);
+ * obj.addAtTail(val);
+ * obj.addAtIndex(index,val);
+ * obj.deleteAtIndex(index);
+ */
+
+
 先瞟了一眼单链表，然后自己实现了
 
 //单链表成功实现
