@@ -9,7 +9,8 @@
 |                                                              | 滑动窗口             | 一般用双指针来模拟滑动窗口                                   |
 |                                                              | 二维数组（螺旋矩阵） | 注意二维数组中有一维或者二维都是null的情况<br>注意数组是引用类型，且null和length == 0是不一样的 |
 | [02、链表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/02、链表) | 哨兵结点sentinel     |                                                              |
-|                                                              |                      |                                                              |
+|                                                              | 链表数据结构及实现   |                                                              |
+|                                                              | 经典 -- 反转链表     | 掌握海象之谜，你对链表问题的解法会变得像诗一样优雅           |
 | [03、哈希表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/03、哈希表) |                      |                                                              |
 | [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) |                      |                                                              |
 | [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                      |                                                              |
