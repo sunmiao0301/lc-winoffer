@@ -2,23 +2,23 @@
 
 **[https://leetcode-cn.com/](https://leetcode-cn.com/)**
 
-| 类型                                                         | 常见题型             | 备注                                       |
-| ------------------------------------------------------------ | -------------------- | ------------------------------------------ |
-| [01、数组](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/01、数组) | 有序数组             | 二分法                                     |
-|                                                              | 双指针               |                                            |
-|                                                              | 滑动窗口             | 一般用双指针来模拟滑动窗口                 |
-|                                                              | 二维数组（螺旋矩阵） | 注意二维数组中有一维或者二维都是null的情况 |
-| [02、链表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/02、链表) | 哨兵结点sentinel     |                                            |
-|                                                              |                      |                                            |
-| [03、哈希表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/03、哈希表) |                      |                                            |
-| [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) |                      |                                            |
-| [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                      |                                            |
-| [06、栈与队列](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/06、栈与队列) |                      |                                            |
-| [07、二叉树](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/07、二叉树) |                      |                                            |
-| [08、回溯算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/08、回溯算法) |                      |                                            |
-| [09、贪心算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/09、贪心算法) |                      |                                            |
-| [10、动态规划](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/10、动态规划) |                      |                                            |
-| [11、单调栈](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/11、单调栈) |                      |                                            |
+| 类型                                                         | 常见题型             | 备注                                                         |
+| ------------------------------------------------------------ | -------------------- | ------------------------------------------------------------ |
+| [01、数组](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/01、数组) | 有序数组             | 二分法                                                       |
+|                                                              | 双指针               |                                                              |
+|                                                              | 滑动窗口             | 一般用双指针来模拟滑动窗口                                   |
+|                                                              | 二维数组（螺旋矩阵） | 注意二维数组中有一维或者二维都是null的情况<br>注意数组是引用类型，且null和length == 0是不一样的 |
+| [02、链表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/02、链表) | 哨兵结点sentinel     |                                                              |
+|                                                              |                      |                                                              |
+| [03、哈希表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/03、哈希表) |                      |                                                              |
+| [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) |                      |                                                              |
+| [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                      |                                                              |
+| [06、栈与队列](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/06、栈与队列) |                      |                                                              |
+| [07、二叉树](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/07、二叉树) |                      |                                                              |
+| [08、回溯算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/08、回溯算法) |                      |                                                              |
+| [09、贪心算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/09、贪心算法) |                      |                                                              |
+| [10、动态规划](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/10、动态规划) |                      |                                                              |
+| [11、单调栈](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/11、单调栈) |                      |                                                              |
 
 ### Log
 
