@@ -18,6 +18,40 @@ class Solution {
         return mid;
     }
 }
+2rd 递归还是不熟练 不成系统 需加强 题解如下 
+//但是有一个疑问，递归到最后一层的时候直接就返回head了 前面的还没执行啊？
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
+    }
+}
+//如果用另外一种递归（我觉得可以称为将迭代递归化，哈哈）就写的很简单了
+// 递归 
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        return reverse(null, head);
+    }
+
+    private ListNode reverse(ListNode prev, ListNode cur) {
+        if (cur == null) {
+            return prev;
+        }
+        ListNode temp = null;
+        temp = cur.next;// 先保存下一个节点
+        cur.next = prev;// 反转
+        // 更新prev、cur位置
+        prev = cur;
+        cur = temp;
+        return reverse(prev, cur);
+    }
+}
+
 
 //第一版 一遍过 （看了题解可知 递归不如迭代 因为使用递归，将会使用隐式栈空间。递归深度可能会达到 n 层。）
 执行结果：
