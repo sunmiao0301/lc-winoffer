@@ -1,3 +1,24 @@
+2rd 掌握清楚了海象之谜之后 代码会变得像诗一样优雅 —— 迭代法
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null){
+            return head;
+        }
+        //先双指针吧
+        ListNode left = null;
+        ListNode mid = head;
+        ListNode right = head.next;
+        while(right != null){
+            mid.next = left;
+            left = mid;
+            mid = right;
+            right = right.next;
+        }
+        mid.next = left;
+        return mid;
+    }
+}
+
 //第一版 一遍过 （看了题解可知 递归不如迭代 因为使用递归，将会使用隐式栈空间。递归深度可能会达到 n 层。）
 执行结果：
 通过
