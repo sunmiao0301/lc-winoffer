@@ -13,6 +13,8 @@
 |                                                              | 经典 -- 反转链表                  | 掌握海象之谜和哨兵节点，你对链表问题的迭代解法会变得像诗一样优雅<br>但是递归法仍有问题 |
 |                                                              | 两两对换                          |                                                              |
 |                                                              | 经典 -- 删除链表的倒数第 N 个结点 | 快慢指针                                                     |
+|                                                              | 找**链表相交**的节点              | 无论如何，最终总会 a == b                                    |
+|                                                              | 环形链表                          | Ⅰ Ⅱ                                                          |
 | [03、哈希表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/03、哈希表) |                                   |                                                              |
 | [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) |                                   |                                                              |
 | [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                                   |                                                              |
