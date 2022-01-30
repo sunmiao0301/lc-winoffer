@@ -1,3 +1,52 @@
+2rd 用的额外空间 实际上使用常数空间也能实现
+执行结果：
+通过
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+39.8 MB
+, 在所有 Java 提交中击败了
+5.02%
+的用户
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ArrayList<ListNode> arr = new ArrayList<>();
+        ListNode sentinel = new ListNode(301, head);
+        head = sentinel;
+        int size = 0;
+        while(head != null){
+            arr.add(head);
+            head = head.next;
+            size++;
+        }
+        arr.add(null);//这样可以嘛
+        arr.get(size - n - 1).next = arr.get(size - n + 1);
+        return sentinel.next;
+    }
+}
+2rd 双指针 配上哨兵节点就更诗意了
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode sentinel = new ListNode(301, head);
+        ListNode slow = sentinel;
+        ListNode fast = sentinel;
+        while(n > -1){
+            fast = fast.next;
+            n--;
+        }
+        while(fast != null){
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return sentinel.next;
+    }
+}
+
+
 //第一版 一遍过
 执行结果：
 通过
