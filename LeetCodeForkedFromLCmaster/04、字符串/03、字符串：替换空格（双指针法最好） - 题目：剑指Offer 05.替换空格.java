@@ -1,3 +1,17 @@
+2nd
+class Solution{
+    public String replaceSpace(String s){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == ' ')
+                sb.append("%20");//StringBuilder类的append方法可以跟字符串
+            else
+                sb.append(s.charAt(i));//StringBuilder类的append方法可以跟字符
+        }
+        return sb.toString();
+    }
+}
+
 //第一版 效率不行
 执行结果：
 通过
