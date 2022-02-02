@@ -1,4 +1,4 @@
-2rd 掌握清楚了海象之谜之后 代码会变得像诗一样优雅 —— 迭代法
+2nd 掌握清楚了海象之谜之后 代码会变得像诗一样优雅 —— 迭代法
 class Solution {
     public ListNode reverseList(ListNode head) {
         if(head == null){

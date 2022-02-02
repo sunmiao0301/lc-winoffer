@@ -1,4 +1,4 @@
-2rd
+2nd
 class Solution {
     public int removeElement(int[] nums, int val) {
         //例如，函数返回的新长度为 2 ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。

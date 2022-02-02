@@ -1,4 +1,4 @@
-2rd 因为没加哨兵 所以写太丑了 还不对 2rd的第二版 我将加上哨兵 以此美化代码
+2nd 因为没加哨兵 所以写太丑了 还不对 2nd的第二版 我将加上哨兵 以此美化代码
 class MyLinkedList {
         int size;
         Node first;

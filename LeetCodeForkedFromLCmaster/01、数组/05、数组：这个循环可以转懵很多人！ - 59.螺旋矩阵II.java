@@ -1,4 +1,4 @@
-2rd
+2nd
 class Solution {
     public int[][] generateMatrix(int n) {
         int[][] res = new int[n][n];

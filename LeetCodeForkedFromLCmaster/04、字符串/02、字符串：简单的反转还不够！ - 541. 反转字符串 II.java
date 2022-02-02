@@ -1,3 +1,34 @@
+2nd 难度是没有的 主要是注意对字符串进行“原地置换”操作的方法如下
+/**
+ * char[] ch = s.toStringArray();
+ * 以及最后的
+ * return new String(ch);
+ */
+class Solution {
+    public String reverseStr(String s, int k) {
+        char[] ch = s.toCharArray();
+        int len = s.length();//ch.length
+        for(int i = 0; i < len; i += 2 * k){
+            if(i + k - 1 >= len){
+                rangeSwap(ch, i, len - 1);
+            }
+            else{
+                rangeSwap(ch, i, i + k - 1);
+            }
+        }
+        return new String(ch);
+    }
+    public void rangeSwap(char[] ch, int i, int j){
+        while(i < j){
+           char tmp = ch[i];
+           ch[i] = ch[j];
+           ch[j] = tmp;
+           i++;
+           j--;
+        }
+    }
+}
+
 //第一版 一遍过 但是效率一般
 难度不大 唯一需要注意的是 刚开始写就得确定自己要用的是开区间还是闭区间！（这里我选择的是闭区间）
 

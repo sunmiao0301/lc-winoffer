@@ -14,9 +14,9 @@
 |                                                              | 两两对换                          |                                                              |
 |                                                              | 经典 -- 删除链表的倒数第 N 个结点 | 快慢指针                                                     |
 |                                                              | 找**链表相交**的节点              | 无论如何，最终总会 a == b                                    |
-|                                                              | 环形链表                          | Ⅰ Ⅱ                                                          |
+|                                                              | 环形链表Ⅰ，Ⅱ                      |                                                              |
 | [03、哈希表](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/03、哈希表) |                                   |                                                              |
-| [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) |                                   |                                                              |
+| [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) | 反转字符串Ⅰ，Ⅱ                    | 唯一收获：swap函数可以用位运算实现                           |
 | [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                                   |                                                              |
 | [06、栈与队列](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/06、栈与队列) |                                   |                                                              |
 | [07、二叉树](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/07、二叉树) |                                   |                                                              |

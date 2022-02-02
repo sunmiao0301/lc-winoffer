@@ -1,4 +1,4 @@
-2rd 不够优雅 太长 （可见最下面的题解）
+2nd 不够优雅 太长 （可见最下面的题解）
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode a = headA;

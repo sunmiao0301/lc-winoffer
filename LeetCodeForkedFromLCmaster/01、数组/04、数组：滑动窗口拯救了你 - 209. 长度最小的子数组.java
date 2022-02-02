@@ -1,4 +1,4 @@
-2rd
+2nd
 class Solution {
     public int[] sortedSquares(int[] nums) {
         //我的思路是二分先找到正负分割点，然后左右轮流按照绝对值大小进行平方

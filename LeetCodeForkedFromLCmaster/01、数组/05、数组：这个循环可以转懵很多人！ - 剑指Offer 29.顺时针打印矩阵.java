@@ -1,4 +1,4 @@
-2rd
+2nd
 执行结果：
 执行出错
 WARNING: A command line option has enabled the Security Manager
