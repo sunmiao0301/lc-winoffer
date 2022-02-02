@@ -1,3 +1,28 @@
+2nd StringBuilder还是很好用的
+class Solution {
+    public String reverseWords(String s) {
+        Stack<String> stack = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == (' ')){
+                if(sb.length() > 0)
+                    stack.push(sb.toString());
+                sb.delete(0, sb.length());
+            }
+            else
+                sb.append(s.charAt(i));
+        }
+        if(sb.length() > 0)//防止sb = ""的时候放入一个""导致错误
+            stack.push(sb.toString());
+        sb.delete(0, sb.length());
+        sb.append(stack.pop());
+        while(!stack.isEmpty()){
+            sb.append(" " + stack.pop());
+        }
+        return sb.toString();
+    }
+}
+
 //第一遍 过了 但是写了蛮久 效率也不高 还是得学习一个好一点的标准思路 毕竟是常考题
 
 执行结果：
