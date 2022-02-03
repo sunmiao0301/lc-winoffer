@@ -19,6 +19,9 @@
 | [04、字符串](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/04、字符串) | 反转字符串Ⅰ，Ⅱ                    | 1）swap函数可以用位运算实现<br>2）对字符串进行原地替换，可以用<br>`char[] ch = s.toStringArray();`<br>`return new String(ch);` |
 |                                                              | 替换空格(或是替换其他)            | 1）对字符串进行（非原地替换）新建和替换，可以用StringBuider类的方法append()，其中append既可以跟字符串s，也可以字符c作为参数 |
 |                                                              | 翻转字符串里的单词                | 清空StringBuilder sb<br>`sb.delete(0, sb.length());`         |
+|                                                              | 左旋转字符串                      | StringBuilder                                                |
+|                                                              |                                   | KMP算法                                                      |
+|                                                              |                                   |                                                              |
 | [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                                   |                                                              |
 | [06、栈与队列](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/06、栈与队列) |                                   |                                                              |
 | [07、二叉树](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/07、二叉树) |                                   |                                                              |
