@@ -1,3 +1,49 @@
+2nd
+先序遍历 迭代法
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        //根左右
+        //递归算法很简单，你可以通过迭代算法完成吗？
+        //队列× 应该是栈
+        LinkedList<TreeNode> stack = new LinkedList<>();
+        List<Integer> res = new LinkedList<>();
+        if(root == null) return res;
+
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode tmp = stack.pop();
+            res.add(tmp.val);
+            if(tmp.right != null)
+                stack.push(tmp.right);
+            if(tmp.left != null)
+                stack.push(tmp.left);
+        }
+        return res;
+    }
+}
+
+后序遍历 迭代法
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        //左右根
+        LinkedList<TreeNode> stack = new LinkedList<>();
+        LinkedList<Integer> res = new LinkedList<>();
+        if(root == null) return res;
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode tmp = stack.pop();
+            res.addFirst(tmp.val);
+            if(tmp.left != null)
+                stack.push(tmp.left);
+            if(tmp.right != null)
+                stack.push(tmp.right);
+        }
+        return res;
+    }
+}
+
+
+
 /*
 首先还是二叉树的定义来一遍 
 */
