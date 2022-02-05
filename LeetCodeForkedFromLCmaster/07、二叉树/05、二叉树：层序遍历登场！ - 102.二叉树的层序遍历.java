@@ -1,3 +1,39 @@
+2nd
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        LinkedList<Integer> valueOfQueue = new LinkedList<>();
+
+        if(root == null) return res;
+        
+        queue.add(root);
+        valueOfQueue.add(root.val);
+
+        res.add((LinkedList<Integer>)valueOfQueue.clone());
+
+        int flag = 1;
+        while(!queue.isEmpty()){
+            TreeNode p = queue.removeFirst();
+            valueOfQueue.removeFirst();
+            flag--;
+            if(p.left != null){
+                queue.add(p.left);
+                valueOfQueue.add(p.left.val);
+            }
+            if(p.right != null){
+                queue.add(p.right);
+                valueOfQueue.add(p.right.val);
+            }
+            if(flag == 0 && !queue.isEmpty()){
+                res.add( (LinkedList<Integer>) valueOfQueue.clone());
+                flag = queue.size();
+            }
+        }
+        return res;
+    }
+}
+
 //第一版 easy
 执行结果：
 通过
