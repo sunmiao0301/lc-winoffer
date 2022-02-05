@@ -1,3 +1,21 @@
+2nd
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        //树中节点数目在范围 [1, 1000] 内
+        return helper(root.left, root.right);
+    }
+    public boolean helper(TreeNode left, TreeNode right){
+        if(left == null && right == null)
+            return true;
+        else if(left == null || right == null)
+            return false;
+        else if(left.val != right.val)
+            return false;
+        else
+            return helper(left.left, right.right) && helper(left.right, right.left);
+    }
+}
+
 //第一版 一遍过 递归法
 执行结果：
 通过
