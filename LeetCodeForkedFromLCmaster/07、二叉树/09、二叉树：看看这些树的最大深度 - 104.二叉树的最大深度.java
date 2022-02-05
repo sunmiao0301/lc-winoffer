@@ -1,3 +1,32 @@
+2nd
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root == null)
+            return 0;
+        if(root.left == null && root.right == null)
+            return 1;
+        else if(root.left == null && root.right != null)
+            return 1 + maxDepth(root.right);
+        else if(root.left != null && root.right == null)
+            return 1 + maxDepth(root.left);        
+        else//(root.left != null && root.right != null)
+            return Math.max(1 + maxDepth(root.left), 1 + maxDepth(root.right));
+    }
+}
+#### 2nd看的题解
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        } else {
+            int leftHeight = maxDepth(root.left);
+            int rightHeight = maxDepth(root.right);
+            return Math.max(leftHeight, rightHeight) + 1;
+        }
+    }
+}
+
+
 //第一版 用的是层序遍历 统计层数 虽然通过 但是时间复杂度很差
 执行结果：
 通过
