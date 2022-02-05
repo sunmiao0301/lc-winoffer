@@ -1,3 +1,19 @@
+2nd
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root == null)
+            return 0;
+        if(root.left == null && root.right == null)
+            return 1;
+        else if(root.left == null && root.right != null)
+            return 1 + minDepth(root.right);
+        else if(root.left != null && root.right == null)
+            return 1 + minDepth(root.left);
+        else
+            return Math.min(1 + minDepth(root.right), 1 + minDepth(root.left));
+    }
+}
+
 //第一版如下 出错 问题在于没有理解题意 
 最小深度是小深度是从根节点到最近叶子节点的最短路径上的节点数量。
 执行结果：
