@@ -24,7 +24,12 @@
 |                                                              |                                   |                                                              |
 | [05、双指针法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/05、双指针法) |                                   |                                                              |
 | [06、栈与队列](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/06、栈与队列) |                                   |                                                              |
-| [07、二叉树](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/07、二叉树) |                                   |                                                              |
+| [07、二叉树](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/07、二叉树) | 深度优先遍历（前中后序遍历）DFS   | 1）递归法<br>2）迭代法（由于递归就是隐形栈，所以递归能做的，栈也能）<br>迭代法中序遍历与前后序遍历略有不同 |
+|                                                              | 广度优先遍历BFS（层序遍历）       | 只用一个队列存储每层节点的话，需要用一个整数值存储上一层的节点数<br>1）一个用于返回的List<List< Integer>> <br>2）一个用于存储某层节点的list< TreeNode><br>3）一个用于存储某层节点值的list< Integer><br>4）整数值i用于记载list< TreeNode>中当前有多少节点是上一层的 |
+|                                                              | 翻转二叉树                        | homebrew<br>下面的四行代码很好用<br>`        TreeNode left = invertTree(root.left);`<br>`TreeNode right = invertTree(root.right);`<br>`root.left = right;`<br>`root.right = left;` |
+|                                                              | 对称二叉树                        |                                                              |
+|                                                              | 二叉树的最大深度                  |                                                              |
+|                                                              | 二叉树的最小深度                  | 和最大深度代码结构一致                                       |
 | [08、回溯算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/08、回溯算法) |                                   |                                                              |
 | [09、贪心算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/09、贪心算法) |                                   |                                                              |
 | [10、动态规划](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/10、动态规划) |                                   |                                                              |
@@ -40,4 +45,4 @@
 
 ##### 2022.1.17 解决一下pointer问题[我的总结](https://github.com/sunmiao0301/LC-Winoffer/blob/main/LeetCodeForkedFromLCmaster/07%E3%80%81%E4%BA%8C%E5%8F%89%E6%A0%91/31%E3%80%81%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%9A%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C%20-%20450.%20%E5%88%A0%E9%99%A4%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9.md)
 
-##### 2022.1.22 第二遍 有序数组 -> 二分 -> 左闭右闭区间or左闭右开区间
+##### 2022.1.22 第二遍 有序数组 -> 二分 -> 左闭右闭区间or**左闭右开区间**
