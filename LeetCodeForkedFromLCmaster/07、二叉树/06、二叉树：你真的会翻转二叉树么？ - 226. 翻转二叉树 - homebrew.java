@@ -1,3 +1,36 @@
+2nd
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if(root == null)
+            return null;
+        helper(root);
+        if(root.left != null)
+            invertTree(root.left);
+        if(root.right != null)
+            invertTree(root.right);
+        return root;
+    }
+    void helper(TreeNode root){
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+    }
+}
+#### 
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+}
+
+
 //第一版 一遍过
 执行结果：
 通过
