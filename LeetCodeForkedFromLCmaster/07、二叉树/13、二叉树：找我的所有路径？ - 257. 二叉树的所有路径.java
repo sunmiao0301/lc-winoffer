@@ -1,3 +1,27 @@
+2nd
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new LinkedList<>();
+        //树中节点的数目在范围 [1, 100] 内
+        //StringBuilder sb = new StringBuilder();
+        helper(root, new StringBuilder(), res);
+        return res;
+    }
+    public void helper(TreeNode root, StringBuilder sb, List<String> res){
+        sb.append(root.val + "->");
+        if(root.left == null && root.right == null){
+            sb.delete(sb.length() - 2, sb.length());
+            res.add(sb.toString());
+        }
+        else{
+            if(root.left != null)
+                helper(root.left, new StringBuilder(sb.toString()), res);
+            if(root.right != null)
+                helper(root.right, new StringBuilder(sb.toString()), res);
+        }
+    }
+}
+
 //第一版 通过 但是效率不高
 执行结果：
 通过
