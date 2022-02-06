@@ -1,3 +1,33 @@
+2nd
+第二次第一版我是自顶向下写的 也知道这样写肯定不是最好的办法
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        //分析一下可知 平衡二叉树需要每个节点的左右子树高度差都满足 （root满足不代表其子节点满足）
+        //直接用helper()DFS得到每个子树高度的方法 有很多次重复遍历 肯定不是最快
+        if(root == null)
+            return true;
+        //if(root.left != null && root.right != null)
+            return isBalanced(root.left) && isBalanced(root.right) && (Math.abs(helper(root.left) - helper(root.right)) > 1 ? false : true);
+    }
+    public int helper(TreeNode root){
+        if(root == null)
+            return 0;
+        /**
+        else if(root.left == null && root.right == null)
+            return 1;
+        else if(root.left != null && root.right == null)
+            return 1 + helper(root.left);
+        else if(root.left == null && root.right != null)
+            return 1 + helper(root.right);
+        */
+        //上面这几行可以省略
+        else
+            return Math.max(1 + helper(root.left), 1 + helper(root.right));
+    }
+}
+
+
+
 /*
 第一版 这一题的难度其实在于如何判断和理解 最小高度和最大高度
 但是这一题的题干中 其实是给定一个二叉树，判断它是否是高度平衡的二叉树。
