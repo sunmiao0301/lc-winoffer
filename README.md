@@ -28,8 +28,11 @@
 |                                                              | 广度优先遍历BFS（层序遍历）       | 只用一个队列存储每层节点的话，需要用一个整数值存储上一层的节点数<br>1）一个用于返回的List<List< Integer>> <br>2）一个用于存储某层节点的list< TreeNode><br>3）一个用于存储某层节点值的list< Integer><br>4）整数值i用于记载list< TreeNode>中当前有多少节点是上一层的 |
 |                                                              | 翻转二叉树                        | homebrew<br>下面的四行代码很好用<br>`        TreeNode left = invertTree(root.left);`<br>`TreeNode right = invertTree(root.right);`<br>`root.left = right;`<br>`root.right = left;` |
 |                                                              | 对称二叉树                        |                                                              |
-|                                                              | 二叉树的最大深度                  |                                                              |
+|                                                              | 二叉树的最大深度                  | 无需helper()                                                 |
 |                                                              | 二叉树的最小深度                  | 和最大深度代码结构一致                                       |
+|                                                              | 完全二叉树的节点个数              | 1）二分查找 + 位运算<br>2）DFS暴力                           |
+|                                                              | 平衡二叉树                        | 自底向上 快<br>自顶向下 慢                                   |
+|                                                              | 二叉树的所有路径                  | 参数传递的本质依旧是GRoE                                     |
 | [08、回溯算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/08、回溯算法) |                                   |                                                              |
 | [09、贪心算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/09、贪心算法) |                                   |                                                              |
 | [10、动态规划](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/10、动态规划) |                                   |                                                              |
