@@ -1,3 +1,80 @@
+2nd 效率很差
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        //如果用广度的话，肯定简单。
+        //但是转念一想，深度优先不会有什么好处啊，因为你不到最右边的树的时候没法确认 “最底层”
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        //int depth = 0;
+        queue.add(root);//addLast and 至少一个节点
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                if(queue.get(i).left != null){
+                    queue.add(queue.get(i).left);
+                }
+                if(queue.get(i).right != null){
+                    queue.add(queue.get(i).right);
+                }
+            }
+            if(queue.size() != size){
+                //return queue.get(0).val;
+                while(size > 0){
+                    queue.removeFirst();
+                    size--;
+                }
+            }
+            else{
+                return queue.get(0).val;
+            }
+        }
+        return 301;
+    }
+}
+2nd 优化一下 效率2ms，差不多了，但是还是没到100%
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        //如果用广度的话，肯定简单。
+        //但是转念一想，深度优先不会有什么好处啊，因为你不到最右边的树的时候没法确认 “最底层”
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        int ret = 0;
+        queue.add(root);//addLast and 至少一个节点
+        while(!queue.isEmpty()){
+            int flag = 0;
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                if(queue.getFirst().left != null){
+                    queue.add(queue.getFirst().left);
+                }
+                if(queue.getFirst().right != null){
+                    queue.add(queue.getFirst().right);
+                }
+                if(flag == 0){
+                    ret = queue.removeFirst().val;
+                    flag = 1;
+                }else{
+                    queue.removeFirst();
+                }
+            }
+        }
+        return ret;
+    }
+}
+2nd
+####
+更优雅的写法 但是不是我写的
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            root = queue.poll();
+            if (root.right != null) queue.offer(root.right);
+            if (root.left != null) queue.offer(root.left);
+        }
+        return root.val;
+    }
+}
+
 //第一版 根据样例来看 我对题意的理解应该对的 因为[0,null,-1]的答案是0不是-1 但是效率不是最好 效率最好的是递归法
 执行结果：
 通过
