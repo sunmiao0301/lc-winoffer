@@ -1,3 +1,31 @@
+2nd 100% 但是不够优雅
+class Solution {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        return helper(root, targetSum, 0);
+    }
+    public boolean helper(TreeNode root, int targetSum, int currentSum){
+        if(root == null)
+            return false;
+        else if(root.left == null && root.right == null && currentSum + root.val == targetSum)
+            return true;
+        else{
+            return helper(root.left, targetSum, currentSum + root.val) || helper(root.right, targetSum, currentSum + root.val);
+        }
+    }
+}
+#### 想要优雅 肯定不能传参currentSum,所以得反过来减去 
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null) {
+            return sum == root.val;
+        }
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+    }
+}
+
 //第一版 差点一遍过 被测试样例坑了
 执行结果：
 解答错误
