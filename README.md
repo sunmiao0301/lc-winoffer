@@ -30,9 +30,12 @@
 |                                                              | 对称二叉树                        |                                                              |
 |                                                              | 二叉树的最大深度                  | 无需helper()                                                 |
 |                                                              | 二叉树的最小深度                  | 和最大深度代码结构一致                                       |
-|                                                              | 完全二叉树的节点个数              | 1）二分查找 + 位运算<br>2）DFS暴力                           |
-|                                                              | 平衡二叉树                        | 自底向上 快<br>自顶向下 慢                                   |
+|                                                              | 完全二叉树的节点个数              | 1）二分查找 + 位运算 **难**<br>2）DFS暴力 易                 |
+|                                                              | 平衡二叉树                        | 自顶向下 慢但是易<br/>自底向上 快但是**难一点**              |
 |                                                              | 二叉树的所有路径                  | 参数传递的本质依旧是GRoE                                     |
+|                                                              | 左叶子之和                        | 广度优先的话很简单<br>深度优先的话如果不用全局变量，需要一点编程思想。 |
+|                                                              | 找树左下角的值                    | LinkedList层序遍历<br>1）普通思路：从左到右层序遍历（配合for循环即可）<br>2）巧妙思路：从右往左层序遍历，LinkedList中最后一个值就是左下角的值 |
+|                                                              | 路径总和                          | 如果新建一个传参currentSum，需要一个helper()<br>更聪明的方法是用targetSum - TreeNode.val |
 | [08、回溯算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/08、回溯算法) |                                   |                                                              |
 | [09、贪心算法](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/09、贪心算法) |                                   |                                                              |
 | [10、动态规划](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/10、动态规划) |                                   |                                                              |
