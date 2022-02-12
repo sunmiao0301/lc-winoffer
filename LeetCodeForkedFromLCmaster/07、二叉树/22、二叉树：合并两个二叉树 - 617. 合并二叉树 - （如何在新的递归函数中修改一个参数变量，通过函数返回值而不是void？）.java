@@ -1,3 +1,55 @@
+2nd 关于这一题中需要注意的，请见这一题在主页上的readme备注。
+class Solution {
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if(root1 == null || root2 == null){
+            return root1 == null ? root2 : root1;
+        }
+        helper(root1, root2);
+        root1.val += root2.val;
+        return root1;
+    }
+    public void helper(TreeNode root1, TreeNode root2){
+        if(root1.left != null && root2.left != null){
+            root1.left.val += root2.left.val;
+            helper(root1.left, root2.left);
+        }
+        else if(root1.left == null){
+            root1.left = root2.left;
+        }
+        else{//if(root1.left != null && root2.left == null){
+
+        }
+
+        if(root1.right != null && root2.right != null){
+            root1.right.val += root2.right.val;
+            helper(root1.right, root2.right);
+        }
+        else if(root1.right == null){
+            root1.right = root2.right;
+        }
+        else{ //if(root1.left != null && root2.left == null){
+        }
+    }
+}
+2nd
+再优化 通过
+root.left =
+root.right =
+摆脱了helper()函数的束缚，一个方法直接解决。
+class Solution {
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if(root1 == null || root2 == null){
+            return root1 == null ? root2 : root1;
+        }
+        root1.val += root2.val;
+        root1.left = mergeTrees(root1.left, root2.left);
+        root1.right = mergeTrees(root1.right, root2.right);
+        return root1;
+    }
+}
+
+
+
 //第一版 没通过 应该还是老问题 递归外部函数没法对主函数内的变量（root1, root2）进行修改 明天再改（新建一个树 或者合并到主函数里面试试）考研室友睡觉了
 输入
 [1,3,2,5]
