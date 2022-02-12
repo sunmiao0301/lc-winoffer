@@ -1,3 +1,17 @@
+2nd
+Solution {
+    public TreeNode searchBST(TreeNode root, int val) {
+        if(root == null)
+            return root;
+        else if(root.val > val)
+            return searchBST(root.left, val);
+        else if(root.val < val)
+            return searchBST(root.right, val);
+        else
+            return root;
+    }
+}
+
 //第一版 一遍过 效率也不错
 执行结果：
 通过
