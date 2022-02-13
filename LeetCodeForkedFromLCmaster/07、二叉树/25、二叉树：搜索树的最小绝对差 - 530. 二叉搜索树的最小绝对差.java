@@ -1,3 +1,49 @@
+2nd
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int getMinimumDifference(TreeNode root) {
+        //一样的道理，中序遍历，然后找前后相邻两个差值的绝对值最小值
+        //左根右
+        int[] min = new int[]{Integer.MAX_VALUE};
+        int[] preValue = new int[]{Integer.MAX_VALUE};
+        TreeNode left = findLeft(root);
+        dfs(root, min, preValue, left);
+        return min[0];
+    }
+    public void dfs(TreeNode root, int[] min, int[] preValue, TreeNode left){
+        if(root.left != null)
+            dfs(root.left, min, preValue, left);
+        if(root != left){
+            int tmp = Math.abs(preValue[0] - root.val);
+            if(tmp < min[0])
+                min[0] = tmp;
+        }
+        preValue[0] = root.val;
+        if(root.right != null)
+            dfs(root.right, min, preValue, left);
+    }
+    public TreeNode findLeft(TreeNode root){
+        if(root.left != null)
+            return findLeft(root.left);
+        else
+            return root;
+    }
+}
+
 //第一版 想的太简单了 最近刷的少了 考虑问题都变简单了
 直接被样例打回：
 执行结果：
