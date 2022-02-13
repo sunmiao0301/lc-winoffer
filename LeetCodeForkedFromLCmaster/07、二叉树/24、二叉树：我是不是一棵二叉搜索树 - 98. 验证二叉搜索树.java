@@ -1,3 +1,97 @@
+2nd 但是时间复杂度没拉满
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        dfs(root, arr);
+        for(int i = 0; i < arr.size() - 1; i++){
+            if(arr.get(i) >= arr.get(i + 1))
+                return false;
+        }
+        return true;
+    }
+    public void dfs(TreeNode root, ArrayList<Integer> arr){
+        if(root.left != null)   
+            dfs(root.left, arr);
+        arr.add(root.val);
+        if(root.right != null)
+            dfs(root.right, arr);
+    }
+}
+
+2nd 炫一波自己对于引用的理解 时间复杂度100%
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        //Stack<Integer> stack = new Stack<>();
+        int[] pre = new int[1];//{root.val};
+        int[] rootval = new int[]{root.val};
+        Boolean[] ret = new Boolean[]{true};
+        TreeNode rootAtLeft = helper(root);
+        dfs(root, pre, ret, rootAtLeft);
+        return ret[0];
+    }
+    public void dfs(TreeNode rootRec, int[] pre, Boolean[] ret, TreeNode rootAtLeft){
+        if(rootRec.left != null)   
+            dfs(rootRec.left, pre, ret, rootAtLeft);
+        if(rootRec == rootAtLeft){
+            pre[0] = rootAtLeft.val;
+        }
+        else if(rootRec.val > pre[0]){
+            pre[0] = rootRec.val;
+        }
+        else{
+            ret[0] = false;
+            return;
+        }
+        if(rootRec.right != null)
+            dfs(rootRec.right, pre, ret, rootAtLeft);
+    }
+    public TreeNode helper(TreeNode root){
+        if(root.left != null)
+            return helper(root.left);
+        else
+            return root;
+    }
+}
+#### 中序遍历 迭代
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        Deque<TreeNode> stack = new LinkedList<TreeNode>();
+        double inorder = -Double.MAX_VALUE;
+
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+              // 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树
+            if (root.val <= inorder) {
+                return false;
+            }
+            inorder = root.val;
+            root = root.right;
+        }
+        return true;
+    }
+}
+#### 递归 递归这个题解不好想到
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    public boolean isValidBST(TreeNode node, long lower, long upper) {
+        if (node == null) {
+            return true;
+        }
+        if (node.val <= lower || node.val >= upper) {
+            return false;
+        }
+        return isValidBST(node.left, lower, node.val) && isValidBST(node.right, node.val, upper);
+    }
+}
+
+
 //第一版 执行出错 就感觉写的时候太简单了 不太对的上中等难度 果然不对
 出错原因是 对二叉搜索树还是理解的不够好 二叉搜索树不是要求当前节点的左节点小于当前节点，而是要求当前节点的左子树内的节点都小于当前节点。
 执行结果：
