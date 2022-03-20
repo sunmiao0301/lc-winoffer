@@ -52,12 +52,4 @@
 | [10、动态规划](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/10、动态规划) |                                   |                                                              |                                                              |
 | [11、单调栈](https://github.com/sunmiao0301/LC-Winoffer/tree/main/LeetCodeForkedFromLCmaster/11、单调栈) |                                   |                                                              |                                                              |
 
-### Log
 
-##### 2021.4.18 第一次力扣
-
-##### 2022.1.4 康复训练
-
-##### 2022.1.13 康复训练结束 继续[按标签做题](https://github.com/sunmiao0301/leetcode-master)
-
-##### 2022.3.20 再次回归 之前中断两周备战DTE
