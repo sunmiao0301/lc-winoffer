@@ -1,3 +1,57 @@
+## 二刷 一遍过 但是效率一般
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        for(int i = 0; i < s.length(); i++){
+            if(stack.isEmpty()){
+                stack.push(s.charAt(i));
+            }
+            else if(s.charAt(i) == ')' && stack.peek() == '('){
+                stack.pop();
+            }
+            else if(s.charAt(i) == '}' && stack.peek() == '{'){
+                stack.pop();
+            }
+            else if(s.charAt(i) == ']' && stack.peek() == '['){
+                stack.pop();
+            }            
+            else{
+                stack.push(s.charAt(i));
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+## 二刷 题解
+class Solution {
+    public boolean isValid(String s) {
+        int n = s.length();
+        if (n % 2 == 1) {
+            return false;
+        }
+
+        Map<Character, Character> pairs = new HashMap<Character, Character>() {{
+            put(')', '(');
+            put(']', '[');
+            put('}', '{');
+        }};
+        Deque<Character> stack = new LinkedList<Character>();
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if (pairs.containsKey(ch)) {
+                if (stack.isEmpty() || stack.peek() != pairs.get(ch)) {
+                    return false;
+                }
+                stack.pop();
+            } else {
+                stack.push(ch);
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
 //第一版 一遍过 但是效率一般 唯一需要注意的是 交 并 之间的括号需要注意 也就是：
 ((s.charAt(i) == ')' && stack.peek() == '(') || (s.charAt(i) == '}' && stack.peek() == '{') || (s.charAt(i) == ']' && stack.peek() == '['))
 需要一个大括号括住，不然后面的 || 与前面的(!stack.isEmpty())就构成了并 即使第一个不满足 后面的满足 依然执行 这样与需要的逻辑不符
