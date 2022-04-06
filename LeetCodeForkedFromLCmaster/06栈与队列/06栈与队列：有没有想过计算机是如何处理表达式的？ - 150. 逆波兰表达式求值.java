@@ -1,3 +1,108 @@
+## 二刷 第一版
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+6 ms
+, 在所有 Java 提交中击败了
+56.02%
+的用户
+内存消耗：
+41.3 MB
+, 在所有 Java 提交中击败了
+15.19%
+的用户
+通过测试用例：
+20 / 20
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < tokens.length; i++){
+            if(tokens[i].equals("+")){
+                int oprb = stack.pop();
+                int opra = stack.pop();
+                int result = opra + oprb;
+                stack.push(result);
+            }
+            else if(tokens[i].equals("-")){
+                int oprb = stack.pop();
+                int opra = stack.pop();
+                int result = opra - oprb;
+                stack.push(result);
+            }
+            else if(tokens[i].equals("*")){
+                int oprb = stack.pop();
+                int opra = stack.pop();
+                int result = opra * oprb;
+                stack.push(result);
+            }
+            else if(tokens[i].equals("/")){
+                int oprb = stack.pop();
+                int opra = stack.pop();
+                int result = opra / oprb;
+                stack.push(result);
+            }
+            else{
+                stack.push(Integer.parseInt(tokens[i]));
+            }
+        }
+        return stack.pop();
+    }
+}
+
+## 二刷 题解 用数组模拟栈 效率高很多
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+2 ms
+, 在所有 Java 提交中击败了
+99.79%
+的用户
+内存消耗：
+40.8 MB
+, 在所有 Java 提交中击败了
+63.96%
+的用户
+通过测试用例：
+20 / 20
+class Solution {
+    public int evalRPN(String[] tokens) {
+        int n = tokens.length;
+        int[] stack = new int[(n + 1) / 2];
+        int index = -1;
+        for (int i = 0; i < n; i++) {
+            String token = tokens[i];
+            switch (token) {
+                case "+":
+                    index--;
+                    stack[index] += stack[index + 1];
+                    break;
+                case "-":
+                    index--;
+                    stack[index] -= stack[index + 1];
+                    break;
+                case "*":
+                    index--;
+                    stack[index] *= stack[index + 1];
+                    break;
+                case "/":
+                    index--;
+                    stack[index] /= stack[index + 1];
+                    break;
+                default:
+                    index++;
+                    stack[index] = Integer.parseInt(token);
+            }
+        }
+        return stack[index];
+    }
+}
+
 //第一版 不对 没有对逆波兰表达式的逻辑进行简化
 class Solution {
     public int evalRPN(String[] tokens) {
