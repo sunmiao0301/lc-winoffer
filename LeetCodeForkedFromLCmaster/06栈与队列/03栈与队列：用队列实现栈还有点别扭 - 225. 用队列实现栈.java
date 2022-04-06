@@ -1,3 +1,75 @@
+## 二刷 第一版 但是我写的是push比较简单，pop和top比较复杂，实际上可以写成push复杂，pop和top简单的形式。
+class MyStack {
+
+    //你能否仅用一个队列来实现栈。
+    Queue<Integer> q;
+
+    public MyStack() {
+        q = new LinkedList<Integer>();
+    }
+    
+    public void push(int x) {
+        q.offer(x);
+    }
+    
+    public int pop() {
+        int size = q.size();
+        for(int i = 0; i < size - 1; i++){
+            q.offer(q.poll());
+        }
+        return q.poll();
+    }
+    
+    public int top() {
+        int size = q.size();
+        for(int i = 0; i < size - 1; i++){
+            q.offer(q.poll());
+        }
+        int res = q.peek();
+        q.offer(q.poll());
+        return res;
+    }
+    
+    public boolean empty() {
+        return q.isEmpty();
+    }
+}
+
+## 二刷 题解 push复杂，pop和top简单的形式。
+class MyStack {
+    Queue<Integer> queue;
+
+    /** Initialize your data structure here. */
+    public MyStack() {
+        queue = new LinkedList<Integer>();
+    }
+    
+    /** Push element x onto stack. */
+    public void push(int x) {
+        int n = queue.size();
+        queue.offer(x);
+        for (int i = 0; i < n; i++) {
+            queue.offer(queue.poll());
+        }
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        return queue.poll();
+    }
+    
+    /** Get the top element. */
+    public int top() {
+        return queue.peek();
+    }
+    
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return queue.isEmpty();
+    }
+}
+
+
 //第一版 先做只用两个Queue完成的
     1)
     请你仅使用两个队列实现一个后入先出（LIFO）的栈，
