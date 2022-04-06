@@ -37,7 +37,7 @@ class MyQueue {
     }
 }
 
-## 二刷 标准题解
+## 二刷 标准题解 把这个解法画个图一看就理解了
 class MyQueue {
 
     Stack<Integer> stack1;
