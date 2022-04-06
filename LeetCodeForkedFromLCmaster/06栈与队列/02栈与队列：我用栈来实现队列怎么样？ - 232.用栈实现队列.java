@@ -1,3 +1,96 @@
+## 二刷 一版过 但是实际上还不是最好的解法
+class MyQueue {
+
+    //均摊时间复杂度为 O(1) 的队列
+
+    Stack<Integer> sPush;
+    Stack<Integer> sPop;
+
+    public MyQueue() {
+        sPush = new Stack<Integer>();
+        sPop = new Stack<Integer>();
+    }
+    
+    public void push(int x) {
+        while(!sPop.isEmpty()){
+            sPush.push(sPop.pop());
+        }
+        sPush.push(x);
+    }
+    
+    public int pop() {
+        while(!sPush.isEmpty()){
+            sPop.push(sPush.pop());
+        }
+        return sPop.pop();
+    }
+    
+    public int peek() {
+        while(!sPush.isEmpty()){
+            sPop.push(sPush.pop());
+        }
+        return sPop.peek();
+    }
+    
+    public boolean empty() {
+        return (sPop.isEmpty() && sPush.isEmpty());
+    }
+}
+
+## 二刷 标准题解
+class MyQueue {
+
+    Stack<Integer> stack1;
+    Stack<Integer> stack2;
+
+    /** Initialize your data structure here. */
+    public MyQueue() {
+        stack1 = new Stack<>(); // 负责进栈
+        stack2 = new Stack<>(); // 负责出栈
+    }
+    
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        stack1.push(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    public int pop() {    
+        dumpStack1();
+        return stack2.pop();
+    }
+    
+    /** Get the front element. */
+    public int peek() {
+        dumpStack1();
+        return stack2.peek();
+    }
+    
+    /** Returns whether the queue is empty. */
+    public boolean empty() {
+        return stack1.isEmpty() && stack2.isEmpty();
+    }
+
+    // 如果stack2为空，那么将stack1中的元素全部放到stack2中
+    private void dumpStack1(){
+        if (stack2.isEmpty()){
+            while (!stack1.isEmpty()){
+                stack2.push(stack1.pop());
+            }
+        }
+    }
+}
+
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+
 //第一版 一遍过
 但是这个方法并不符合题目进阶要求，具体见第二版
 进阶：
