@@ -1,4 +1,13 @@
-# WinOffer
+# LC-WinOffer
+
+| Directory                      | Detail                                             |
+| ------------------------------ | -------------------------------------------------- |
+| LeetCodeCodingInterviews       | 剑指 Offer（第 2 版）                              |
+| LeetCodeDataStructure14Days    | 专项突破-数据结构-14天（康复训练）                 |
+| LeetCodeEveryDay               | 每日 1 题                                          |
+| LeetCodeForkedFromLCmaster     | [**leetcode-master**](https://programmercarl.com/) |
+| LeetCodeHot100                 | 🔥 LeetCode 热题 HOT 100                            |
+| LeetCodeOtherPeopleAskedMeToDo | 别人和我讨论的                                     |
 
 #### [leetcode-master](https://github.com/youngyangyang04/leetcode-master) --> [**non-github**](https://programmercarl.com/)
 
