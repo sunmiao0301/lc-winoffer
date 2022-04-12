@@ -98,6 +98,9 @@ class Solution {
 }
 
 ## 第二版 我也用double来实现一版 -- 应该可以省去first
+## 这里需要注意一点 那就是 Double.MIN_VALUE 是非负非0的double最小值
+double在计算机中的表示方式和int、long等不同，因此它才可以表示的如此大范围的数。顺带提一句，Double里的最小值是非0非负的最小值，需要最小值只需 -MAX_VALUE即可，负的最大值是-MIN_VALUE。
+原文链接 " https://blog.csdn.net/qq_43508407/article/details/120139912
 
 执行结果：
 通过
