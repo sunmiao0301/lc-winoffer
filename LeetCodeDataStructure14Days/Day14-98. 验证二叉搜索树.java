@@ -1,0 +1,144 @@
+## 第一版就写错了 大意了 忘记了搜索二叉树不只是大于当前的根节点，还有之前的根节点
+
+执行结果：
+解答错误
+显示详情
+添加备注
+
+通过测试用例：
+72 / 80
+输入：
+[5,4,6,null,null,3,7]
+输出：
+true
+预期结果：
+false
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root == null) return true;
+        return (root.left == null || root.left.val < root.val) && (root.right == null || root.right.val > root.val) && isValidBST(root.left) && isValidBST(root.right);
+    }
+}
+
+## 用迭代先实现一版吧 -- 但是代码奇丑无比
+
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+41.3 MB
+, 在所有 Java 提交中击败了
+5.05%
+的用户
+通过测试用例：
+80 / 80
+
+class Solution {
+    int pre = Integer.MIN_VALUE;
+    int first = 1;
+    boolean res = true;
+    public boolean isValidBST(TreeNode root) {
+        helper(root);
+        return res;
+    }
+    public void helper(TreeNode root){
+        //中序 -- 左根右
+        if(root.left != null){
+            helper(root.left);
+        }
+        if(first == 1 && root.val >= pre){
+            pre = root.val;
+            first = 0;
+        }
+        else if(first == 1 && root.val < pre){
+            res = false;
+            first = 0;
+        }
+        else if(first == 0 && root.val > pre){
+            pre = root.val;
+        }
+        else{
+            res = false;
+        }
+        if(root.right != null){
+            helper(root.right);
+        }
+    }
+}
+
+## 题解 很聪明 通过double的max值避开了integer的最小值相等问题 -- 此外也是通过栈实现的遍历 我本质上还是通过递归来中序遍历的
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        Deque<TreeNode> stack = new LinkedList<TreeNode>();
+        double inorder = -Double.MAX_VALUE;
+
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+              // 如果中序遍历得到的节点的值小于等于前一个 inorder，说明不是二叉搜索树
+            if (root.val <= inorder) {
+                return false;
+            }
+            inorder = root.val;
+            root = root.right;
+        }
+        return true;
+    }
+}
+
+## 第二版 我也用double来实现一版 -- 应该可以省去first
+
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+0 ms
+, 在所有 Java 提交中击败了
+100.00%
+的用户
+内存消耗：
+41.2 MB
+, 在所有 Java 提交中击败了
+13.50%
+的用户
+通过测试用例：
+80 / 80
+
+class Solution {
+    double pre = -Double.MAX_VALUE;//double的最小值居然是正数
+    //int pre = Integer.MIN_VALUE;
+    boolean res = true;
+    public boolean isValidBST(TreeNode root) {
+        //中序 -- 左根右
+        helper(root);
+        return res;
+    }
+    public void helper(TreeNode root){
+        if(res == false) return;//zzh提出的
+        if(root.left != null){
+            helper(root.left);
+        }
+        if(root.val > pre){
+            pre = root.val;
+        }
+        else{
+            res = false;
+        }
+        if(root.right != null){
+            helper(root.right);
+        }
+    }
+}
