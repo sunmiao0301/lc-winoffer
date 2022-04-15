@@ -10,9 +10,9 @@ class Solution {
     }
 }
 
-## 题解 本题是经典的「荷兰国旗问题」，由计算机科学家 Edsger W. Dijkstra 首先提出
+## 本题是经典的「荷兰国旗问题」，由计算机科学家 Edsger W. Dijkstra 首先提出
 
-## 第二版 首先先实现了 但是用的是单指针 并且遍历了不止单趟
+## 第二版 先实现一版吧 但是用的是单指针 并且遍历了不止单趟
 
 执行结果：
 通过
@@ -37,7 +37,7 @@ class Solution {
         //单指针
         int noZero = 0;
         int i = nums.length - 1;
-        while(noZero < i){
+        while(noZero < i){//第一遍，把0都放到最前面
             while(noZero < i && nums[noZero] == 0){
                 noZero++;
             }
@@ -52,7 +52,7 @@ class Solution {
         int noOne = noZero;
         i = nums.length - 1;
 
-        while(noOne < i){
+        while(noOne < i){//第二遍，把2都放到最后面
             while(noOne < i && nums[noOne] == 1){
                 noOne++;
             }
