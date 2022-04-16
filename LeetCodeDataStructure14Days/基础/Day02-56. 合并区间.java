@@ -113,3 +113,47 @@ class Solution {
         intervals[b][1] = tmpSec;
     }
 }
+
+## 题解 思路其实和我是一样的 但是由于排序算法 以及一些算法不相干的优化 导致题解的速度快
+
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+6 ms
+, 在所有 Java 提交中击败了
+97.85%
+的用户
+内存消耗：
+46.6 MB
+, 在所有 Java 提交中击败了
+10.18%
+的用户
+通过测试用例：
+169 / 169
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) {
+            return new int[0][2];
+        }
+        //快排还能这样用
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            public int compare(int[] interval1, int[] interval2) {
+                return interval1[0] - interval2[0];
+            }
+        });
+        List<int[]> merged = new ArrayList<int[]>();
+        for (int i = 0; i < intervals.length; ++i) {
+            int L = intervals[i][0], R = intervals[i][1];
+            if (merged.size() == 0 || merged.get(merged.size() - 1)[1] < L) {
+                merged.add(new int[]{L, R});
+            } else {
+                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], R);
+            }
+        }
+        return merged.toArray(new int[merged.size()][]);
+    }
+}
