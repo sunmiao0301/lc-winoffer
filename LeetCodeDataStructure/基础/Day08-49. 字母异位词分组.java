@@ -116,6 +116,7 @@ class Solution {
 }
 
 ## 题解的思路是：找到一个可以代表 字母异位词 的 Key，然后构造 HashMap<Key, List<String>>，最后遍历HashMap拿到所有的value放入一个大的List中。
+## 也就是说 字母异位词的定位在于字母的字典序完全一致即可，（相当于一个 hashCode() )
 ## 相较于我写的方法，由于题解用了HashMap，所以优化到了只需遍历一遍，速度大大提升。
 
 ## 题解1 以字典序排序后的String作为Key：
