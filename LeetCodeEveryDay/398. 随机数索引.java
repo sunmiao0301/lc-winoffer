@@ -123,7 +123,40 @@ class Solution {
 时间复杂度：初始化为 O(1)，pick 为 O(n)，其中 n 是 nums 的长度。
 空间复杂度：O(1)。我们只需要常数的空间保存若干变量。
  
- 
- 
- 
+## 隔了一天 自己写了一版蓄水池抽样的 --> 注意，由于pick中需要用到 nums 参数，但是Solution是构造函数，没法调用函数，所以得用 "this" 关键词帮忙一下
+ class Solution {
+    //要求初始化Solution方法的时间复杂度是o(1) pick方法的时间复杂度是o(n)
+    int[] nums;
+    Random rand;
+
+    public Solution(int[] nums) {
+        rand = new Random();
+        this.nums = nums; // this 关键词帮忙
+    }
+    
+    public int pick(int target) {
+        int res = 0;
+        int k = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] == target){
+                k++;
+                if(k == 1){
+                    res = i;
+                }
+                else{
+                    if(rand.nextInt(k - 1 + 1) + 1 == k){
+                        res = i;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */
  
