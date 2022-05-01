@@ -163,3 +163,78 @@ class Solution {
         return new ArrayList<List<String>>(map.values());
     }
 }
+
+## 二刷 重写了一版 但是结果一看就知道是 hashmap 使用的 equals 方法没有对于 int 数组进行针对性重写：
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<int[], List<String>> map = new HashMap<>();
+        List<List<String>> res = new ArrayList<>();
+        for(int i = 0; i < strs.length; i++){
+            int[] mapKey = new int[26];
+            for(int j = 0; j < strs[i].length(); j++){
+                mapKey[strs[i].charAt(j) - 'a']++;
+            }
+            // if(map.containsKey(mapKey)){
+            //     map.get(mapKey).add()
+            // }
+            List<String> tmp = map.getOrDefault(mapKey, new ArrayList<String>());
+            tmp.add(strs[i]);
+            map.put(mapKey, tmp);
+        }
+        for (Map.Entry<int[], List<String>> p : map.entrySet()) {
+        //p.getValue()
+        res.add(p.getValue());
+        }
+        return res;
+    }
+}
+
+## 所以我们用 
+
+//数组转String
+String mapKeyToStr = Arrays.toString(mapKey);
+方法将 int[] 转为 String 再作为 Key，在hashmap中使用
+
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+18 ms
+, 在所有 Java 提交中击败了
+11.59%
+的用户
+内存消耗：
+45.5 MB
+, 在所有 Java 提交中击败了
+5.28%
+的用户
+通过测试用例：
+115 / 115
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+        List<List<String>> res = new ArrayList<>();
+        for(int i = 0; i < strs.length; i++){
+            int[] mapKey = new int[26];
+            for(int j = 0; j < strs[i].length(); j++){
+                mapKey[strs[i].charAt(j) - 'a']++;
+            }
+            //数组转String
+            String mapKeyToStr = Arrays.toString(mapKey);
+            // if(map.containsKey(mapKey)){
+            //     map.get(mapKey).add()
+            // }
+            List<String> tmp = map.getOrDefault(mapKeyToStr, new ArrayList<String>());
+            tmp.add(strs[i]);
+            map.put(mapKeyToStr, tmp);
+        }
+        for (Map.Entry<String, List<String>> p : map.entrySet()) {
+        //p.getValue()
+        res.add(p.getValue());
+        }
+        return res;
+    }
+}
