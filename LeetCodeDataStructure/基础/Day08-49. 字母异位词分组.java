@@ -164,7 +164,7 @@ class Solution {
     }
 }
 
-## 二刷 重写了一版 但是结果一看就知道是 hashmap 使用的 equals 方法没有对于 int 数组进行针对性重写：
+## 二刷 重写了一版 但是结果一看就知道是 hashmap 使用的 equals 方法没有对于 int 数组进行针对性重写：所以我们判断 key 值的时候默认使用的 equals 会判断 int[]的地址是否相等 --> 由于都是new的，肯定不相等。
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         Map<int[], List<String>> map = new HashMap<>();
