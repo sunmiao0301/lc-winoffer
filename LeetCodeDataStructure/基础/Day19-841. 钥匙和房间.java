@@ -94,7 +94,7 @@ class Solution {
     }
 }
 
-## 题解 虽然思路一样 但是由于一些小的优化（比如 int[] ---> boolean[] 之类）效果好了很多
+## 题解 虽然思路一样 但是由于一些小的优化（比如 int[] ---> boolean[] 之类）效率达到 100%
 class Solution {
     boolean[] vis;
     int num;
