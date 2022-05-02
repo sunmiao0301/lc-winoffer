@@ -92,95 +92,95 @@
 
 ## LeetCodeDataStructure
 
-| 等级 | 类型    | 天数  | 题目                                                         | 备注                          |
-| ---- | ------- | ----- | ------------------------------------------------------------ | ----------------------------- |
-| 入门 | 数组    | Day1  | [217. 存在重复元素](https://leetcode-cn.com/problems/contains-duplicate/) |                               |
-|      |         |       | [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/) | 动态规划                      |
-|      | 数组    | Day2  | [1. 两数之和](https://leetcode-cn.com/problems/two-sum/)     | HashMap，并且只遍历一遍就够了 |
-|      |         |       | [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/) | *要求空间o(1)                 |
-|      | 数组    | Day3  | [350. 两个数组的交集 II](https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/) |                               |
-|      |         |       | [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/) |                               |
-|      | 数组    | Day4  | [566. 重塑矩阵](https://leetcode-cn.com/problems/reshape-the-matrix/) |                               |
-|      |         |       | [118. 杨辉三角](https://leetcode-cn.com/problems/pascals-triangle/) |                               |
-|      | 数组    | Day5  | [36. 有效的数独](https://leetcode-cn.com/problems/valid-sudoku/) |                               |
-|      |         |       | [73. 矩阵置零](https://leetcode-cn.com/problems/set-matrix-zeroes/) |                               |
-|      | 字符串  | Day6  | [387. 字符串中的第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/) |                               |
-|      |         |       | [383. 赎金信](https://leetcode-cn.com/problems/ransom-note/) |                               |
-|      |         |       | [242. 有效的字母异位词](https://leetcode-cn.com/problems/valid-anagram/) |                               |
-|      | 链表    | Day7  | [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/) |                               |
-|      |         |       | [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/) |                               |
-|      |         |       | [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/) |                               |
-|      | 链表    | Day8  | [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/) |                               |
-|      |         |       | [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/) |                               |
-|      | 栈/队列 | Day9  | [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/) |                               |
-|      |         |       | [232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/) |                               |
-|      | 树      | Day10 | [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) |                               |
-|      |         |       | [94. 二叉树的中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/) |                               |
-|      |         |       | [145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/) |                               |
-|      | 树      | Day11 | [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/) |                               |
-|      |         |       | [104. 二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) |                               |
-|      |         |       | [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/) |                               |
-|      | 树      | Day12 | [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/) |                               |
-|      |         |       | [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)  |                               |
-|      | 树      | Day13 | [700. 二叉搜索树中的搜索](https://leetcode-cn.com/problems/search-in-a-binary-search-tree/) |                               |
-|      |         |       | [701. 二叉搜索树中的插入操作](https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/) |                               |
-|      | 树      | Day14 | [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) |                               |
-|      |         |       | [653. 两数之和 IV - 输入 BST](https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/) |                               |
-|      |         |       | [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) |                               |
-| -    |         |       |                                                              |                               |
-| 基础 | 数组    | Day1  | [136. 只出现一次的数字](https://leetcode-cn.com/problems/single-number/) |                               |
-|      |         |       | [169. 多数元素](https://leetcode-cn.com/problems/majority-element/) |                               |
-|      |         |       | [15. 三数之和](https://leetcode-cn.com/problems/3sum/)       |                               |
-|      | 数组    | Day2  | [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/) |                               |
-|      |         |       | [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/) |                               |
-|      |         |       | [706. 设计哈希映射](https://leetcode-cn.com/problems/design-hashmap/) |                               |
-|      | 数组    | Day3  | [119. 杨辉三角 II](https://leetcode-cn.com/problems/pascals-triangle-ii/) |                               |
-|      |         |       | [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/) |                               |
-|      |         |       | [59. 螺旋矩阵 II](https://leetcode-cn.com/problems/spiral-matrix-ii/) |                               |
-|      | 数组    | Day4  | [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/) |                               |
-|      |         |       | [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/) |                               |
-|      | 数组    | Day5  | [334. 递增的三元子序列](https://leetcode-cn.com/problems/increasing-triplet-subsequence/) |                               |
-|      |         |       | [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/) |                               |
-|      |         |       | [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/) |                               |
-|      | 字符串  | Day6  | [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) |                               |
-|      |         |       | [409. 最长回文串](https://leetcode-cn.com/problems/longest-palindrome/) |                               |
-|      | 字符串  | Day7  | [290. 单词规律](https://leetcode-cn.com/problems/word-pattern/) |                               |
-|      |         |       | [763. 划分字母区间](https://leetcode-cn.com/problems/partition-labels/) |                               |
-|      | 字符串  | Day8  | [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) |                               |
-|      |         |       | [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) |                               |
-|      | 字符串  | Day9  | [187. 重复的DNA序列](https://leetcode-cn.com/problems/repeated-dna-sequences/) |                               |
-|      |         |       | [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/) |                               |
-|      | 链表    | Day10 | [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/) |                               |
-|      |         |       | [142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/) |                               |
-|      | 链表    | Day11 | [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) |                               |
-|      |         |       | [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/) |                               |
-|      | 链表    | Day12 | [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/) |                               |
-|      |         |       | [707. 设计链表](https://leetcode-cn.com/problems/design-linked-list/) |                               |
-|      | 链表    | Day13 | [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/) |                               |
-|      |         |       | [143. 重排链表](https://leetcode-cn.com/problems/reorder-list/) |                               |
-|      | 栈/队列 | Day14 | [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)   |                               |
-|      |         |       | [1249. 移除无效的括号](https://leetcode-cn.com/problems/minimum-remove-to-make-valid-parentheses/) |                               |
-|      |         |       | [1823. 找出游戏的获胜者](https://leetcode-cn.com/problems/find-the-winner-of-the-circular-game/) |                               |
-|      | 树      | Day15 | [108. 将有序数组转换为二叉搜索树](https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/) |                               |
-|      |         |       | [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) |                               |
-|      |         |       | [103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/) |                               |
-|      | 树      | Day16 | [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/) |                               |
-|      |         |       | [113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/) |                               |
-|      |         |       | [450. 删除二叉搜索树中的节点](https://leetcode-cn.com/problems/delete-node-in-a-bst/) |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
-|      |         |       |                                                              |                               |
+| 等级 | 类型     | 天数  | 题目                                                         | 备注                                                         |
+| ---- | -------- | ----- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 入门 | 数组     | Day1  | [217. 存在重复元素](https://leetcode-cn.com/problems/contains-duplicate/) |                                                              |
+|      |          |       | [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/) | 动态规划                                                     |
+|      | 数组     | Day2  | [1. 两数之和](https://leetcode-cn.com/problems/two-sum/)     | HashMap，并且只遍历一遍就够了                                |
+|      |          |       | [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/) | *要求空间o(1)                                                |
+|      | 数组     | Day3  | [350. 两个数组的交集 II](https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/) |                                                              |
+|      |          |       | [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/) |                                                              |
+|      | 数组     | Day4  | [566. 重塑矩阵](https://leetcode-cn.com/problems/reshape-the-matrix/) |                                                              |
+|      |          |       | [118. 杨辉三角](https://leetcode-cn.com/problems/pascals-triangle/) |                                                              |
+|      | 数组     | Day5  | [36. 有效的数独](https://leetcode-cn.com/problems/valid-sudoku/) |                                                              |
+|      |          |       | [73. 矩阵置零](https://leetcode-cn.com/problems/set-matrix-zeroes/) |                                                              |
+|      | 字符串   | Day6  | [387. 字符串中的第一个唯一字符](https://leetcode-cn.com/problems/first-unique-character-in-a-string/) |                                                              |
+|      |          |       | [383. 赎金信](https://leetcode-cn.com/problems/ransom-note/) |                                                              |
+|      |          |       | [242. 有效的字母异位词](https://leetcode-cn.com/problems/valid-anagram/) |                                                              |
+|      | 链表     | Day7  | [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/) |                                                              |
+|      |          |       | [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/) |                                                              |
+|      |          |       | [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/) |                                                              |
+|      | 链表     | Day8  | [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/) |                                                              |
+|      |          |       | [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/) |                                                              |
+|      | 栈/队列  | Day9  | [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/) |                                                              |
+|      |          |       | [232. 用栈实现队列](https://leetcode-cn.com/problems/implement-queue-using-stacks/) |                                                              |
+|      | 树       | Day10 | [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) |                                                              |
+|      |          |       | [94. 二叉树的中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/) |                                                              |
+|      |          |       | [145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/) |                                                              |
+|      | 树       | Day11 | [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/) |                                                              |
+|      |          |       | [104. 二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) |                                                              |
+|      |          |       | [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/) |                                                              |
+|      | 树       | Day12 | [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/) |                                                              |
+|      |          |       | [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)  |                                                              |
+|      | 树       | Day13 | [700. 二叉搜索树中的搜索](https://leetcode-cn.com/problems/search-in-a-binary-search-tree/) |                                                              |
+|      |          |       | [701. 二叉搜索树中的插入操作](https://leetcode-cn.com/problems/insert-into-a-binary-search-tree/) |                                                              |
+|      | 树       | Day14 | [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) |                                                              |
+|      |          |       | [653. 两数之和 IV - 输入 BST](https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/) |                                                              |
+|      |          |       | [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) |                                                              |
+| -    |          |       |                                                              |                                                              |
+| 基础 | 数组     | Day1  | [136. 只出现一次的数字](https://leetcode-cn.com/problems/single-number/) |                                                              |
+|      |          |       | [169. 多数元素](https://leetcode-cn.com/problems/majority-element/) |                                                              |
+|      |          |       | [15. 三数之和](https://leetcode-cn.com/problems/3sum/)       |                                                              |
+|      | 数组     | Day2  | [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/) |                                                              |
+|      |          |       | [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/) |                                                              |
+|      |          |       | [706. 设计哈希映射](https://leetcode-cn.com/problems/design-hashmap/) |                                                              |
+|      | 数组     | Day3  | [119. 杨辉三角 II](https://leetcode-cn.com/problems/pascals-triangle-ii/) |                                                              |
+|      |          |       | [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/) |                                                              |
+|      |          |       | [59. 螺旋矩阵 II](https://leetcode-cn.com/problems/spiral-matrix-ii/) |                                                              |
+|      | 数组     | Day4  | [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/) |                                                              |
+|      |          |       | [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/) |                                                              |
+|      | 数组     | Day5  | [334. 递增的三元子序列](https://leetcode-cn.com/problems/increasing-triplet-subsequence/) |                                                              |
+|      |          |       | [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/) |                                                              |
+|      |          |       | [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/) |                                                              |
+|      | 字符串   | Day6  | [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) |                                                              |
+|      |          |       | [409. 最长回文串](https://leetcode-cn.com/problems/longest-palindrome/) |                                                              |
+|      | 字符串   | Day7  | [290. 单词规律](https://leetcode-cn.com/problems/word-pattern/) |                                                              |
+|      |          |       | [763. 划分字母区间](https://leetcode-cn.com/problems/partition-labels/) |                                                              |
+|      | 字符串   | Day8  | [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) |                                                              |
+|      |          |       | [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) |                                                              |
+|      | 字符串   | Day9  | [187. 重复的DNA序列](https://leetcode-cn.com/problems/repeated-dna-sequences/) |                                                              |
+|      |          |       | [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/) |                                                              |
+|      | 链表     | Day10 | [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/) |                                                              |
+|      |          |       | [142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/) |                                                              |
+|      | 链表     | Day11 | [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) |                                                              |
+|      |          |       | [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/) |                                                              |
+|      | 链表     | Day12 | [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/) |                                                              |
+|      |          |       | [707. 设计链表](https://leetcode-cn.com/problems/design-linked-list/) |                                                              |
+|      | 链表     | Day13 | [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/) |                                                              |
+|      |          |       | [143. 重排链表](https://leetcode-cn.com/problems/reorder-list/) |                                                              |
+|      | 栈/队列  | Day14 | [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)   |                                                              |
+|      |          |       | [1249. 移除无效的括号](https://leetcode-cn.com/problems/minimum-remove-to-make-valid-parentheses/) |                                                              |
+|      |          |       | [1823. 找出游戏的获胜者](https://leetcode-cn.com/problems/find-the-winner-of-the-circular-game/) |                                                              |
+|      | 树       | Day15 | [108. 将有序数组转换为二叉搜索树](https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/) |                                                              |
+|      |          |       | [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/) |                                                              |
+|      |          |       | [103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/) |                                                              |
+|      | 树       | Day16 | [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/) |                                                              |
+|      |          |       | [113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/) |                                                              |
+|      |          |       | [450. 删除二叉搜索树中的节点](https://leetcode-cn.com/problems/delete-node-in-a-bst/) |                                                              |
+|      | 树       | Day17 | [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/) |                                                              |
+|      |          |       | [173. 二叉搜索树迭代器](https://leetcode-cn.com/problems/binary-search-tree-iterator/) |                                                              |
+|      | 树       | Day18 | [236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/) | [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) |
+|      |          |       | [297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/) |                                                              |
+|      | 图       | Day19 | [997. 找到小镇的法官](https://leetcode-cn.com/problems/find-the-town-judge/) |                                                              |
+|      |          |       | [1557. 可以到达所有点的最少点数目](https://leetcode-cn.com/problems/minimum-number-of-vertices-to-reach-all-nodes/) |                                                              |
+|      |          |       | [841. 钥匙和房间](https://leetcode-cn.com/problems/keys-and-rooms/) |                                                              |
+|      | 优先队列 | Day20 | [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) |                                                              |
+|      |          |       | [347. 前 K 个高频元素](https://leetcode-cn.com/problems/top-k-frequent-elements/) |                                                              |
+|      |          |       |                                                              |                                                              |
+|      |          |       |                                                              |                                                              |
+|      |          |       |                                                              |                                                              |
+|      |          |       |                                                              |                                                              |
+|      |          |       |                                                              |                                                              |
+|      |          |       |                                                              |                                                              |
+|      |          |       |                                                              |                                                              |
 
