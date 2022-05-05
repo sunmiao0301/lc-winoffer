@@ -176,11 +176,6 @@
 |      |          |       | [841. 钥匙和房间](https://leetcode-cn.com/problems/keys-and-rooms/) |                                                              |
 |      | 优先队列 | Day20 | [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) |                                                              |
 |      |          |       | [347. 前 K 个高频元素](https://leetcode-cn.com/problems/top-k-frequent-elements/) |                                                              |
-|      |          |       |                                                              |                                                              |
-|      |          |       |                                                              |                                                              |
-|      |          |       |                                                              |                                                              |
-|      |          |       |                                                              |                                                              |
-|      |          |       |                                                              |                                                              |
-|      |          |       |                                                              |                                                              |
-|      |          |       |                                                              |                                                              |
+|      | 优先队列 | Day21 | [451. 根据字符出现频率排序](https://leetcode-cn.com/problems/sort-characters-by-frequency/) |                                                              |
+|      |          |       | [973. 最接近原点的 K 个点](https://leetcode-cn.com/problems/k-closest-points-to-origin/) |                                                              |
 
