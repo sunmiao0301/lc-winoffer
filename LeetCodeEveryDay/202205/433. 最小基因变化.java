@@ -203,3 +203,6 @@ class Solution {
         return false;
     }
 }
+
+p.s. 虽然以上写的不多，但是学到了一个对LinkedList的 一边遍历、一边删除的相关知识"https://blog.csdn.net/github_2011/article/details/54927531
+for-each不行，for + size() 更不行，用 迭代器 + remove() 才对，此外还需注意迭代器删完之后是 null 而不是 size() == 0
