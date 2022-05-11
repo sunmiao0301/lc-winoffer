@@ -1,5 +1,15 @@
 ## 第一版 通过 但是题解的思路更标准，应该好好学习一下
 
+p.s. 此外需要注意，由于main是一个ArrayList，所以需要挨个初始化，而不能像数组一样，默认为null，初始化如下：
+    public MyHashMap() {
+        main = new ArrayList<>(1000);
+        for(int i = 0; i < 1000; i++){
+            main.add(new LinkedList<>());
+        }
+        // LinkedList<int[]> bucket = main.get(0);
+        // bucket.add(new int[]{0, 1});
+    }
+
 执行结果：
 通过
 显示详情
