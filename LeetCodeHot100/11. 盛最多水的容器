@@ -1,0 +1,37 @@
+## 双指针 看题解之后写出来的 题解一看就懂了 "https://leetcode.cn/problems/container-with-most-water/solution/sheng-zui-duo-shui-de-rong-qi-by-leetcode-solution/
+
+执行结果：
+通过
+显示详情
+添加备注
+
+执行用时：
+4 ms
+, 在所有 Java 提交中击败了
+67.10%
+的用户
+内存消耗：
+51.6 MB
+, 在所有 Java 提交中击败了
+19.56%
+的用户
+通过测试用例：
+60 / 60
+
+class Solution {
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int res = Math.min(height[left], height[right]) * (right - left);
+        while(left < right){
+            if(height[left] < height[right]){
+                left++;
+            }
+            else{
+                right--;
+            }
+            res = Math.max(Math.min(height[left], height[right]) * (right - left), res);
+        }
+        return res;
+    }
+}
